@@ -5872,6 +5872,7 @@ namespace CORNBusinessLayer.Classes
                 WriteLog("pIsItemChanged:" + pIsItemChanged.ToString());
                 WriteLog("pTakeawayType:" + pTakeawayType.ToString());
                 WriteLog("OldInvoiceJson:" + OldInvoiceJson.ToString());
+                WriteLog("dtInvoiceDetail: started");
                 int rowNo = 1;
                 foreach (DataRow row in dtInvoiceDetail.Rows)
                 {
@@ -5882,7 +5883,7 @@ namespace CORNBusinessLayer.Classes
                     }
                     rowNo++;
                 }
-
+                WriteLog("dtInvoiceDetail: started");
                 foreach (DataRow row in dt.Rows)
                 {
                     foreach (DataColumn col in dt.Columns)
