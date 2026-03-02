@@ -5876,6 +5876,7 @@ namespace CORNBusinessLayer.Classes
                 int rowNo = 1;
                 foreach (DataRow row in dtInvoiceDetail.Rows)
                 {
+                    WriteLog("rowNo:" + rowNo.ToString());
                     foreach (DataColumn col in dtInvoiceDetail.Columns)
                     {
                         string value = row[col] == DBNull.Value ? "NULL" : row[col].ToString();
@@ -5883,9 +5884,11 @@ namespace CORNBusinessLayer.Classes
                     }
                     rowNo++;
                 }
-                WriteLog("dtInvoiceDetail: started");
+                rowNo = 1;
+                WriteLog("dtOld: started");
                 foreach (DataRow row in dt.Rows)
                 {
+                    WriteLog("dtOld:" + rowNo.ToString());
                     foreach (DataColumn col in dt.Columns)
                     {
                         string value = row[col] == DBNull.Value ? "NULL" : row[col].ToString();

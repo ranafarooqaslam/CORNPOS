@@ -1,0 +1,208 @@
+02/03/2026 12:53:45 pm: mTransaction.Rollback()
+02/03/2026 12:53:45 pm: pSaleInvoiceId:1152651
+02/03/2026 12:53:45 pm: pPaymentModeId:-2147483648
+02/03/2026 12:53:45 pm: pCustomerTypeId:1
+02/03/2026 12:53:45 pm: pTableId:2
+02/03/2026 12:53:45 pm: pAmountdue:0
+02/03/2026 12:53:45 pm: pDiscount:0
+02/03/2026 12:53:45 pm: pGst:194
+02/03/2026 12:53:45 pm: pPaidin:0
+02/03/2026 12:53:45 pm: pBalance:0
+02/03/2026 12:53:45 pm: pIsHold:True
+02/03/2026 12:53:45 pm: pUserId:2
+02/03/2026 12:53:45 pm: pDocumentDate:30/03/2024 12:00:00 am
+02/03/2026 12:53:45 pm: pDistributorId:1
+02/03/2026 12:53:45 pm: pDiscType:0
+02/03/2026 12:53:45 pm: pOrderBookerId:1012
+02/03/2026 12:53:45 pm: pCovertTable:2
+02/03/2026 12:53:45 pm: pTakeAwayCustomer:2
+02/03/2026 12:53:45 pm: p_VOID_BY:0
+02/03/2026 12:53:45 pm: pMANUAL_ORDER_NO:
+02/03/2026 12:53:45 pm: pREMARKS:
+02/03/2026 12:53:45 pm: pserviceCharges:0
+02/03/2026 12:53:45 pm: pcustomerID:0
+02/03/2026 12:53:45 pm: pInvoicePrinted:True
+02/03/2026 12:53:45 pm: pGSTPER:16.00
+02/03/2026 12:53:45 pm: pGSTPERCreditCard:5.00
+02/03/2026 12:53:45 pm: pBillFormat:1
+02/03/2026 12:53:45 pm: pAdvanceAmount:0
+02/03/2026 12:53:45 pm: pCustomerGST:0
+02/03/2026 12:53:45 pm: pCustomerDiscount:0
+02/03/2026 12:53:45 pm: pCustomerDiscountType:0
+02/03/2026 12:53:45 pm: pCustomerServiceCharges:0
+02/03/2026 12:53:45 pm: pCustomerServiceType:0
+02/03/2026 12:53:45 pm: pRecipeType:1
+02/03/2026 12:53:45 pm: pDelChannel:0
+02/03/2026 12:53:45 pm: pDELIVERY_CHANNEL_CASH_IMPACT:True
+02/03/2026 12:53:45 pm: pCreditCard_Impact:True
+02/03/2026 12:53:45 pm: KDSImplemented:True
+02/03/2026 12:53:45 pm: pIsItemChanged:False
+02/03/2026 12:53:45 pm: pTakeawayType:0
+02/03/2026 12:53:45 pm: OldInvoiceJson:[{"SKU_ID":285,"QTY":3.00000,"KDS_QTY":0.00,"IsModifiedItem":null,"IsReady":false,"LASTUPDATE_DATE":"\/Date(1772178620160)\/","SALE_INVOICE_DETAIL_ID":1260356,"DealQTY":0.00,"TIME_STAMP":"20260216165715970"},{"SKU_ID":8380,"QTY":1.00000,"KDS_QTY":0.00,"IsModifiedItem":null,"IsReady":false,"LASTUPDATE_DATE":"\/Date(1772185012340)\/","SALE_INVOICE_DETAIL_ID":1260357,"DealQTY":0.00,"TIME_STAMP":"20260227143649670"},{"SKU_ID":8385,"QTY":1.00000,"KDS_QTY":0.00,"IsModifiedItem":null,"IsReady":false,"LASTUPDATE_DATE":"\/Date(1772185012370)\/","SALE_INVOICE_DETAIL_ID":1260358,"DealQTY":0.00,"TIME_STAMP":"20260227143650657"}]
+02/03/2026 12:53:45 pm: dtInvoiceDetail: started
+02/03/2026 12:53:45 pm: Row 1 | SKU_ID: 285
+02/03/2026 12:53:45 pm: Row 1 | SKU_NAME: BISCUT - 04:57 PM 
+02/03/2026 12:53:45 pm: Row 1 | QTY: 3
+02/03/2026 12:53:45 pm: Row 1 | T_PRICE: 10
+02/03/2026 12:53:45 pm: Row 1 | AMOUNT: 30
+02/03/2026 12:53:45 pm: Row 1 | PRINTER: 
+02/03/2026 12:53:45 pm: Row 1 | PR_COUNT: 3
+02/03/2026 12:53:45 pm: Row 1 | SEC_ID: 3
+02/03/2026 12:53:45 pm: Row 1 | SECTION: STORE
+02/03/2026 12:53:45 pm: Row 1 | C1: 1
+02/03/2026 12:53:45 pm: Row 1 | VOID: false
+02/03/2026 12:53:45 pm: Row 1 | CAT_ID: 50
+02/03/2026 12:53:45 pm: Row 1 | INVOICE_ID: 1152651
+02/03/2026 12:53:45 pm: Row 1 | DESC: Biscut
+02/03/2026 12:53:45 pm: Row 1 | PRINT: true
+02/03/2026 12:53:45 pm: Row 1 | A_PRICE: 10
+02/03/2026 12:53:45 pm: Row 1 | I_D_ID: 0
+02/03/2026 12:53:45 pm: Row 1 | C2: 0
+02/03/2026 12:53:45 pm: Row 1 | intDealID: 0
+02/03/2026 12:53:45 pm: Row 1 | lngDealDetailID: 0
+02/03/2026 12:53:45 pm: Row 1 | DEAL_QTY: 0
+02/03/2026 12:53:45 pm: Row 1 | DEAL_NAME: 
+02/03/2026 12:53:45 pm: Row 1 | UOM_ID: 20
+02/03/2026 12:53:45 pm: Row 1 | intStockMUnitCode: 20
+02/03/2026 12:53:45 pm: Row 1 | Stock_to_SaleOperator: *
+02/03/2026 12:53:45 pm: Row 1 | Stock_to_SaleFactor: 1
+02/03/2026 12:53:45 pm: Row 1 | DEFAULT_QTY: 2
+02/03/2026 12:53:45 pm: Row 1 | IS_HasMODIFIER: false
+02/03/2026 12:53:45 pm: Row 1 | DeliveryType: 0
+02/03/2026 12:53:45 pm: Row 1 | SALE_INVOICE_DETAIL_ID: 1260356
+02/03/2026 12:53:45 pm: Row 1 | IS_FREE: 0
+02/03/2026 12:53:45 pm: Row 1 | ORIGINAL_QTY: 2
+02/03/2026 12:53:45 pm: Row 1 | PRINT_QTY: 3
+02/03/2026 12:53:45 pm: Row 1 | MODIFIER: 0
+02/03/2026 12:53:45 pm: Row 1 | MODIFIER_PARENT_ID: 0
+02/03/2026 12:53:45 pm: Row 1 | LessCancelReasonID: 0
+02/03/2026 12:53:45 pm: Row 1 | SortOrder: 0
+02/03/2026 12:53:45 pm: Row 1 | ModifierParetn_Row_ID: 1
+02/03/2026 12:53:45 pm: Row 1 | GSTPER: 0
+02/03/2026 12:53:45 pm: Row 1 | ItemWiseGST: 0
+02/03/2026 12:53:45 pm: Row 1 | DISCOUNT: 0
+02/03/2026 12:53:45 pm: Row 1 | ItemComments: 
+02/03/2026 12:53:45 pm: Row 1 | ItemType: 
+02/03/2026 12:53:45 pm: Row 1 | ComplimentaryReason: 0
+02/03/2026 12:53:45 pm: Row 1 | TIME_STAMP: 16/02/2026 11:57:15 am
+02/03/2026 12:53:45 pm: Row 1 | DISCOUNTDeal: 0
+02/03/2026 12:53:45 pm: Row 2 | SKU_ID: 8380
+02/03/2026 12:53:45 pm: Row 2 | SKU_NAME: UPSIZE - 02:36 PM 
+02/03/2026 12:53:45 pm: Row 2 | QTY: 1
+02/03/2026 12:53:45 pm: Row 2 | T_PRICE: 590
+02/03/2026 12:53:45 pm: Row 2 | AMOUNT: 590
+02/03/2026 12:53:45 pm: Row 2 | PRINTER: 
+02/03/2026 12:53:45 pm: Row 2 | PR_COUNT: 1
+02/03/2026 12:53:45 pm: Row 2 | SEC_ID: 2
+02/03/2026 12:53:45 pm: Row 2 | SECTION: BAR
+02/03/2026 12:53:45 pm: Row 2 | C1: 2
+02/03/2026 12:53:45 pm: Row 2 | VOID: false
+02/03/2026 12:53:45 pm: Row 2 | CAT_ID: 4067
+02/03/2026 12:53:45 pm: Row 2 | INVOICE_ID: 1152651
+02/03/2026 12:53:45 pm: Row 2 | DESC: Upsize
+02/03/2026 12:53:45 pm: Row 2 | PRINT: true
+02/03/2026 12:53:45 pm: Row 2 | A_PRICE: 590
+02/03/2026 12:53:45 pm: Row 2 | I_D_ID: 0
+02/03/2026 12:53:45 pm: Row 2 | C2: 0
+02/03/2026 12:53:45 pm: Row 2 | intDealID: 0
+02/03/2026 12:53:45 pm: Row 2 | lngDealDetailID: 0
+02/03/2026 12:53:45 pm: Row 2 | DEAL_QTY: 0
+02/03/2026 12:53:45 pm: Row 2 | DEAL_NAME: 
+02/03/2026 12:53:45 pm: Row 2 | UOM_ID: 14
+02/03/2026 12:53:45 pm: Row 2 | intStockMUnitCode: 14
+02/03/2026 12:53:45 pm: Row 2 | Stock_to_SaleOperator: *
+02/03/2026 12:53:45 pm: Row 2 | Stock_to_SaleFactor: 1
+02/03/2026 12:53:45 pm: Row 2 | DEFAULT_QTY: 1
+02/03/2026 12:53:45 pm: Row 2 | IS_HasMODIFIER: false
+02/03/2026 12:53:45 pm: Row 2 | DeliveryType: 0
+02/03/2026 12:53:45 pm: Row 2 | SALE_INVOICE_DETAIL_ID: 1260357
+02/03/2026 12:53:45 pm: Row 2 | IS_FREE: 0
+02/03/2026 12:53:45 pm: Row 2 | ORIGINAL_QTY: 0
+02/03/2026 12:53:45 pm: Row 2 | PRINT_QTY: 1
+02/03/2026 12:53:45 pm: Row 2 | MODIFIER: 0
+02/03/2026 12:53:45 pm: Row 2 | MODIFIER_PARENT_ID: 0
+02/03/2026 12:53:45 pm: Row 2 | LessCancelReasonID: 0
+02/03/2026 12:53:45 pm: Row 2 | SortOrder: 0
+02/03/2026 12:53:45 pm: Row 2 | ModifierParetn_Row_ID: 2
+02/03/2026 12:53:45 pm: Row 2 | GSTPER: 0
+02/03/2026 12:53:45 pm: Row 2 | ItemWiseGST: 0
+02/03/2026 12:53:45 pm: Row 2 | DISCOUNT: 0
+02/03/2026 12:53:45 pm: Row 2 | ItemComments: 
+02/03/2026 12:53:45 pm: Row 2 | ItemType: 
+02/03/2026 12:53:45 pm: Row 2 | ComplimentaryReason: 0
+02/03/2026 12:53:45 pm: Row 2 | TIME_STAMP: 27/02/2026 9:36:49 am
+02/03/2026 12:53:45 pm: Row 2 | DISCOUNTDeal: 0
+02/03/2026 12:53:45 pm: Row 3 | SKU_ID: 8385
+02/03/2026 12:53:45 pm: Row 3 | SKU_NAME: OAT MILK - 02:36 PM 
+02/03/2026 12:53:45 pm: Row 3 | QTY: 1
+02/03/2026 12:53:45 pm: Row 3 | T_PRICE: 590
+02/03/2026 12:53:45 pm: Row 3 | AMOUNT: 590
+02/03/2026 12:53:45 pm: Row 3 | PRINTER: 
+02/03/2026 12:53:45 pm: Row 3 | PR_COUNT: 1
+02/03/2026 12:53:45 pm: Row 3 | SEC_ID: 1
+02/03/2026 12:53:45 pm: Row 3 | SECTION: KITCHEN
+02/03/2026 12:53:45 pm: Row 3 | C1: 3
+02/03/2026 12:53:45 pm: Row 3 | VOID: false
+02/03/2026 12:53:45 pm: Row 3 | CAT_ID: 4067
+02/03/2026 12:53:45 pm: Row 3 | INVOICE_ID: 1152651
+02/03/2026 12:53:45 pm: Row 3 | DESC: Oat Milk
+02/03/2026 12:53:45 pm: Row 3 | PRINT: true
+02/03/2026 12:53:45 pm: Row 3 | A_PRICE: 590
+02/03/2026 12:53:45 pm: Row 3 | I_D_ID: 0
+02/03/2026 12:53:45 pm: Row 3 | C2: 0
+02/03/2026 12:53:45 pm: Row 3 | intDealID: 0
+02/03/2026 12:53:45 pm: Row 3 | lngDealDetailID: 0
+02/03/2026 12:53:45 pm: Row 3 | DEAL_QTY: 0
+02/03/2026 12:53:45 pm: Row 3 | DEAL_NAME: 
+02/03/2026 12:53:45 pm: Row 3 | UOM_ID: 14
+02/03/2026 12:53:45 pm: Row 3 | intStockMUnitCode: 14
+02/03/2026 12:53:45 pm: Row 3 | Stock_to_SaleOperator: *
+02/03/2026 12:53:45 pm: Row 3 | Stock_to_SaleFactor: 1
+02/03/2026 12:53:45 pm: Row 3 | DEFAULT_QTY: 1
+02/03/2026 12:53:45 pm: Row 3 | IS_HasMODIFIER: false
+02/03/2026 12:53:45 pm: Row 3 | DeliveryType: 0
+02/03/2026 12:53:45 pm: Row 3 | SALE_INVOICE_DETAIL_ID: 1260358
+02/03/2026 12:53:45 pm: Row 3 | IS_FREE: 0
+02/03/2026 12:53:45 pm: Row 3 | ORIGINAL_QTY: 0
+02/03/2026 12:53:45 pm: Row 3 | PRINT_QTY: 1
+02/03/2026 12:53:45 pm: Row 3 | MODIFIER: 0
+02/03/2026 12:53:45 pm: Row 3 | MODIFIER_PARENT_ID: 0
+02/03/2026 12:53:45 pm: Row 3 | LessCancelReasonID: 0
+02/03/2026 12:53:45 pm: Row 3 | SortOrder: 0
+02/03/2026 12:53:45 pm: Row 3 | ModifierParetn_Row_ID: 3
+02/03/2026 12:53:45 pm: Row 3 | GSTPER: 0
+02/03/2026 12:53:45 pm: Row 3 | ItemWiseGST: 0
+02/03/2026 12:53:45 pm: Row 3 | DISCOUNT: 0
+02/03/2026 12:53:45 pm: Row 3 | ItemComments: 
+02/03/2026 12:53:45 pm: Row 3 | ItemType: 
+02/03/2026 12:53:45 pm: Row 3 | ComplimentaryReason: 0
+02/03/2026 12:53:45 pm: Row 3 | TIME_STAMP: 27/02/2026 9:36:50 am
+02/03/2026 12:53:45 pm: Row 3 | DISCOUNTDeal: 0
+02/03/2026 12:53:45 pm: dtInvoiceDetail: started
+02/03/2026 12:53:45 pm: Row 4 | SKU_ID: 285
+02/03/2026 12:53:45 pm: Row 4 | QTY: 3.00000
+02/03/2026 12:53:45 pm: Row 4 | KDS_QTY: 0.00
+02/03/2026 12:53:45 pm: Row 4 | IsModifiedItem: NULL
+02/03/2026 12:53:45 pm: Row 4 | IsReady: False
+02/03/2026 12:53:45 pm: Row 4 | LASTUPDATE_DATE: 27/02/2026 12:50:20 pm
+02/03/2026 12:53:45 pm: Row 4 | SALE_INVOICE_DETAIL_ID: 1260356
+02/03/2026 12:53:45 pm: Row 4 | DealQTY: 0.00
+02/03/2026 12:53:45 pm: Row 4 | TIME_STAMP: 20260216165715970
+02/03/2026 12:53:45 pm: Row 5 | SKU_ID: 8380
+02/03/2026 12:53:45 pm: Row 5 | QTY: 1.00000
+02/03/2026 12:53:45 pm: Row 5 | KDS_QTY: 0.00
+02/03/2026 12:53:45 pm: Row 5 | IsModifiedItem: NULL
+02/03/2026 12:53:45 pm: Row 5 | IsReady: False
+02/03/2026 12:53:45 pm: Row 5 | LASTUPDATE_DATE: 27/02/2026 2:36:52 pm
+02/03/2026 12:53:45 pm: Row 5 | SALE_INVOICE_DETAIL_ID: 1260357
+02/03/2026 12:53:45 pm: Row 5 | DealQTY: 0.00
+02/03/2026 12:53:45 pm: Row 5 | TIME_STAMP: 20260227143649670
+02/03/2026 12:53:45 pm: Row 6 | SKU_ID: 8385
+02/03/2026 12:53:45 pm: Row 6 | QTY: 1.00000
+02/03/2026 12:53:45 pm: Row 6 | KDS_QTY: 0.00
+02/03/2026 12:53:45 pm: Row 6 | IsModifiedItem: NULL
+02/03/2026 12:53:45 pm: Row 6 | IsReady: False
+02/03/2026 12:53:45 pm: Row 6 | LASTUPDATE_DATE: 27/02/2026 2:36:52 pm
+02/03/2026 12:53:45 pm: Row 6 | SALE_INVOICE_DETAIL_ID: 1260358
+02/03/2026 12:53:45 pm: Row 6 | DealQTY: 0.00
+02/03/2026 12:53:45 pm: Row 6 | TIME_STAMP: 20260227143650657
