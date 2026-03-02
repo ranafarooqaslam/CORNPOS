@@ -970,7 +970,8 @@ namespace CORNBusinessLayer.Classes
             IDbConnection mConnection = null;
             IDbTransaction mTransaction = null;
             try
-            {                
+            {
+                LogParams(pSaleInvoiceId, pPaymentModeId, pCustomerTypeId, pTableId, pAmountdue, pDiscount, pGst, pPaidin, pBalance, pIsHold, pUserId, pDocumentDate, pDistributorId, pDiscType, dtInvoiceDetail, pOrderBookerId, pCovertTable, pTakeAwayCustomer, p_VOID_BY, pMANUAL_ORDER_NO, pREMARKS, pserviceCharges, pcustomerID, pInvoicePrinted, pGSTPER, pGSTPERCreditCard, pBillFormat, pAdvanceAmount, pCustomerGST, pCustomerDiscount, pCustomerDiscountType, pCustomerServiceCharges, pCustomerServiceType, pRecipeType, pDelChannel, pDELIVERY_CHANNEL_CASH_IMPACT, pCreditCard_Impact, KDSImplemented, pIsItemChanged, pTakeawayType, dt, OldInvoiceJson);
                 DataTable dtItemLessCancel = dtInvoiceDetail.Clone();
                 List<int> Deal = new List<int>();
                 decimal itemDiscount = 0;
@@ -1367,75 +1368,7 @@ namespace CORNBusinessLayer.Classes
             catch (Exception exp)
             {
                 ExceptionPublisher.PublishException(exp);
-                mTransaction.Rollback();
-                WriteLog("mTransaction.Rollback()");
-                try
-                {
-                    WriteLog("pSaleInvoiceId:" + pSaleInvoiceId.ToString());
-                    WriteLog("pPaymentModeId:" + pPaymentModeId.ToString());
-                    WriteLog("pCustomerTypeId:" + pCustomerTypeId.ToString());
-                    WriteLog("pTableId:" + pTableId.ToString());
-                    WriteLog("pAmountdue:" + pAmountdue.ToString());
-                    WriteLog("pDiscount:" + pDiscount.ToString());
-                    WriteLog("pGst:" + pGst.ToString());
-                    WriteLog("pPaidin:" + pPaidin.ToString());
-                    WriteLog("pBalance:" + pBalance.ToString());
-                    WriteLog("pIsHold:" + pIsHold.ToString());
-                    WriteLog("pUserId:" + pUserId.ToString());
-                    WriteLog("pDocumentDate:" + pDocumentDate.ToString());
-                    WriteLog("pDistributorId:" + pDistributorId.ToString());
-                    WriteLog("pDiscType:" + pDiscType.ToString());
-                    WriteLog("pOrderBookerId:" + pOrderBookerId.ToString());
-                    WriteLog("pCovertTable:" + pCovertTable);
-                    WriteLog("pTakeAwayCustomer:" + pTakeAwayCustomer);
-                    WriteLog("p_VOID_BY:" + p_VOID_BY.ToString());
-                    WriteLog("pMANUAL_ORDER_NO:" + pMANUAL_ORDER_NO);
-                    WriteLog("pREMARKS:" + pREMARKS);
-                    WriteLog("pserviceCharges:" + pserviceCharges);
-                    WriteLog("pcustomerID:" + pcustomerID.ToString());
-                    WriteLog("pInvoicePrinted:" + pInvoicePrinted.ToString());
-                    WriteLog("pGSTPER:" + pGSTPER);
-                    WriteLog("pGSTPERCreditCard:" + pGSTPERCreditCard.ToString());
-                    WriteLog("pBillFormat:" + pBillFormat.ToString());
-                    WriteLog("pAdvanceAmount:" + pAdvanceAmount.ToString());
-                    WriteLog("pCustomerGST:" + pCustomerGST.ToString());
-                    WriteLog("pCustomerDiscount:" + pCustomerDiscount.ToString());
-                    WriteLog("pCustomerDiscountType:" + pCustomerDiscountType.ToString());
-                    WriteLog("pCustomerServiceCharges:" + pCustomerServiceCharges.ToString());
-                    WriteLog("pCustomerServiceType:" + pCustomerServiceType.ToString());
-                    WriteLog("pRecipeType:" + pRecipeType.ToString());
-                    WriteLog("pDelChannel:" + pDelChannel.ToString());
-                    WriteLog("pDELIVERY_CHANNEL_CASH_IMPACT:" + pDELIVERY_CHANNEL_CASH_IMPACT.ToString());
-                    WriteLog("pCreditCard_Impact:" + pCreditCard_Impact.ToString());
-                    WriteLog("KDSImplemented:" + KDSImplemented.ToString());
-                    WriteLog("pIsItemChanged:" + pIsItemChanged.ToString());
-                    WriteLog("pTakeawayType:" + pTakeawayType.ToString());
-                    WriteLog("OldInvoiceJson:" + OldInvoiceJson.ToString());
-                    int rowNo = 1;
-                    foreach (DataRow row in dtInvoiceDetail.Rows)
-                    {
-                        foreach (DataColumn col in dtInvoiceDetail.Columns)
-                        {
-                            string value = row[col] == DBNull.Value ? "NULL" : row[col].ToString();
-                            WriteLog($"Row {rowNo} | {col.ColumnName}: {value}");
-                        }
-                        rowNo++;
-                    }
-
-                    foreach (DataRow row in dt.Rows)
-                    {
-                        foreach (DataColumn col in dt.Columns)
-                        {
-                            string value = row[col] == DBNull.Value ? "NULL" : row[col].ToString();
-                            WriteLog($"Row {rowNo} | {col.ColumnName}: {value}");
-                        }
-                        rowNo++;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ExceptionPublisher.PublishException(ex);
-                }
+                mTransaction.Rollback();                
                 throw;
             }
             finally
@@ -5867,7 +5800,7 @@ namespace CORNBusinessLayer.Classes
         private static void WriteLog(string Msg)
         {
             string path = AppDomain.CurrentDomain.BaseDirectory;
-            string logFile = path + "TestLog.txt";
+            string logFile = path + "\\TestLog.txt";
             for (int i = 0; i < 3; i++)
             {
                 try
@@ -5892,6 +5825,78 @@ namespace CORNBusinessLayer.Classes
                 }
             }
 
+        }
+
+        private static void LogParams(long pSaleInvoiceId, int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pBalance, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, int pDiscType, DataTable dtInvoiceDetail, int pOrderBookerId, string pCovertTable, string pTakeAwayCustomer, int p_VOID_BY, string pMANUAL_ORDER_NO, string pREMARKS, int pserviceCharges, int pcustomerID, bool pInvoicePrinted, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, string pRecipeType, int pDelChannel, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, bool KDSImplemented, bool pIsItemChanged, short pTakeawayType, DataTable dt,string OldInvoiceJson)
+        {
+            WriteLog("mTransaction.Rollback()");
+            try
+            {
+                WriteLog("pSaleInvoiceId:" + pSaleInvoiceId.ToString());
+                WriteLog("pPaymentModeId:" + pPaymentModeId.ToString());
+                WriteLog("pCustomerTypeId:" + pCustomerTypeId.ToString());
+                WriteLog("pTableId:" + pTableId.ToString());
+                WriteLog("pAmountdue:" + pAmountdue.ToString());
+                WriteLog("pDiscount:" + pDiscount.ToString());
+                WriteLog("pGst:" + pGst.ToString());
+                WriteLog("pPaidin:" + pPaidin.ToString());
+                WriteLog("pBalance:" + pBalance.ToString());
+                WriteLog("pIsHold:" + pIsHold.ToString());
+                WriteLog("pUserId:" + pUserId.ToString());
+                WriteLog("pDocumentDate:" + pDocumentDate.ToString());
+                WriteLog("pDistributorId:" + pDistributorId.ToString());
+                WriteLog("pDiscType:" + pDiscType.ToString());
+                WriteLog("pOrderBookerId:" + pOrderBookerId.ToString());
+                WriteLog("pCovertTable:" + pCovertTable);
+                WriteLog("pTakeAwayCustomer:" + pTakeAwayCustomer);
+                WriteLog("p_VOID_BY:" + p_VOID_BY.ToString());
+                WriteLog("pMANUAL_ORDER_NO:" + pMANUAL_ORDER_NO);
+                WriteLog("pREMARKS:" + pREMARKS);
+                WriteLog("pserviceCharges:" + pserviceCharges);
+                WriteLog("pcustomerID:" + pcustomerID.ToString());
+                WriteLog("pInvoicePrinted:" + pInvoicePrinted.ToString());
+                WriteLog("pGSTPER:" + pGSTPER);
+                WriteLog("pGSTPERCreditCard:" + pGSTPERCreditCard.ToString());
+                WriteLog("pBillFormat:" + pBillFormat.ToString());
+                WriteLog("pAdvanceAmount:" + pAdvanceAmount.ToString());
+                WriteLog("pCustomerGST:" + pCustomerGST.ToString());
+                WriteLog("pCustomerDiscount:" + pCustomerDiscount.ToString());
+                WriteLog("pCustomerDiscountType:" + pCustomerDiscountType.ToString());
+                WriteLog("pCustomerServiceCharges:" + pCustomerServiceCharges.ToString());
+                WriteLog("pCustomerServiceType:" + pCustomerServiceType.ToString());
+                WriteLog("pRecipeType:" + pRecipeType.ToString());
+                WriteLog("pDelChannel:" + pDelChannel.ToString());
+                WriteLog("pDELIVERY_CHANNEL_CASH_IMPACT:" + pDELIVERY_CHANNEL_CASH_IMPACT.ToString());
+                WriteLog("pCreditCard_Impact:" + pCreditCard_Impact.ToString());
+                WriteLog("KDSImplemented:" + KDSImplemented.ToString());
+                WriteLog("pIsItemChanged:" + pIsItemChanged.ToString());
+                WriteLog("pTakeawayType:" + pTakeawayType.ToString());
+                WriteLog("OldInvoiceJson:" + OldInvoiceJson.ToString());
+                int rowNo = 1;
+                foreach (DataRow row in dtInvoiceDetail.Rows)
+                {
+                    foreach (DataColumn col in dtInvoiceDetail.Columns)
+                    {
+                        string value = row[col] == DBNull.Value ? "NULL" : row[col].ToString();
+                        WriteLog($"Row {rowNo} | {col.ColumnName}: {value}");
+                    }
+                    rowNo++;
+                }
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    foreach (DataColumn col in dt.Columns)
+                    {
+                        string value = row[col] == DBNull.Value ? "NULL" : row[col].ToString();
+                        WriteLog($"Row {rowNo} | {col.ColumnName}: {value}");
+                    }
+                    rowNo++;
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionPublisher.PublishException(ex);
+            }
         }
         #endregion
     }
