@@ -1366,70 +1366,76 @@ namespace CORNBusinessLayer.Classes
             }
             catch (Exception exp)
             {
-                WriteLog("pSaleInvoiceId:" + pSaleInvoiceId.ToString());
-                WriteLog("pPaymentModeId:" + pPaymentModeId.ToString());
-                WriteLog("pCustomerTypeId:" + pCustomerTypeId.ToString());
-                WriteLog("pTableId:" + pTableId.ToString());
-                WriteLog("pAmountdue:" + pAmountdue.ToString());
-                WriteLog("pDiscount:" + pDiscount.ToString());
-                WriteLog("pGst:" + pGst.ToString());
-                WriteLog("pPaidin:" + pPaidin.ToString());
-                WriteLog("pBalance:" + pBalance.ToString());
-                WriteLog("pIsHold:" + pIsHold.ToString());
-                WriteLog("pUserId:" + pUserId.ToString());
-                WriteLog("pDocumentDate:" + pDocumentDate.ToString());
-                WriteLog("pDistributorId:" + pDistributorId.ToString());
-                WriteLog("pDiscType:" + pDiscType.ToString());
-                WriteLog("pOrderBookerId:" + pOrderBookerId.ToString());
-                WriteLog("pCovertTable:" + pCovertTable);
-                WriteLog("pTakeAwayCustomer:" + pTakeAwayCustomer);
-                WriteLog("p_VOID_BY:" + p_VOID_BY.ToString());
-                WriteLog("pMANUAL_ORDER_NO:" + pMANUAL_ORDER_NO);
-                WriteLog("pREMARKS:" + pREMARKS);
-                WriteLog("pserviceCharges:" + pserviceCharges);
-                WriteLog("pcustomerID:" + pcustomerID.ToString());
-                WriteLog("pInvoicePrinted:" + pInvoicePrinted.ToString());
-                WriteLog("pGSTPER:" + pGSTPER);
-                WriteLog("pGSTPERCreditCard:" + pGSTPERCreditCard.ToString());
-                WriteLog("pBillFormat:" + pBillFormat.ToString());
-                WriteLog("pAdvanceAmount:" + pAdvanceAmount.ToString());
-                WriteLog("pCustomerGST:" + pCustomerGST.ToString());
-                WriteLog("pCustomerDiscount:" + pCustomerDiscount.ToString());
-                WriteLog("pCustomerDiscountType:" + pCustomerDiscountType.ToString());
-                WriteLog("pCustomerServiceCharges:" + pCustomerServiceCharges.ToString());
-                WriteLog("pCustomerServiceType:" + pCustomerServiceType.ToString());
-                WriteLog("pRecipeType:" + pRecipeType.ToString());
-                WriteLog("pDelChannel:" + pDelChannel.ToString());
-                WriteLog("pDELIVERY_CHANNEL_CASH_IMPACT:" + pDELIVERY_CHANNEL_CASH_IMPACT.ToString());
-                WriteLog("pCreditCard_Impact:" + pCreditCard_Impact.ToString());
-                WriteLog("KDSImplemented:" + KDSImplemented.ToString());
-                WriteLog("pIsItemChanged:" + pIsItemChanged.ToString());
-                WriteLog("pTakeawayType:" + pTakeawayType.ToString());
-                WriteLog("OldInvoiceJson:" + OldInvoiceJson.ToString());
-                int rowNo = 1;
-                foreach (DataRow row in dtInvoiceDetail.Rows)
-                {
-                    foreach (DataColumn col in dtInvoiceDetail.Columns)
-                    {
-                        string value = row[col] == DBNull.Value ? "NULL" : row[col].ToString();
-                        WriteLog($"Row {rowNo} | {col.ColumnName}: {value}");
-                    }
-                    rowNo++;
-                }
-
-                foreach (DataRow row in dt.Rows)
-                {
-                    foreach (DataColumn col in dt.Columns)
-                    {
-                        string value = row[col] == DBNull.Value ? "NULL" : row[col].ToString();
-                        WriteLog($"Row {rowNo} | {col.ColumnName}: {value}");
-                    }
-                    rowNo++;
-                }
-
                 ExceptionPublisher.PublishException(exp);
                 mTransaction.Rollback();
                 WriteLog("mTransaction.Rollback()");
+                try
+                {
+                    WriteLog("pSaleInvoiceId:" + pSaleInvoiceId.ToString());
+                    WriteLog("pPaymentModeId:" + pPaymentModeId.ToString());
+                    WriteLog("pCustomerTypeId:" + pCustomerTypeId.ToString());
+                    WriteLog("pTableId:" + pTableId.ToString());
+                    WriteLog("pAmountdue:" + pAmountdue.ToString());
+                    WriteLog("pDiscount:" + pDiscount.ToString());
+                    WriteLog("pGst:" + pGst.ToString());
+                    WriteLog("pPaidin:" + pPaidin.ToString());
+                    WriteLog("pBalance:" + pBalance.ToString());
+                    WriteLog("pIsHold:" + pIsHold.ToString());
+                    WriteLog("pUserId:" + pUserId.ToString());
+                    WriteLog("pDocumentDate:" + pDocumentDate.ToString());
+                    WriteLog("pDistributorId:" + pDistributorId.ToString());
+                    WriteLog("pDiscType:" + pDiscType.ToString());
+                    WriteLog("pOrderBookerId:" + pOrderBookerId.ToString());
+                    WriteLog("pCovertTable:" + pCovertTable);
+                    WriteLog("pTakeAwayCustomer:" + pTakeAwayCustomer);
+                    WriteLog("p_VOID_BY:" + p_VOID_BY.ToString());
+                    WriteLog("pMANUAL_ORDER_NO:" + pMANUAL_ORDER_NO);
+                    WriteLog("pREMARKS:" + pREMARKS);
+                    WriteLog("pserviceCharges:" + pserviceCharges);
+                    WriteLog("pcustomerID:" + pcustomerID.ToString());
+                    WriteLog("pInvoicePrinted:" + pInvoicePrinted.ToString());
+                    WriteLog("pGSTPER:" + pGSTPER);
+                    WriteLog("pGSTPERCreditCard:" + pGSTPERCreditCard.ToString());
+                    WriteLog("pBillFormat:" + pBillFormat.ToString());
+                    WriteLog("pAdvanceAmount:" + pAdvanceAmount.ToString());
+                    WriteLog("pCustomerGST:" + pCustomerGST.ToString());
+                    WriteLog("pCustomerDiscount:" + pCustomerDiscount.ToString());
+                    WriteLog("pCustomerDiscountType:" + pCustomerDiscountType.ToString());
+                    WriteLog("pCustomerServiceCharges:" + pCustomerServiceCharges.ToString());
+                    WriteLog("pCustomerServiceType:" + pCustomerServiceType.ToString());
+                    WriteLog("pRecipeType:" + pRecipeType.ToString());
+                    WriteLog("pDelChannel:" + pDelChannel.ToString());
+                    WriteLog("pDELIVERY_CHANNEL_CASH_IMPACT:" + pDELIVERY_CHANNEL_CASH_IMPACT.ToString());
+                    WriteLog("pCreditCard_Impact:" + pCreditCard_Impact.ToString());
+                    WriteLog("KDSImplemented:" + KDSImplemented.ToString());
+                    WriteLog("pIsItemChanged:" + pIsItemChanged.ToString());
+                    WriteLog("pTakeawayType:" + pTakeawayType.ToString());
+                    WriteLog("OldInvoiceJson:" + OldInvoiceJson.ToString());
+                    int rowNo = 1;
+                    foreach (DataRow row in dtInvoiceDetail.Rows)
+                    {
+                        foreach (DataColumn col in dtInvoiceDetail.Columns)
+                        {
+                            string value = row[col] == DBNull.Value ? "NULL" : row[col].ToString();
+                            WriteLog($"Row {rowNo} | {col.ColumnName}: {value}");
+                        }
+                        rowNo++;
+                    }
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        foreach (DataColumn col in dt.Columns)
+                        {
+                            string value = row[col] == DBNull.Value ? "NULL" : row[col].ToString();
+                            WriteLog($"Row {rowNo} | {col.ColumnName}: {value}");
+                        }
+                        rowNo++;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ExceptionPublisher.PublishException(ex);
+                }
                 throw;
             }
             finally

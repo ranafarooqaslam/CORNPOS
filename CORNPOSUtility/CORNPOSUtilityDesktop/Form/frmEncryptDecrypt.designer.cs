@@ -45,6 +45,17 @@
             this.lblInputInsight = new System.Windows.Forms.Label();
             this.txtInputInsight = new System.Windows.Forms.TextBox();
             this.btnEncryptInsight = new System.Windows.Forms.Button();
+            this.pCORNNewEncryptDecrypt = new System.Windows.Forms.TabPage();
+            this.btnDecryptNew = new System.Windows.Forms.Button();
+            this.txtOutputNew = new System.Windows.Forms.TextBox();
+            this.lblOutputNew = new System.Windows.Forms.Label();
+            this.lblInputNew = new System.Windows.Forms.Label();
+            this.txtInputNew = new System.Windows.Forms.TextBox();
+            this.btnEncryptNew = new System.Windows.Forms.Button();
+            this.TeamSuit = new System.Windows.Forms.TabPage();
+            this.btnUpdate = new System.Windows.Forms.Button();
+            this.lblServer = new System.Windows.Forms.Label();
+            this.txtServer = new System.Windows.Forms.TextBox();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.label31 = new System.Windows.Forms.Label();
@@ -62,22 +73,16 @@
             this.dataGridViewCheckBoxColumn5 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pCORNNewEncryptDecrypt = new System.Windows.Forms.TabPage();
-            this.btnDecryptNew = new System.Windows.Forms.Button();
-            this.txtOutputNew = new System.Windows.Forms.TextBox();
-            this.lblOutputNew = new System.Windows.Forms.Label();
-            this.lblInputNew = new System.Windows.Forms.Label();
-            this.txtInputNew = new System.Windows.Forms.TextBox();
-            this.btnEncryptNew = new System.Windows.Forms.Button();
             this.TabTerminal.SuspendLayout();
             this.pCORNEncryptDecrtype.SuspendLayout();
             this.pCORNInsightEncryptDecrypt.SuspendLayout();
+            this.pCORNNewEncryptDecrypt.SuspendLayout();
+            this.TeamSuit.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).BeginInit();
             this.tabControl3.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).BeginInit();
-            this.pCORNNewEncryptDecrypt.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabTerminal
@@ -85,6 +90,7 @@
             this.TabTerminal.Controls.Add(this.pCORNEncryptDecrtype);
             this.TabTerminal.Controls.Add(this.pCORNInsightEncryptDecrypt);
             this.TabTerminal.Controls.Add(this.pCORNNewEncryptDecrypt);
+            this.TabTerminal.Controls.Add(this.TeamSuit);
             this.TabTerminal.Dock = System.Windows.Forms.DockStyle.Top;
             this.TabTerminal.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.TabTerminal.Location = new System.Drawing.Point(0, 0);
@@ -255,6 +261,115 @@
             this.btnEncryptInsight.UseVisualStyleBackColor = true;
             this.btnEncryptInsight.Click += new System.EventHandler(this.btnEncryptInsight_Click);
             // 
+            // pCORNNewEncryptDecrypt
+            // 
+            this.pCORNNewEncryptDecrypt.Controls.Add(this.btnDecryptNew);
+            this.pCORNNewEncryptDecrypt.Controls.Add(this.txtOutputNew);
+            this.pCORNNewEncryptDecrypt.Controls.Add(this.lblOutputNew);
+            this.pCORNNewEncryptDecrypt.Controls.Add(this.lblInputNew);
+            this.pCORNNewEncryptDecrypt.Controls.Add(this.txtInputNew);
+            this.pCORNNewEncryptDecrypt.Controls.Add(this.btnEncryptNew);
+            this.pCORNNewEncryptDecrypt.Location = new System.Drawing.Point(4, 25);
+            this.pCORNNewEncryptDecrypt.Name = "pCORNNewEncryptDecrypt";
+            this.pCORNNewEncryptDecrypt.Padding = new System.Windows.Forms.Padding(3);
+            this.pCORNNewEncryptDecrypt.Size = new System.Drawing.Size(926, 356);
+            this.pCORNNewEncryptDecrypt.TabIndex = 2;
+            this.pCORNNewEncryptDecrypt.Text = "CORN New Encrypt Decrypt";
+            this.pCORNNewEncryptDecrypt.UseVisualStyleBackColor = true;
+            // 
+            // btnDecryptNew
+            // 
+            this.btnDecryptNew.Location = new System.Drawing.Point(149, 67);
+            this.btnDecryptNew.Name = "btnDecryptNew";
+            this.btnDecryptNew.Size = new System.Drawing.Size(75, 23);
+            this.btnDecryptNew.TabIndex = 20;
+            this.btnDecryptNew.Text = "Decrypt";
+            this.btnDecryptNew.UseVisualStyleBackColor = true;
+            this.btnDecryptNew.Click += new System.EventHandler(this.btnDecryptNew_Click);
+            // 
+            // txtOutputNew
+            // 
+            this.txtOutputNew.Location = new System.Drawing.Point(85, 39);
+            this.txtOutputNew.Name = "txtOutputNew";
+            this.txtOutputNew.Size = new System.Drawing.Size(339, 22);
+            this.txtOutputNew.TabIndex = 19;
+            this.txtOutputNew.Enter += new System.EventHandler(this.txtOutputNew_Enter);
+            // 
+            // lblOutputNew
+            // 
+            this.lblOutputNew.AutoSize = true;
+            this.lblOutputNew.Location = new System.Drawing.Point(8, 39);
+            this.lblOutputNew.Name = "lblOutputNew";
+            this.lblOutputNew.Size = new System.Drawing.Size(51, 17);
+            this.lblOutputNew.TabIndex = 22;
+            this.lblOutputNew.Text = "Output";
+            // 
+            // lblInputNew
+            // 
+            this.lblInputNew.AutoSize = true;
+            this.lblInputNew.Location = new System.Drawing.Point(8, 15);
+            this.lblInputNew.Name = "lblInputNew";
+            this.lblInputNew.Size = new System.Drawing.Size(77, 17);
+            this.lblInputNew.TabIndex = 21;
+            this.lblInputNew.Text = "Enter Input";
+            // 
+            // txtInputNew
+            // 
+            this.txtInputNew.Location = new System.Drawing.Point(85, 12);
+            this.txtInputNew.Name = "txtInputNew";
+            this.txtInputNew.Size = new System.Drawing.Size(339, 22);
+            this.txtInputNew.TabIndex = 18;
+            this.txtInputNew.Enter += new System.EventHandler(this.txtInputNew_Enter);
+            // 
+            // btnEncryptNew
+            // 
+            this.btnEncryptNew.Location = new System.Drawing.Point(230, 67);
+            this.btnEncryptNew.Name = "btnEncryptNew";
+            this.btnEncryptNew.Size = new System.Drawing.Size(75, 23);
+            this.btnEncryptNew.TabIndex = 23;
+            this.btnEncryptNew.Text = "Encrypt";
+            this.btnEncryptNew.UseVisualStyleBackColor = true;
+            this.btnEncryptNew.Click += new System.EventHandler(this.btnEncryptNew_Click);
+            // 
+            // TeamSuit
+            // 
+            this.TeamSuit.Controls.Add(this.btnUpdate);
+            this.TeamSuit.Controls.Add(this.lblServer);
+            this.TeamSuit.Controls.Add(this.txtServer);
+            this.TeamSuit.Location = new System.Drawing.Point(4, 25);
+            this.TeamSuit.Name = "TeamSuit";
+            this.TeamSuit.Padding = new System.Windows.Forms.Padding(3);
+            this.TeamSuit.Size = new System.Drawing.Size(926, 356);
+            this.TeamSuit.TabIndex = 3;
+            this.TeamSuit.Text = "Team Suit";
+            this.TeamSuit.UseVisualStyleBackColor = true;
+            // 
+            // btnUpdate
+            // 
+            this.btnUpdate.Location = new System.Drawing.Point(208, 34);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdate.TabIndex = 24;
+            this.btnUpdate.Text = "Update Server";
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            // 
+            // lblServer
+            // 
+            this.lblServer.AutoSize = true;
+            this.lblServer.Location = new System.Drawing.Point(33, 9);
+            this.lblServer.Name = "lblServer";
+            this.lblServer.Size = new System.Drawing.Size(54, 17);
+            this.lblServer.TabIndex = 23;
+            this.lblServer.Text = "Server:";
+            // 
+            // txtServer
+            // 
+            this.txtServer.Location = new System.Drawing.Point(110, 6);
+            this.txtServer.Name = "txtServer";
+            this.txtServer.Size = new System.Drawing.Size(339, 22);
+            this.txtServer.TabIndex = 22;
+            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(758, 127);
@@ -407,76 +522,6 @@
             this.dataGridViewTextBoxColumn10.HeaderText = "Value";
             this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
             // 
-            // pCORNNewEncryptDecrypt
-            // 
-            this.pCORNNewEncryptDecrypt.Controls.Add(this.btnDecryptNew);
-            this.pCORNNewEncryptDecrypt.Controls.Add(this.txtOutputNew);
-            this.pCORNNewEncryptDecrypt.Controls.Add(this.lblOutputNew);
-            this.pCORNNewEncryptDecrypt.Controls.Add(this.lblInputNew);
-            this.pCORNNewEncryptDecrypt.Controls.Add(this.txtInputNew);
-            this.pCORNNewEncryptDecrypt.Controls.Add(this.btnEncryptNew);
-            this.pCORNNewEncryptDecrypt.Location = new System.Drawing.Point(4, 25);
-            this.pCORNNewEncryptDecrypt.Name = "pCORNNewEncryptDecrypt";
-            this.pCORNNewEncryptDecrypt.Padding = new System.Windows.Forms.Padding(3);
-            this.pCORNNewEncryptDecrypt.Size = new System.Drawing.Size(926, 356);
-            this.pCORNNewEncryptDecrypt.TabIndex = 2;
-            this.pCORNNewEncryptDecrypt.Text = "CORN New Encrypt Decrypt";
-            this.pCORNNewEncryptDecrypt.UseVisualStyleBackColor = true;
-            // 
-            // btnDecryptNew
-            // 
-            this.btnDecryptNew.Location = new System.Drawing.Point(149, 67);
-            this.btnDecryptNew.Name = "btnDecryptNew";
-            this.btnDecryptNew.Size = new System.Drawing.Size(75, 23);
-            this.btnDecryptNew.TabIndex = 20;
-            this.btnDecryptNew.Text = "Decrypt";
-            this.btnDecryptNew.UseVisualStyleBackColor = true;
-            this.btnDecryptNew.Click += new System.EventHandler(this.btnDecryptNew_Click);
-            // 
-            // txtOutputNew
-            // 
-            this.txtOutputNew.Location = new System.Drawing.Point(85, 39);
-            this.txtOutputNew.Name = "txtOutputNew";
-            this.txtOutputNew.Size = new System.Drawing.Size(339, 22);
-            this.txtOutputNew.TabIndex = 19;
-            this.txtOutputNew.Enter += new System.EventHandler(this.txtOutputNew_Enter);
-            // 
-            // lblOutputNew
-            // 
-            this.lblOutputNew.AutoSize = true;
-            this.lblOutputNew.Location = new System.Drawing.Point(8, 39);
-            this.lblOutputNew.Name = "lblOutputNew";
-            this.lblOutputNew.Size = new System.Drawing.Size(51, 17);
-            this.lblOutputNew.TabIndex = 22;
-            this.lblOutputNew.Text = "Output";
-            // 
-            // lblInputNew
-            // 
-            this.lblInputNew.AutoSize = true;
-            this.lblInputNew.Location = new System.Drawing.Point(8, 15);
-            this.lblInputNew.Name = "lblInputNew";
-            this.lblInputNew.Size = new System.Drawing.Size(77, 17);
-            this.lblInputNew.TabIndex = 21;
-            this.lblInputNew.Text = "Enter Input";
-            // 
-            // txtInputNew
-            // 
-            this.txtInputNew.Location = new System.Drawing.Point(85, 12);
-            this.txtInputNew.Name = "txtInputNew";
-            this.txtInputNew.Size = new System.Drawing.Size(339, 22);
-            this.txtInputNew.TabIndex = 18;
-            this.txtInputNew.Enter += new System.EventHandler(this.txtInputNew_Enter);
-            // 
-            // btnEncryptNew
-            // 
-            this.btnEncryptNew.Location = new System.Drawing.Point(230, 67);
-            this.btnEncryptNew.Name = "btnEncryptNew";
-            this.btnEncryptNew.Size = new System.Drawing.Size(75, 23);
-            this.btnEncryptNew.TabIndex = 23;
-            this.btnEncryptNew.Text = "Encrypt";
-            this.btnEncryptNew.UseVisualStyleBackColor = true;
-            this.btnEncryptNew.Click += new System.EventHandler(this.btnEncryptNew_Click);
-            // 
             // frmEncryptDecrypt
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -491,13 +536,15 @@
             this.pCORNEncryptDecrtype.PerformLayout();
             this.pCORNInsightEncryptDecrypt.ResumeLayout(false);
             this.pCORNInsightEncryptDecrypt.PerformLayout();
+            this.pCORNNewEncryptDecrypt.ResumeLayout(false);
+            this.pCORNNewEncryptDecrypt.PerformLayout();
+            this.TeamSuit.ResumeLayout(false);
+            this.TeamSuit.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView5)).EndInit();
             this.tabControl3.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView6)).EndInit();
-            this.pCORNNewEncryptDecrypt.ResumeLayout(false);
-            this.pCORNNewEncryptDecrypt.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -545,5 +592,9 @@
         private System.Windows.Forms.Label lblInputNew;
         private System.Windows.Forms.TextBox txtInputNew;
         private System.Windows.Forms.Button btnEncryptNew;
+        private System.Windows.Forms.TabPage TeamSuit;
+        private System.Windows.Forms.Label lblServer;
+        private System.Windows.Forms.TextBox txtServer;
+        private System.Windows.Forms.Button btnUpdate;
     }
 }

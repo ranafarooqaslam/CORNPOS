@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -211,6 +213,108 @@ namespace CORNPOSUtilityDesktop
                 txtOutputNew.Text = Convert.ToBase64String(combinedData);
                 txtOutputNew.Focus();
             }
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            if (txtServer.Text.Trim().Length > 0)
+            {
+                DataTable dtDBName = new DataTable();
+                dtDBName.Columns.Add("DBName", typeof(string));
+                dtDBName.Columns.Add("Id", typeof(long));
+                string conString = "server=tsl.faastdemo.com"
+                + ";uid=Mansoor"
+                + ";pwd=Windows@1234"
+                + ";database=FS-MultiTenant";
+                string NewConnectionString = "";
+                using (SqlConnection con = new SqlConnection(conString))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(string.Format("SELECT DBName, Id FROM tbl_MultiTenant"), con))
+                    {
+                        using (IDataReader dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                DataRow drNew = dtDBName.NewRow();
+                                drNew["DBName"] = dr[0];
+                                drNew["Id"] = dr[1];
+                                dtDBName.Rows.Add(drNew);
+                            }
+                        }
+                    }
+                    con.Close();
+                }
+                int len = 0;
+                foreach (DataRow dr in dtDBName.Rows)
+                {
+                    NewConnectionString = "Data Source=" + txtServer.Text + ";Initial Catalog=" + dr["DBName"].ToString() + ";Persist Security Info=True;User ID=app;Password=Fast12341234;";
+                    StringBuilder sbScript = new StringBuilder();
+                    sbScript.Append("UPDATE tbl_MultiTenant");
+                    sbScript.Append(Environment.NewLine);
+                    sbScript.Append("SET DBConInfoCorn='" + EncryptNewConnection(NewConnectionString) + "'");
+                    sbScript.Append(Environment.NewLine);
+                    sbScript.Append("WHERE Id=" + Convert.ToInt64(dr["Id"]));
+                    ExecuteScript(sbScript.ToString());
+                    len++;
+                }
+                if(len> 0)
+                {
+                    MessageBox.Show("Connection String udated for all dbs");
+                }
+            }
+        }
+        private void ExecuteScript(string script)
+        {
+            string conString = "server=tsl.faastdemo.com"
+                + ";uid=Mansoor"
+                + ";pwd=Windows@1234"
+                + ";database=FS-MultiTenant";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(conString))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand(script, con))
+                    {
+                        if (cmd.ExecuteNonQuery() > 0)
+                        {
+                        }
+                    }
+                    con.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private string EncryptNewConnection(string plainText)
+        {
+            byte[] cipherData;
+            Aes aes = Aes.Create();
+
+            aes.Key = Encoding.UTF8.GetBytes(_keyString);
+            aes.IV = Encoding.UTF8.GetBytes(_ivString);
+            aes.Mode = CipherMode.CBC;
+            ICryptoTransform cipher = aes.CreateEncryptor(aes.Key, aes.IV);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, cipher, CryptoStreamMode.Write))
+                {
+                    using (StreamWriter sw = new StreamWriter(cs))
+                    {
+                        sw.Write(plainText);
+                    }
+                }
+
+                cipherData = ms.ToArray();
+            }
+            byte[] combinedData = new byte[aes.IV.Length + cipherData.Length];
+            Array.Copy(aes.IV, 0, combinedData, 0, aes.IV.Length);
+            Array.Copy(cipherData, 0, combinedData, aes.IV.Length, cipherData.Length);
+            return Convert.ToBase64String(combinedData);            
         }
     }
 }
