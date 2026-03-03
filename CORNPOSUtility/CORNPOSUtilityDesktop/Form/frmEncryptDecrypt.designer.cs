@@ -73,6 +73,8 @@
             this.dataGridViewCheckBoxColumn5 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.dataGridViewTextBoxColumn9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtPwd = new System.Windows.Forms.TextBox();
+            this.lblPwd = new System.Windows.Forms.Label();
             this.TabTerminal.SuspendLayout();
             this.pCORNEncryptDecrtype.SuspendLayout();
             this.pCORNInsightEncryptDecrypt.SuspendLayout();
@@ -333,6 +335,8 @@
             // 
             // TeamSuit
             // 
+            this.TeamSuit.Controls.Add(this.lblPwd);
+            this.TeamSuit.Controls.Add(this.txtPwd);
             this.TeamSuit.Controls.Add(this.btnUpdate);
             this.TeamSuit.Controls.Add(this.lblServer);
             this.TeamSuit.Controls.Add(this.txtServer);
@@ -346,7 +350,7 @@
             // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(208, 34);
+            this.btnUpdate.Location = new System.Drawing.Point(203, 73);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(75, 23);
             this.btnUpdate.TabIndex = 24;
@@ -522,6 +526,22 @@
             this.dataGridViewTextBoxColumn10.HeaderText = "Value";
             this.dataGridViewTextBoxColumn10.Name = "dataGridViewTextBoxColumn10";
             // 
+            // txtPwd
+            // 
+            this.txtPwd.Location = new System.Drawing.Point(110, 45);
+            this.txtPwd.Name = "txtPwd";
+            this.txtPwd.Size = new System.Drawing.Size(339, 22);
+            this.txtPwd.TabIndex = 25;
+            // 
+            // lblPwd
+            // 
+            this.lblPwd.AutoSize = true;
+            this.lblPwd.Location = new System.Drawing.Point(33, 50);
+            this.lblPwd.Name = "lblPwd";
+            this.lblPwd.Size = new System.Drawing.Size(38, 17);
+            this.lblPwd.TabIndex = 26;
+            this.lblPwd.Text = "Pwd:";
+            // 
             // frmEncryptDecrypt
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -596,5 +616,7 @@
         private System.Windows.Forms.Label lblServer;
         private System.Windows.Forms.TextBox txtServer;
         private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.Label lblPwd;
+        private System.Windows.Forms.TextBox txtPwd;
     }
 }

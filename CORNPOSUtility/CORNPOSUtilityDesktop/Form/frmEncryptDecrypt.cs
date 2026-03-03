@@ -222,10 +222,10 @@ namespace CORNPOSUtilityDesktop
                 DataTable dtDBName = new DataTable();
                 dtDBName.Columns.Add("DBName", typeof(string));
                 dtDBName.Columns.Add("Id", typeof(long));
-                string conString = "server=tsl.faastdemo.com"
-                + ";uid=Mansoor"
+                string conString = "server=3.1.99.246"
+                + ";uid=apimt"
                 + ";pwd=Windows@1234"
-                + ";database=FS-MultiTenant";
+                + ";database=MultiTenant";
                 string NewConnectionString = "";
                 using (SqlConnection con = new SqlConnection(conString))
                 {
@@ -248,7 +248,7 @@ namespace CORNPOSUtilityDesktop
                 int len = 0;
                 foreach (DataRow dr in dtDBName.Rows)
                 {
-                    NewConnectionString = "Data Source=" + txtServer.Text + ";Initial Catalog=" + dr["DBName"].ToString() + ";Persist Security Info=True;User ID=app;Password=Fast12341234;";
+                    NewConnectionString = "Data Source=" + txtServer.Text + ";Initial Catalog=" + dr["DBName"].ToString() + ";Persist Security Info=True;User ID=app;Password=" + txtPwd.Text + ";";
                     StringBuilder sbScript = new StringBuilder();
                     sbScript.Append("UPDATE tbl_MultiTenant");
                     sbScript.Append(Environment.NewLine);
@@ -267,9 +267,9 @@ namespace CORNPOSUtilityDesktop
         private void ExecuteScript(string script)
         {
             string conString = "server=tsl.faastdemo.com"
-                + ";uid=Mansoor"
+                + ";uid=apimt"
                 + ";pwd=Windows@1234"
-                + ";database=FS-MultiTenant";
+                + ";database=MultiTenant";
             try
             {
                 using (SqlConnection con = new SqlConnection(conString))
