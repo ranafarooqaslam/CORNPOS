@@ -165,23 +165,26 @@ public partial class Invoice : System.Web.UI.Page
     }    
     private void LoadInvoice()
     {
-        gvInvoice.DataSource = null;
-        gvInvoice.DataBind();
-        DataTable dtLocation = new DataTable();
-        using (SqlConnection con = new SqlConnection(conStringCorn))
+        if (ddlLocation.Items.Count > 0)
         {
-            con.Open();
-            using (SqlCommand cmd = new SqlCommand(string.Format("USE {0} SELECT SALE_INVOICE_ID,InvoiceNo,AMOUNTDUE FROM SALE_INVOICE_MASTER WHERE IS_ACTIVE = 1 AND IS_HOLD = 0 AND DISTRIBUTOR_ID = " + ddlLocation.SelectedItem.Value + " AND DOCUMENT_DATE = '" + Convert.ToDateTime(txtDate.Text).ToString("yyyy-MM-dd") + "'", ddlDB.SelectedItem), con))
+            gvInvoice.DataSource = null;
+            gvInvoice.DataBind();
+            DataTable dtLocation = new DataTable();
+            using (SqlConnection con = new SqlConnection(conStringCorn))
             {
-                using (IDataReader dr = cmd.ExecuteReader())
+                con.Open();
+                using (SqlCommand cmd = new SqlCommand(string.Format("USE {0} SELECT SALE_INVOICE_ID,InvoiceNo,AMOUNTDUE FROM SALE_INVOICE_MASTER WHERE IS_ACTIVE = 1 AND IS_HOLD = 0 AND DISTRIBUTOR_ID = " + ddlLocation.SelectedItem.Value + " AND DOCUMENT_DATE = '" + Convert.ToDateTime(txtDate.Text).ToString("yyyy-MM-dd") + "'", ddlDB.SelectedItem), con))
                 {
-                    dtLocation.Load(dr);
+                    using (IDataReader dr = cmd.ExecuteReader())
+                    {
+                        dtLocation.Load(dr);
+                    }
                 }
+                con.Close();
             }
-            con.Close();
+            gvInvoice.DataSource = dtLocation;
+            gvInvoice.DataBind();
         }
-        gvInvoice.DataSource = dtLocation;
-        gvInvoice.DataBind();
     }
 
     protected void rblType_SelectedIndexChanged(object sender, EventArgs e)
