@@ -413,19 +413,32 @@ namespace CORNPOSKOTPrintService
                 default:
                     RunningOrderText = string.Empty;
                     break;
-            }
+            }            
+
+            CurrentY = CurrentY + 20;
+            g.DrawString("DATE: " + DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt"), InvoiceFont2, BlueBrush, 10, CurrentY);
+            g.DrawString(maxOrderNo, InvOrderTitleFont, BlueBrush, 230, CurrentY - 20);
 
             if (RunningOrderText.Length > 0)
             {
                 CurrentY = CurrentY + 20;
-                float textWidth = g.MeasureString(RunningOrderText, InvoiceFont).Width;
-                float centerX = (InvoiceWidth - textWidth) / 2;
 
-                g.DrawString(RunningOrderText, InvoiceFont, BlueBrush, centerX, CurrentY);
+                // Measure text size
+                SizeF textSize = g.MeasureString(RunningOrderText, InvoiceFont);
+
+                float padding = 5; // space inside box
+
+                float rectX = 10;
+                float rectY = CurrentY - padding;
+                float rectWidth = textSize.Width + (padding * 2);
+                float rectHeight = textSize.Height + (padding * 2);
+
+                // Draw rectangle
+                g.DrawRectangle(Pens.Blue, rectX, rectY, rectWidth, rectHeight);
+
+                // Draw text
+                g.DrawString(RunningOrderText, InvoiceFont, BlueBrush, rectX + padding, CurrentY);
             }
-            CurrentY = CurrentY + 20;
-            g.DrawString("DATE: " + DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt"), InvoiceFont2, BlueBrush, 10, CurrentY);
-            g.DrawString(maxOrderNo, InvOrderTitleFont, BlueBrush, 230, CurrentY - 20);
 
             Utiltiy.DrawCircle(g, new Pen(Brushes.Black, 2), 250, CurrentY - 10, 27);
 
