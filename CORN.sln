@@ -72,21 +72,4 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://fastservices.visualstudio.com/
-		SccLocalPath0 = .
-		SccWebProject1 = true
-		SccProjectUniqueName1 = CORN
-		SccProjectName1 = CORN
-		SccLocalPath1 = CORN
-		SccProjectEnlistmentChoice1 = 2
-		SccProjectUniqueName2 = CORNBusinessLayer\\CORNBusinessLayer.csproj
-		SccProjectName2 = CORNBusinessLayer
-		SccLocalPath2 = CORNBusinessLayer
-		SccProjectUniqueName3 = CORNDatabaseLayer\\CORNDatabaseLayer.csproj
-		SccProjectName3 = CORNDatabaseLayer
-		SccLocalPath3 = CORNDatabaseLayer
-	EndGlobalSection
 EndGlobal
