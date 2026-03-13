@@ -440,7 +440,7 @@ namespace CORNPOSKOTPrintService
                 g.DrawString(RunningOrderText, InvoiceFont, BlueBrush, rectX + padding, CurrentY);
             }
 
-            Utiltiy.DrawCircle(g, new Pen(Brushes.Black, 2), 250, CurrentY - 10, 27);
+            Utiltiy.DrawCircle(g, new Pen(Brushes.Black, 2), 250, CurrentY - 30, 27);
 
             int XNoOfuntit = (int)g.MeasureString("", InvoiceFont).Width + 180;
             int YNoOfUnit = CurrentY;
