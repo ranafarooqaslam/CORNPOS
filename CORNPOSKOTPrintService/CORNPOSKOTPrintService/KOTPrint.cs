@@ -1,15 +1,16 @@
 ﻿using System;
-using System.ServiceProcess;
-using Timer = System.Timers.Timer;
-using System.Drawing;
-using System.Text;
-using System.IO;
-using System.Security.Cryptography;
 using System.Data;
 using System.Data.SqlClient;
-using System.Timers;
+using System.Drawing;
 using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.ServiceProcess;
+using System.Text;
+using System.Timers;
+using static System.Net.Mime.MediaTypeNames;
+using Timer = System.Timers.Timer;
 
 namespace CORNPOSKOTPrintService
 {
@@ -78,6 +79,7 @@ namespace CORNPOSKOTPrintService
         static byte byteKOTType = 0;
         static long OrderNo = 0;
         static string covertable = string.Empty;
+        static bool IsPrintTypeFullKOT = false;
         static DataTable dtValue = new DataTable();
         #endregion
 
@@ -89,7 +91,7 @@ namespace CORNPOSKOTPrintService
             conString = Decrypt(System.Configuration.ConfigurationManager.AppSettings["connString"].ToString(), "b0tin@74");
             timer.Elapsed += PerformTimerOperation;
             timer.Interval = TimeSpan.FromSeconds(10).TotalMilliseconds;
-            timer.Start();            
+            timer.Start();
         }
 
         protected override void OnStart(string[] args)
@@ -227,7 +229,7 @@ namespace CORNPOSKOTPrintService
                                 KOTType = "NewKOT";
                                 break;
                         }
-
+                        #region Section Wise Printing
                         foreach (DataRow drSection in dtSection.Rows)
                         {
                             dtValue = GetPrintOrders(2, Convert.ToInt64(dtOrders.Rows[0]["SaleInvoiceID"]), 0, Convert.ToInt32(drKOTTyp["KOTType"]), drSection["SECTION"].ToString());
@@ -243,34 +245,37 @@ namespace CORNPOSKOTPrintService
                                 OrderNo = Convert.ToInt64(dtValue.Rows[0]["SaleInvoiceID"]);
                                 covertable = dtValue.Rows[0]["CoverTable"].ToString();
                                 byteKOTType = Convert.ToByte(drKOTTyp["KOTType"]);
+                                IsPrintTypeFullKOT = false;
                                 WriteLog(string.Format("Order No-{0}-" + KOTType + "-" + drSection["SECTION"].ToString() + " Started Printing.", dtValue.Rows[0]["SaleInvoiceID"].ToString()), string.Empty);
                                 PrintReport(false);
                             }
                         }
-                        //#region Xpeditor Print
-                        //try
-                        //{
-                        //    if (IsXpeditor == "1")
-                        //    {
-                        //        foreach (string printer in XpeditorPrinterName)
-                        //        {
-                        //            DataTable dtOrderDetailX = GetOfersForPrintCrystalReport(3, Convert.ToInt64(dtOrders.Rows[0]["SaleInvoiceID"]), 0, Convert.ToInt32(drKOTTyp["KOTType"]), string.Empty);
-                        //            if (dtOrderDetailX.Rows.Count > 0)
-                        //            {
-                        //                WriteLog(string.Format("Order No-{0}-" + KOTType + "-Xpeditor" + " Started Printing.", dtOrderDetailX.Rows[0]["SaleInvoiceID"].ToString()));
-                        //                if (PrintKOTCrystalReportNew(dtOrderDetailX, printer, dtOrderDetailX.Rows[0]["SaleInvoiceID"].ToString(), 1, true, dtOrderDetailX.Rows[0]["OrderNotes"].ToString(), dtOrderDetailX.Rows[0]["LastUpdateDateTime"].ToString(), "Xpeditor", "X" + KOTType, Convert.ToByte(drKOTTyp["KOTType"]), IsXpeditor))
-                        //                {
-
-                        //                }
-                        //            }
-                        //        }
-                        //    }
-                        //}
-                        //catch (Exception ex)
-                        //{
-                        //    WriteLog(ex.ToString());
-                        //}
-                        //#endregion
+                        #endregion
+                        #region Xpeditor Print
+                        try
+                        {
+                            if (IsXpeditor == "1")
+                            {
+                                dtValue = GetPrintOrders(3, Convert.ToInt64(dtOrders.Rows[0]["SaleInvoiceID"]), 0, Convert.ToInt32(drKOTTyp["KOTType"]), string.Empty);
+                                _section = "Full KOT";
+                                customerType = dtValue.Rows[0]["CustomerType"].ToString();
+                                bookerName = dtValue.Rows[0]["bookerName"].ToString();
+                                tableName = dtValue.Rows[0]["tableName"].ToString();
+                                maxOrderNo = dtValue.Rows[0]["maxOrderNo"].ToString();
+                                OrderNotes = dtValue.Rows[0]["OrderNotes"].ToString();
+                                OrderNo = Convert.ToInt64(dtValue.Rows[0]["SaleInvoiceID"]);
+                                covertable = dtValue.Rows[0]["CoverTable"].ToString();
+                                byteKOTType = Convert.ToByte(drKOTTyp["KOTType"]);
+                                IsPrintTypeFullKOT = true;
+                                WriteLog(string.Format("Order No-{0}-" + KOTType + "-Full KOT Started Printing.", dtValue.Rows[0]["SaleInvoiceID"].ToString()), string.Empty);
+                                PrintReport(true);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            WriteLog(ex.ToString(), "if (IsXpeditor == '1')");
+                        }
+                        #endregion
                     }
                 }
             }
@@ -286,12 +291,12 @@ namespace CORNPOSKOTPrintService
         private static void PrintReport(bool IsXpeditor)
         {
             try
-            {                
+            {
                 if (IsXpeditor)
                 {
                     PrintDocument prnDocument = new PrintDocument();
                     prnDocument.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0);
-                    prnDocument.PrinterSettings.PrinterName = XpeditorPrinterName[0].ToString();
+                    prnDocument.PrinterSettings.PrinterName = XpeditorPrinterName[0].ToString().Trim();
                     prnDocument.PrintPage += new PrintPageEventHandler(prnDocument_PrintPage);
                     prnDocument.Print();
                 }
@@ -350,7 +355,14 @@ namespace CORNPOSKOTPrintService
             InvSubTitleHeight = (int)(InvSubTitleFont.GetHeight(g));
 
             // Set Titles Left:
-            InvSubTitle3 = _section;
+            if (IsPrintTypeFullKOT)
+            {
+                InvSubTitle3 = "Full KOT";
+            }
+            else
+            {
+                InvSubTitle3 = _section;
+            }
             InvSubTitle4 = customerType;
             if (InvSubTitle3 != "")
             {
@@ -389,7 +401,7 @@ namespace CORNPOSKOTPrintService
                 g.DrawString("Location Name: " + System.Configuration.ConfigurationManager.AppSettings["LocationName"].ToString(), InvoiceFont, BlueBrush, 10, CurrentY);
             }
 
-            if(covertable.Length > 0)
+            if (covertable.Length > 0)
             {
                 CurrentY = CurrentY + 20;
                 g.DrawString("Covers: " + covertable, InvoiceFont, BlueBrush, 10, CurrentY);
@@ -413,7 +425,7 @@ namespace CORNPOSKOTPrintService
                 default:
                     RunningOrderText = string.Empty;
                     break;
-            }            
+            }
 
             CurrentY = CurrentY + 20;
             g.DrawString("DATE: " + DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt"), InvoiceFont2, BlueBrush, 10, CurrentY);
@@ -440,7 +452,7 @@ namespace CORNPOSKOTPrintService
                 g.DrawString(RunningOrderText, InvoiceFont, BlueBrush, rectX + padding, CurrentY);
             }
 
-            Utiltiy.DrawCircle(g, new Pen(Brushes.Black, 2), 250, CurrentY - 30, 27);
+            Utiltiy.DrawCircle(g, new Pen(Brushes.Black, 2), 250, CurrentY - 10, 27);
 
             int XNoOfuntit = (int)g.MeasureString("", InvoiceFont).Width + 180;
             int YNoOfUnit = CurrentY;
@@ -494,39 +506,119 @@ namespace CORNPOSKOTPrintService
                     Alignment = StringAlignment.Far,
                     LineAlignment = StringAlignment.Near
                 };
-
-                foreach (DataRow dr in dtValue.Rows)
+                if (IsPrintTypeFullKOT)
                 {
-                    string skuName = Convert.ToString(dr["SKU_NAME"] ?? string.Empty).Trim();
-                    string modifiers = Convert.ToString(dr["Modifiers"] ?? string.Empty).Trim();
-                    string qty = Convert.ToString(dr["QTY"] ?? string.Empty).Trim();
-
-                    string displayName = skuName;
-                    if (!string.IsNullOrEmpty(modifiers))
+                    string FullKOTGroup = System.Configuration.ConfigurationManager.AppSettings["FullKOTGroup"] ?? "1";
+                    DataView view = new DataView(dtValue);
+                    if (FullKOTGroup == "1")
                     {
-                        displayName += Environment.NewLine + "  " + modifiers;
+                        DataTable dtValue2 = view.ToTable(true, "SECTION");
+                        foreach (DataRow drValue2 in dtValue2.Rows)
+                        {
+                            g.DrawString(drValue2["SECTION"].ToString(), InvoiceFont, BlueBrush, 10, CurrentY);
+
+                            SizeF size = g.MeasureString(drValue2["SECTION"].ToString(), InvoiceFont);
+                            g.DrawLine(Pens.Blue, 10, CurrentY + size.Height, 10 + size.Width + 50, CurrentY + size.Height);
+                            CurrentY = CurrentY + 20;
+                            foreach (DataRow dr in dtValue.Rows)
+                            {
+                                if (drValue2["SECTION"].ToString() == dr["SECTION"].ToString())
+                                {
+                                    string skuName = Convert.ToString(dr["SKU_NAME"] ?? string.Empty).Trim();
+                                    string modifiers = Convert.ToString(dr["Modifiers"] ?? string.Empty).Replace("<br>", Environment.NewLine).Trim();
+                                    string qty = Convert.ToString(dr["QTY"] ?? string.Empty).Trim();
+                                    string displayName = skuName;
+                                    if (!string.IsNullOrEmpty(modifiers))
+                                    {
+                                        displayName += Environment.NewLine + "  " + modifiers;
+                                    }
+                                    // Measure required block height for wrapping
+                                    SizeF measured = g.MeasureString(displayName, InvoiceFont2, nameColWidth, wrapFormat);
+                                    float blockHeight = measured.Height;
+                                    // Draw name block
+                                    var nameRect = new RectangleF(xProductID, CurrentY, nameColWidth, blockHeight);
+                                    g.DrawString(displayName, InvoiceFont2, BlackBrush, nameRect, wrapFormat);
+                                    // Draw qty right aligned
+                                    var qtyRect = new RectangleF(xQtyColumn, CurrentY, qtyColWidth, blockHeight);
+                                    g.DrawString(qty, InvoiceFont2, BlackBrush, qtyRect, qtyFormat);
+                                    // Advance Y and draw separator
+                                    CurrentY = CurrentY + (int)blockHeight + 6;
+                                    g.DrawLine(new Pen(Brushes.Black, 1), xProductID, CurrentY, lineEndX, CurrentY);
+                                    CurrentY = CurrentY + 6; // extra spacing after line
+                                    CurrentRecord++;
+                                }
+                            }
+                        }
                     }
+                    else
+                    {
+                        DataTable dtValue2 = view.ToTable(true, "SKU_HIE_NAME");
+                        foreach (DataRow drValue2 in dtValue2.Rows)
+                        {
+                            g.DrawString(drValue2["SKU_HIE_NAME"].ToString(), InvoiceFont, BlueBrush, 10, CurrentY);
 
-                    // Measure required block height for wrapping
-                    SizeF measured = g.MeasureString(displayName, InvoiceFont2, nameColWidth, wrapFormat);
-                    float blockHeight = measured.Height;
-
-                    // Draw name block
-                    var nameRect = new RectangleF(xProductID, CurrentY, nameColWidth, blockHeight);
-                    g.DrawString(displayName, InvoiceFont2, BlackBrush, nameRect, wrapFormat);
-
-                    // Draw qty right aligned
-                    var qtyRect = new RectangleF(xQtyColumn, CurrentY, qtyColWidth, blockHeight);
-                    g.DrawString(qty, InvoiceFont2, BlackBrush, qtyRect, qtyFormat);
-
-                    // Advance Y and draw separator
-                    CurrentY = CurrentY + (int)blockHeight + 6;
-                    g.DrawLine(new Pen(Brushes.Black, 1), xProductID, CurrentY, lineEndX, CurrentY);
-
-                    CurrentY = CurrentY + 6; // extra spacing after line
-                    CurrentRecord++;
+                            SizeF size = g.MeasureString(drValue2["SKU_HIE_NAME"].ToString(), InvoiceFont);
+                            g.DrawLine(Pens.Blue, 10, CurrentY + size.Height, 10 + size.Width + 50, CurrentY + size.Height);
+                            CurrentY = CurrentY + 20;
+                            foreach (DataRow dr in dtValue.Rows)
+                            {
+                                if (drValue2["SKU_HIE_NAME"].ToString() == dr["SKU_HIE_NAME"].ToString())
+                                {
+                                    string skuName = Convert.ToString(dr["SKU_NAME"] ?? string.Empty).Trim();
+                                    string modifiers = Convert.ToString(dr["Modifiers"] ?? string.Empty).Replace("<br>", Environment.NewLine).Trim();
+                                    string qty = Convert.ToString(dr["QTY"] ?? string.Empty).Trim();
+                                    string displayName = skuName;
+                                    if (!string.IsNullOrEmpty(modifiers))
+                                    {
+                                        displayName += Environment.NewLine + "  " + modifiers;
+                                    }
+                                    // Measure required block height for wrapping
+                                    SizeF measured = g.MeasureString(displayName, InvoiceFont2, nameColWidth, wrapFormat);
+                                    float blockHeight = measured.Height;
+                                    // Draw name block
+                                    var nameRect = new RectangleF(xProductID, CurrentY, nameColWidth, blockHeight);
+                                    g.DrawString(displayName, InvoiceFont2, BlackBrush, nameRect, wrapFormat);
+                                    // Draw qty right aligned
+                                    var qtyRect = new RectangleF(xQtyColumn, CurrentY, qtyColWidth, blockHeight);
+                                    g.DrawString(qty, InvoiceFont2, BlackBrush, qtyRect, qtyFormat);
+                                    // Advance Y and draw separator
+                                    CurrentY = CurrentY + (int)blockHeight + 6;
+                                    g.DrawLine(new Pen(Brushes.Black, 1), xProductID, CurrentY, lineEndX, CurrentY);
+                                    CurrentY = CurrentY + 6; // extra spacing after line
+                                    CurrentRecord++;
+                                }
+                            }
+                        }
+                    }                    
                 }
-
+                else
+                {
+                    foreach (DataRow dr in dtValue.Rows)
+                    {
+                        string skuName = Convert.ToString(dr["SKU_NAME"] ?? string.Empty).Trim();
+                        string modifiers = Convert.ToString(dr["Modifiers"] ?? string.Empty).Replace("<br>", Environment.NewLine).Trim();
+                        string qty = Convert.ToString(dr["QTY"] ?? string.Empty).Trim();
+                        string displayName = skuName;
+                        if (!string.IsNullOrEmpty(modifiers))
+                        {
+                            displayName += Environment.NewLine + "  " + modifiers;
+                        }
+                        // Measure required block height for wrapping
+                        SizeF measured = g.MeasureString(displayName, InvoiceFont2, nameColWidth, wrapFormat);
+                        float blockHeight = measured.Height;
+                        // Draw name block
+                        var nameRect = new RectangleF(xProductID, CurrentY, nameColWidth, blockHeight);
+                        g.DrawString(displayName, InvoiceFont2, BlackBrush, nameRect, wrapFormat);
+                        // Draw qty right aligned
+                        var qtyRect = new RectangleF(xQtyColumn, CurrentY, qtyColWidth, blockHeight);
+                        g.DrawString(qty, InvoiceFont2, BlackBrush, qtyRect, qtyFormat);
+                        // Advance Y and draw separator
+                        CurrentY = CurrentY + (int)blockHeight + 6;
+                        g.DrawLine(new Pen(Brushes.Black, 1), xProductID, CurrentY, lineEndX, CurrentY);
+                        CurrentY = CurrentY + 6; // extra spacing after line
+                        CurrentRecord++;
+                    }
+                }
                 // Draw order notes if present
                 if (!string.IsNullOrEmpty(OrderNotes))
                 {
@@ -541,13 +633,12 @@ namespace CORNPOSKOTPrintService
                     CurrentY += (int)g.MeasureString(OrderNotes, InvoiceFont, (int)notesWidth, notesFormat).Height + 4;
                 }
             }
-
             // Keep Graphics disposal to printing subsystem (do not dispose g here)
         }
 
         #endregion
 
-        #region Decryp
+            #region Decryp
         public static string Decrypt(string EncryptedText, string Key)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(Key);
@@ -563,7 +654,7 @@ namespace CORNPOSKOTPrintService
             }
             catch (Exception ex)
             {
-                WriteLog(ex.ToString(),"Decrypt");
+                WriteLog(ex.ToString(), "Decrypt");
             }
             return Encoding.UTF8.GetString(stream.ToArray());
         }
@@ -604,7 +695,7 @@ namespace CORNPOSKOTPrintService
                 }
                 catch (Exception ex)
                 {
-                    WriteLog(ex.ToString(),"WriteLog");
+                    WriteLog(ex.ToString(), "WriteLog");
                 }
             }
         }
