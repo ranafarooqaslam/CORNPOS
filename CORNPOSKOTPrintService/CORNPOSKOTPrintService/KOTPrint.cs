@@ -17,8 +17,8 @@ namespace CORNPOSKOTPrintService
     public partial class KOTPrint : ServiceBase
     {
         #region Printing Variables for windows printing                
-        private static int CurrentY;
-        private static int CurrentX;
+        private static float CurrentY;
+        private static float CurrentX;
         private static int leftMargin;
         private static int rightMargin;
         private static int topMargin;
@@ -454,9 +454,6 @@ namespace CORNPOSKOTPrintService
 
             Utiltiy.DrawCircle(g, new Pen(Brushes.Black, 2), 250, CurrentY - 10, 27);
 
-            int XNoOfuntit = (int)g.MeasureString("", InvoiceFont).Width + 180;
-            int YNoOfUnit = CurrentY;
-
             CurrentY = CurrentY + 25;
             g.DrawLine(new Pen(Brushes.Black, 2), 10, CurrentY, 300, CurrentY);//            
             CurrentY = CurrentY + 5;
@@ -495,10 +492,11 @@ namespace CORNPOSKOTPrintService
 
             if (dtValue.Rows.Count > 0)
             {
-                var wrapFormat = new StringFormat(StringFormat.GenericTypographic)
+                var wrapFormat = new StringFormat()
                 {
-                    FormatFlags = StringFormatFlags.LineLimit,
-                    Trimming = StringTrimming.EllipsisCharacter
+                    Alignment = StringAlignment.Near,
+                    LineAlignment = StringAlignment.Near,
+                    Trimming = StringTrimming.Word
                 };
 
                 var qtyFormat = new StringFormat()
@@ -534,7 +532,7 @@ namespace CORNPOSKOTPrintService
                                     }
                                     // Measure required block height for wrapping
                                     SizeF measured = g.MeasureString(displayName, InvoiceFont2, nameColWidth, wrapFormat);
-                                    float blockHeight = measured.Height;
+                                    float blockHeight = measured.Height + 4;
                                     // Draw name block
                                     var nameRect = new RectangleF(xProductID, CurrentY, nameColWidth, blockHeight);
                                     g.DrawString(displayName, InvoiceFont2, BlackBrush, nameRect, wrapFormat);
@@ -542,7 +540,7 @@ namespace CORNPOSKOTPrintService
                                     var qtyRect = new RectangleF(xQtyColumn, CurrentY, qtyColWidth, blockHeight);
                                     g.DrawString(qty, InvoiceFont2, BlackBrush, qtyRect, qtyFormat);
                                     // Advance Y and draw separator
-                                    CurrentY = CurrentY + (int)blockHeight + 6;
+                                    CurrentY = CurrentY + blockHeight + 6;
                                     g.DrawLine(new Pen(Brushes.Black, 1), xProductID, CurrentY, lineEndX, CurrentY);
                                     CurrentY = CurrentY + 6; // extra spacing after line
                                     CurrentRecord++;
@@ -574,7 +572,7 @@ namespace CORNPOSKOTPrintService
                                     }
                                     // Measure required block height for wrapping
                                     SizeF measured = g.MeasureString(displayName, InvoiceFont2, nameColWidth, wrapFormat);
-                                    float blockHeight = measured.Height;
+                                    float blockHeight = measured.Height + 4;
                                     // Draw name block
                                     var nameRect = new RectangleF(xProductID, CurrentY, nameColWidth, blockHeight);
                                     g.DrawString(displayName, InvoiceFont2, BlackBrush, nameRect, wrapFormat);
@@ -582,7 +580,7 @@ namespace CORNPOSKOTPrintService
                                     var qtyRect = new RectangleF(xQtyColumn, CurrentY, qtyColWidth, blockHeight);
                                     g.DrawString(qty, InvoiceFont2, BlackBrush, qtyRect, qtyFormat);
                                     // Advance Y and draw separator
-                                    CurrentY = CurrentY + (int)blockHeight + 6;
+                                    CurrentY = CurrentY + blockHeight + 6;
                                     g.DrawLine(new Pen(Brushes.Black, 1), xProductID, CurrentY, lineEndX, CurrentY);
                                     CurrentY = CurrentY + 6; // extra spacing after line
                                     CurrentRecord++;
@@ -605,7 +603,7 @@ namespace CORNPOSKOTPrintService
                         }
                         // Measure required block height for wrapping
                         SizeF measured = g.MeasureString(displayName, InvoiceFont2, nameColWidth, wrapFormat);
-                        float blockHeight = measured.Height;
+                        float blockHeight = measured.Height + 4;
                         // Draw name block
                         var nameRect = new RectangleF(xProductID, CurrentY, nameColWidth, blockHeight);
                         g.DrawString(displayName, InvoiceFont2, BlackBrush, nameRect, wrapFormat);
@@ -613,7 +611,7 @@ namespace CORNPOSKOTPrintService
                         var qtyRect = new RectangleF(xQtyColumn, CurrentY, qtyColWidth, blockHeight);
                         g.DrawString(qty, InvoiceFont2, BlackBrush, qtyRect, qtyFormat);
                         // Advance Y and draw separator
-                        CurrentY = CurrentY + (int)blockHeight + 6;
+                        CurrentY = CurrentY + blockHeight + 6;
                         g.DrawLine(new Pen(Brushes.Black, 1), xProductID, CurrentY, lineEndX, CurrentY);
                         CurrentY = CurrentY + 6; // extra spacing after line
                         CurrentRecord++;
@@ -630,7 +628,7 @@ namespace CORNPOSKOTPrintService
                     };
                     var notesRect = new RectangleF(xProductID, CurrentY, notesWidth, InvoiceFont.GetHeight(g) * 4f);
                     g.DrawString(OrderNotes, InvoiceFont, BlueBrush, notesRect, notesFormat);
-                    CurrentY += (int)g.MeasureString(OrderNotes, InvoiceFont, (int)notesWidth, notesFormat).Height + 4;
+                    CurrentY += g.MeasureString(OrderNotes, InvoiceFont, (int)notesWidth, notesFormat).Height + 4;
                 }
             }
             // Keep Graphics disposal to printing subsystem (do not dispose g here)
