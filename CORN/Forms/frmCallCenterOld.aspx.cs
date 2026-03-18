@@ -587,7 +587,7 @@ namespace Forms
                     bool IsFinanceIntegrate = (bool)HttpContext.Current.Session["IsFinanceIntegrate"];
                     DataTable dtInvoice = OrderEntryController.GetInvoiceDetail(Convert.ToInt64(dtValue.Rows[0]["INVOICE_ID"]));
                     string OldInvoiceJson = GetJson(dtInvoice);
-                    OrderEntryController.HoldOrder(long.Parse(dtValue.Rows[0]["INVOICE_ID"].ToString()), Constants.IntNullValue,customerTypeId, tableId, 0, 0, 0, 0, 0, true, userId, CurrentWorkDate, distributerId, 0,dtValue, int.Parse(orderBooker), coverTable, takeAwayCustomer,intVoidBy, manualOrderNo, remarks,0, customerId, Convert.ToBoolean(HttpContext.Current.Session["InvoicePrinted"]),0,0,"1",0,0, 0, 0, 0, 0, HttpContext.Current.Session["LocationWiseRecipe"].ToString(),0,true,true, Convert.ToBoolean(HttpContext.Current.Session["KDSImplemented"]),true,1,dtInvoice,OldInvoiceJson, IsFinanceIntegrate,dtCOAConfig);
+                    OrderEntryController.HoldOrder(long.Parse(dtValue.Rows[0]["INVOICE_ID"].ToString()), Constants.IntNullValue,customerTypeId, tableId, 0, 0, 0, 0, 0, true, userId, CurrentWorkDate, distributerId, 0,dtValue, int.Parse(orderBooker), coverTable, takeAwayCustomer,intVoidBy, manualOrderNo, remarks,0, customerId, Convert.ToBoolean(HttpContext.Current.Session["InvoicePrinted"]),0,0,"1",0,0, 0, 0, 0, 0, HttpContext.Current.Session["LocationWiseRecipe"].ToString(),0,true,true, Convert.ToBoolean(HttpContext.Current.Session["KDSImplemented"]),true,1,dtInvoice,OldInvoiceJson,5, IsFinanceIntegrate,dtCOAConfig);
                 }
                 else
                 {

@@ -975,7 +975,7 @@ namespace Forms
                         Convert.ToBoolean(HttpContext.Current.Session["InvoicePrinted"]), GSTPER, GSTPERCreditCard, HttpContext.Current.Session["BillFormat"].ToString(), Convert.ToDecimal(AdvanceAmount),
                         Convert.ToDecimal(CustomerGST), Convert.ToDecimal(CustomerDiscount), Convert.ToByte(CustomerDiscountType), Convert.ToDecimal(CustomerServiceCharges), 
                         Convert.ToByte(CustomerServiceType), HttpContext.Current.Session["LocationWiseRecipe"].ToString(), Convert.ToInt32(delChannel), CashImpact, CreditCard_Impact,
-                        Convert.ToBoolean(HttpContext.Current.Session["KDSImplemented"]), ItemChanged,Convert.ToInt16(TakeawayType),dtInvoice, OldInvoiceJson, IsFinanceIntegrate, dtCOAConfig);
+                        Convert.ToBoolean(HttpContext.Current.Session["KDSImplemented"]), ItemChanged,Convert.ToInt16(TakeawayType),dtInvoice, OldInvoiceJson,1, IsFinanceIntegrate, dtCOAConfig);
                     DataRow drStock = dtStk.NewRow();
                     drStock["SKU_NAME"] = "InvoiceID";
                     drStock["Stock"] = dtValue.Rows[0]["INVOICE_ID"].ToString();

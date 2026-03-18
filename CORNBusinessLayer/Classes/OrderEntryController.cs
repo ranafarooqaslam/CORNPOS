@@ -965,13 +965,13 @@ namespace CORNBusinessLayer.Classes
             }
         }
 
-        public static bool HoldOrder(long pSaleInvoiceId, int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pBalance, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, int pDiscType, DataTable dtInvoiceDetail, int pOrderBookerId, string pCovertTable, string pTakeAwayCustomer, int p_VOID_BY, string pMANUAL_ORDER_NO, string pREMARKS, int pserviceCharges, int pcustomerID, bool pInvoicePrinted, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, string pRecipeType, int pDelChannel, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, bool KDSImplemented, bool pIsItemChanged, short pTakeawayType,DataTable dt,string OldInvoiceJson, bool IsFinanceIntegrate, DataTable dtCOAConfig)
+        public static bool HoldOrder(long pSaleInvoiceId, int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pBalance, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, int pDiscType, DataTable dtInvoiceDetail, int pOrderBookerId, string pCovertTable, string pTakeAwayCustomer, int p_VOID_BY, string pMANUAL_ORDER_NO, string pREMARKS, int pserviceCharges, int pcustomerID, bool pInvoicePrinted, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, string pRecipeType, int pDelChannel, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, bool KDSImplemented, bool pIsItemChanged, short pTakeawayType,DataTable dt,string OldInvoiceJson, byte pFORM_ID, bool IsFinanceIntegrate, DataTable dtCOAConfig)
         {
             IDbConnection mConnection = null;
             IDbTransaction mTransaction = null;
             try
             {
-                LogParams(pSaleInvoiceId, pPaymentModeId, pCustomerTypeId, pTableId, pAmountdue, pDiscount, pGst, pPaidin, pBalance, pIsHold, pUserId, pDocumentDate, pDistributorId, pDiscType, dtInvoiceDetail, pOrderBookerId, pCovertTable, pTakeAwayCustomer, p_VOID_BY, pMANUAL_ORDER_NO, pREMARKS, pserviceCharges, pcustomerID, pInvoicePrinted, pGSTPER, pGSTPERCreditCard, pBillFormat, pAdvanceAmount, pCustomerGST, pCustomerDiscount, pCustomerDiscountType, pCustomerServiceCharges, pCustomerServiceType, pRecipeType, pDelChannel, pDELIVERY_CHANNEL_CASH_IMPACT, pCreditCard_Impact, KDSImplemented, pIsItemChanged, pTakeawayType, dt, OldInvoiceJson);
+                LogParams(pSaleInvoiceId, pPaymentModeId, pCustomerTypeId, pTableId, pAmountdue, pDiscount, pGst, pPaidin, pBalance, pIsHold, pUserId, pDocumentDate, pDistributorId, pDiscType, dtInvoiceDetail, pOrderBookerId, pCovertTable, pTakeAwayCustomer, p_VOID_BY, pMANUAL_ORDER_NO, pREMARKS, pserviceCharges, pcustomerID, pInvoicePrinted, pGSTPER, pGSTPERCreditCard, pBillFormat, pAdvanceAmount, pCustomerGST, pCustomerDiscount, pCustomerDiscountType, pCustomerServiceCharges, pCustomerServiceType, pRecipeType, pDelChannel, pDELIVERY_CHANNEL_CASH_IMPACT, pCreditCard_Impact, KDSImplemented, pIsItemChanged, pTakeawayType, pFORM_ID, dt, OldInvoiceJson);
                 DataTable dtItemLessCancel = dtInvoiceDetail.Clone();
                 List<int> Deal = new List<int>();
                 decimal itemDiscount = 0;
@@ -5827,7 +5827,7 @@ namespace CORNBusinessLayer.Classes
 
         }
 
-        private static void LogParams(long pSaleInvoiceId, int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pBalance, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, int pDiscType, DataTable dtInvoiceDetail, int pOrderBookerId, string pCovertTable, string pTakeAwayCustomer, int p_VOID_BY, string pMANUAL_ORDER_NO, string pREMARKS, int pserviceCharges, int pcustomerID, bool pInvoicePrinted, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, string pRecipeType, int pDelChannel, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, bool KDSImplemented, bool pIsItemChanged, short pTakeawayType, DataTable dt,string OldInvoiceJson)
+        private static void LogParams(long pSaleInvoiceId, int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pBalance, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, int pDiscType, DataTable dtInvoiceDetail, int pOrderBookerId, string pCovertTable, string pTakeAwayCustomer, int p_VOID_BY, string pMANUAL_ORDER_NO, string pREMARKS, int pserviceCharges, int pcustomerID, bool pInvoicePrinted, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, string pRecipeType, int pDelChannel, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, bool KDSImplemented, bool pIsItemChanged, short pTakeawayType, byte pFORM_ID, DataTable dt,string OldInvoiceJson)
         {
             WriteLog("mTransaction.Rollback()");
             try
@@ -5872,6 +5872,7 @@ namespace CORNBusinessLayer.Classes
                 WriteLog("pIsItemChanged:" + pIsItemChanged.ToString());
                 WriteLog("pTakeawayType:" + pTakeawayType.ToString());
                 WriteLog("OldInvoiceJson:" + OldInvoiceJson.ToString());
+                WriteLog("pFORM_ID" + pFORM_ID.ToString());
                 WriteLog("dtInvoiceDetail: started");
                 int rowNo = 1;
                 foreach (DataRow row in dtInvoiceDetail.Rows)
