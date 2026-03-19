@@ -974,6 +974,7 @@ namespace CORNBusinessLayer.Classes
                 LogParams(pSaleInvoiceId, pPaymentModeId, pCustomerTypeId, pTableId, pAmountdue, pDiscount, pGst, pPaidin, pBalance, pIsHold, pUserId, pDocumentDate, pDistributorId, pDiscType, dtInvoiceDetail, pOrderBookerId, pCovertTable, pTakeAwayCustomer, p_VOID_BY, pMANUAL_ORDER_NO, pREMARKS, pserviceCharges, pcustomerID, pInvoicePrinted, pGSTPER, pGSTPERCreditCard, pBillFormat, pAdvanceAmount, pCustomerGST, pCustomerDiscount, pCustomerDiscountType, pCustomerServiceCharges, pCustomerServiceType, pRecipeType, pDelChannel, pDELIVERY_CHANNEL_CASH_IMPACT, pCreditCard_Impact, KDSImplemented, pIsItemChanged, pTakeawayType, pFORM_ID, dt, OldInvoiceJson);
                 DataTable dtItemLessCancel = dtInvoiceDetail.Clone();
                 List<int> Deal = new List<int>();
+                System.Text.StringBuilder sbSaleInvoiceDetailIds = new System.Text.StringBuilder();
                 decimal itemDiscount = 0;
                 decimal DISCOUNTDeal = 0;
                 DISCOUNTDeal = calculateDealDiscount(dtInvoiceDetail);
@@ -1015,6 +1016,8 @@ namespace CORNBusinessLayer.Classes
                             ItemType = 1;
                         }
 
+                        sbSaleInvoiceDetailIds.Append(SALEINVOICEDETAILD);
+                        sbSaleInvoiceDetailIds.Append(",");
                         uspInsertSaleInvoiceItemLog mItemLesCancel = new uspInsertSaleInvoiceItemLog
                         {
                             Connection = mConnection,
@@ -1361,9 +1364,16 @@ namespace CORNBusinessLayer.Classes
                         mISom2.SALE_INVOICE_ID = pSaleInvoiceId;
                         mISom2.ExecuteQuery();
                     }
+
+                    DeleteSaleInvoiceDetail mDel = new DeleteSaleInvoiceDetail();
+                    mDel.Connection = mConnection;
+                    mDel.Transaction = mTransaction;
+                    mDel.SaleInvoiceIds = sbSaleInvoiceDetailIds.ToString();
+                    mDel.ExecuteQuery();
+
                     mTransaction.Commit();                    
                     return true;
-                }
+                }                
             }
             catch (Exception exp)
             {
