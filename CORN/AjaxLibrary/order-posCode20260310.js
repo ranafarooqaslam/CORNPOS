@@ -831,7 +831,45 @@ function LoadPendingBill2(products) {
     $('#ddlBankDiscount2').change();
     $('#ddlBankDiscount').change();
 }
+function GetPendingBill3(saleInvoiceMasterId) {
 
+    $.ajax
+        (
+            {
+                type: "POST", //HTTP method
+                url: "frmOrderPOS.aspx/GetPendingBill2", //page/method name
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: "{'saleInvoiceMasterId':'" + saleInvoiceMasterId + "'}",
+                success: LoadPendingBill3
+            }
+        );
+}
+function LoadPendingBill3(products) {
+    $('#hfCustomerAdvanceAmount').val(0);
+    products = JSON.stringify(products);
+    var result = jQuery.parseJSON(products.replace(/&quot;/g, '"'));
+    products = eval(result.d);
+    Modifierparent = [];
+    if (products.length > 0) {
+        $("#hfAmountDue").val(products[0].AMOUNTDUE);
+        $("#ddlOrderBooker").val(products[0].orderBookerId);
+        $('#txtManualOrderNo').val(products[0].MANUAL_ORDER_NO);
+        $("#hfCustomerNo").val(products[0].ADDRESS);
+        for (var i = 0, len = products.length; i < len; ++i) {
+            var obj = {};
+            obj["ItemID"] = products[i].SKU_ID;
+            obj["ParentID"] = products[i].MODIFIER_PARENT_ID;
+            obj["ItemName"] = products[i].DESC;
+            obj["Price"] = products[i].T_PRICE;
+            obj["Qty"] = products[i].QTY;
+            obj["ModifierParetn_Row_ID"] = products[i].ModifierParetn_Row_ID;
+            obj["SALE_INVOICE_DETAIL_ID"] = products[i].SALE_INVOICE_DETAIL_ID;
+            Modifierparent.push(obj);
+        }
+    }
+    UniqueSection(products);
+}
 //=======Pending Bills
 function GetPendingBills() {
 
@@ -2749,196 +2787,554 @@ function fnHoldOrder() {
                 });
     }
 }
-function UniqueSection() {
-    var modifierExist = false;
-    var orderedProducts = $("#hfOrderedproducts").val();
+function UniqueSection(products) {
+    var IsCentralizedOrder = false;
+    var sNO = 0;
+    var sNoCancel = 0;
+    var sNoLess = 0;
+    var arr = [];
+    var orderedProducts = products;
     orderedProducts = eval(orderedProducts);
-    for (var i = 0, len = orderedProducts.length; i < len; i++) {
-        if (orderedProducts[i].MODIFIER === "0" || orderedProducts[i].MODIFIER === "false") {
-            if (orderedProducts[i].IS_HasMODIFIER) {
-                modifierExist = true;
-                break;
-            }
-        }
-    }
-    if (modifierExist) {
-        GetPendingBill($("#OrderNo1"));
-        orderedProducts = $("#hfOrderedproducts").val();
-        orderedProducts = eval(orderedProducts);
-    }
+    orderedProducts = orderedProducts.sort(sort_by('C1', false, parseFloat));
 
     var uniqueSections = $.unique(orderedProducts.map(function (d) { return d.SEC_ID; }));
     uniqueSections = uniqueSections.sort();
     uniqueSections = unique(uniqueSections);
-    orderedProducts = orderedProducts.sort(sort_by('SortOrder', false, parseFloat));
-    var sNO = 0;
-    var sNoCancel = 0;
-    var sNoLess = 0;
-    for (var j = 0; j < uniqueSections.length; j++) {
-        $('#detail-section-skus').empty(); // clear all skus  from invoice
-        $('#detail-section-skusCancel').empty();
-        $('#detail-section-skusLess').empty();
-        $("#OrderprintType").text('');
-        $("#divCancel").html('');
-        $("#divAdd").html('');
-        $("#divLess").html('');
-        $("#divDuplicate").html('');
-        $("#divLess").css("display", "none");
-        $("#divCancel").css("display", "none");
-        $("#divAdd").css("display", "none");
-        $("#divDuplicate").css("display", "none");
-        $("#tblAddItem").css("display", "none");
-        $("#tblCancelItem").css("display", "none");
-        $("#tblLessItem").css("display", "none");
-        for (var i = 0, len = orderedProducts.length; i < len; i++) {
-            if (orderedProducts[i].PRINT == "true") {
+    //New Order
+    $("#OrderprintType").text('');
+    $("#divLess").css("display", "none");
+    $("#divCancel").css("display", "none");
+    $("#divAdd").css("display", "none");
+    $("#divDuplicate").css("display", "none");
+    $("#tblCancelItem").css("display", "none");
+    $("#tblLessItem").css("display", "none");
+    $("#tblAddItem").css("display", "none");
+    if (parseInt(orderedProducts[0].Seconds) < 2 || IsNewDeliveryOrder == 1) {
+        for (var j = 0; j < uniqueSections.length; j++) {
+            var arrDealIDs = [];
+            $('#detail-section-skusCancel').empty();
+            $('#detail-section-skus').empty(); // clear all skus  from invoice                
+            for (var i = 0, len = orderedProducts.length; i < len; i++) {
                 if (orderedProducts[i].SEC_ID == uniqueSections[j]) {
-                    var qty = orderedProducts[i].QTY - orderedProducts[i].PR_COUNT;
-                    var IS_VOID = orderedProducts[i].VOID;
-                    if (IS_VOID == "false") {
-                        if (qty > 0) {
-                            $("#tblAddItem").css("display", "block");
-                            if (orderedProducts[i].INVOICE_ID != 'N/A') {
-                                if (parseFloat(orderedProducts[i].INVOICE_ID) > 0) {
-                                    if (IsNewDeliveryOrder == 0) {
-                                        $("#OrderprintType").text('Running Order...');
-                                        $("#divAdd").html('<hr>ADD ITEM<br><hr>');
-                                        $("#divAdd").css("display", "block");
+                    $("#tblAddItem").css("display", "block");
+                    var qty = orderedProducts[i].QTY;
+                    $("#SectionName").text(orderedProducts[i].SECTION);
+                    $("#lblOrderNotes2").text(products[0].REMARKS);
+                    $("#CustoerType").text($("#hfCustomerType").val().toUpperCase());
+                    if ($("#hfEatIn").val() == "1") {
+                        $("#TableNo").text("");
+                    }
+                    else {
+                        $("#TableNo").text("TABLE NO : " + orderedProducts[i].TableDefination_No);
+                    }
+                    $("#kitchenOrderTaker").text("O-T : " + $('select#ddlOrderBooker option:selected').text());
+                    if ($("#hfCustomerType").val() == "Takeaway") {
+                        $("#TableNo").text("CUSTOMER :" + $("#txtTakeawayCustomer").val());
+                    }
+                    else if ($("#hfCustomerType").val() == "Delivery") {
+                        if (document.getElementById("hfPrintCustomerOnDelivery").value == "0") {
+                            $("#TableNo").text("");
+                        }
+                        else {
+                            $("#TableNo").text("CUSOTMER :" + orderedProducts[i].TableDefination_No + " " + document.getElementById('hfCustomerNo').value);
+                        }
+                        $("#kitchenOrderTaker").text("D-M :" + $('select#ddlOrderBooker option:selected').text());
+                    }
+                    $("#Date").text($("#hfCurrentWorkDate").val());
+                    $("#Time").text(moment().format('hh:mm A'));
+                    if ($("#txtManualOrderNo").val() != "") {
+                        $("#PrintMaxOrderNo").text($("#MaxOrderNo").text() + "-" + $("#txtManualOrderNo").val());
+                    }
+                    else {
+                        $("#PrintMaxOrderNo").text($("#MaxOrderNo").text());
+                    }
+                    if (orderedProducts[i].I_D_ID == 0) {
+                        if (orderedProducts[i].MODIFIER === false) {
+                            var mod = '';
+                            if (orderedProducts[i].IS_HasMODIFIER) {
+                                var HasMod = 0;
+                                for (var k = 0, lenk = Modifierparent.length; k < lenk; ++k) {
+                                    if (orderedProducts[i].SKU_ID === Modifierparent[k].ParentID && parseInt(orderedProducts[i].ModifierParetn_Row_ID) === parseInt(Modifierparent[k].ModifierParetn_Row_ID)) {
+                                        if (!IsModifierDeleted(orderedProducts, Modifierparent[k].ItemID)) {
+                                            mod = mod + '<br>' + Modifierparent[k].ItemName + ' - ' + Modifierparent[k].Qty;
+                                            HasMod = 1;
+                                        }
                                     }
                                 }
-                            }
-                            $("#SectionName").text(orderedProducts[i].SECTION);
-                            $("#lblOrderNotes2").text($("#txtRemarks").val());
-                            $("#CustoerType").text($("#hfCustomerType").val().toUpperCase());
-                            if ($("#hfEatIn").val() == "1") {
-                                $("#TableNo").text("");
-                            }
-                            else {
-                                $("#TableNo").text("TABLE NO : " + $("#hfTableNo").val());
-                            }
-                            $("#kitchenOrderTaker").text("O-T : " + $('select#ddlOrderBooker option:selected').text());
-                            if ($("#hfCustomerType").val() == "Takeaway") {
-                                $("#TableNo").text("CUSTOMER :" + $("#txtTakeawayCustomer").val());
-                            }
-                            else if ($("#hfCustomerType").val() == "Delivery") {
-                                if (document.getElementById("hfPrintCustomerOnDelivery").value == "0") {
-                                    $("#TableNo").text("");
+                                if (HasMod == 0) {
+                                    sNO = sNO + 1;
+                                    var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                    $('#detail-section-skus').append(row);
                                 }
                                 else {
-                                    $("#TableNo").text("CUSOTMER :" + $("#hfTableNo").val() + " " + document.getElementById('hfCustomerNo').value);
+                                    sNO = sNO + 1;
+                                    var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + mod + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                    $('#detail-section-skus').append(row);
                                 }
-                                $("#kitchenOrderTaker").text("D-M :" + $('select#ddlOrderBooker option:selected').text());
-                            }
-                            $("#Date").text($("#hfCurrentWorkDate").val());
-                            $("#Time").text(moment().format('hh:mm A'));
-                            if ($("#txtManualOrderNo").val() != "") {
-                                $("#PrintMaxOrderNo").text($("#MaxOrderNo").text() + "-" + $("#txtManualOrderNo").val());
                             }
                             else {
-                                $("#PrintMaxOrderNo").text($("#MaxOrderNo").text());
-                            }
-                            sNO = sNO + 1;
-                            var row = $('<tr ><td>' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right">' + qty + '</td></tr>');
-                            $('#detail-section-skus').append(row);
-                        }
-                        else if (qty < 0) {
-                            if (orderedProducts[i].INVOICE_ID != 'N/A') {
-                                if (parseFloat(orderedProducts[i].INVOICE_ID) > 0) {
-                                    if (IsNewDeliveryOrder == 0) {
-                                        $("#OrderprintType").text('Running Order...');
-                                        $("#tblLessItem").css("display", "block");
-                                        $("#divLess").html('<br><hr>LESS ITEM<br><hr>');
-                                        $("#divLess").css("display", "block");
-                                    }
-                                    $("#SectionName").text(orderedProducts[i].SECTION);
-                                    $("#lblOrderNotes2").text($("#txtRemarks").val());
-                                    $("#CustoerType").text($("#hfCustomerType").val().toUpperCase());
-                                    if ($("#hfEatIn").val() == "1") {
-                                        $("#TableNo").text("");
-                                    }
-                                    else {
-                                        $("#TableNo").text("TABLE NO : " + $("#hfTableNo").val());
-                                    }
-                                    $("#kitchenOrderTaker").text("O-T : " + $('select#ddlOrderBooker option:selected').text());
-                                    if ($("#hfCustomerType").val() == "Takeaway") {
-                                        $("#TableNo").text("CUSTOMER :" + $("#txtTakeawayCustomer").val());
-                                    }
-                                    else if ($("#hfCustomerType").val() == "Delivery") {
-                                        if (document.getElementById("hfPrintCustomerOnDelivery").value == "0") {
-                                            $("#TableNo").text("");
-                                        }
-                                        else {
-                                            $("#TableNo").text("CUSOTMER :" + $("#hfTableNo").val());
-                                        }
-                                        $("#kitchenOrderTaker").text("D-M :" + $('select#ddlOrderBooker option:selected').text());
-                                    }
-                                    $("#Date").text($("#hfCurrentWorkDate").val());
-                                    $("#Time").text(moment().format('hh:mm A'));
-                                    if ($("#txtManualOrderNo").val() != "") {
-                                        $("#PrintMaxOrderNo").text($("#MaxOrderNo").text() + "-" + $("#txtManualOrderNo").val());
-                                    }
-                                    else {
-                                        $("#PrintMaxOrderNo").text($("#MaxOrderNo").text());
-                                    }
-                                    sNoLess = sNoLess + 1;
-                                    var row = $('<tr ><td>' + sNoLess + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right">' + orderedProducts[i].QTY + '</td></tr>');
-                                    $('#detail-section-skusLess').append(row);
-                                }
+                                sNO = sNO + 1;
+                                var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                $('#detail-section-skus').append(row);
                             }
                         }
                     }
                     else {
-                        if (orderedProducts[i].INVOICE_ID != 'N/A') {
-                            if (parseFloat(orderedProducts[i].INVOICE_ID) > 0) {
-                                if (IsNewDeliveryOrder == 0) {
-                                    $("#OrderprintType").text('Running Order...');
-                                    $("#divCancel").html('<br><hr>CANCELED ITEM<br><hr>');
-                                    $("#tblCancelItem").css("display", "block");
-                                    $("#divCancel").css("display", "block");
+                        var uniqueDeal = $.unique(orderedProducts.map(function (d) { return d.I_D_ID; }));
+                        uniqueDeal = uniqueDeal.sort();
+                        uniqueDeal = unique(uniqueDeal);
+
+                        for (var jj = 0; jj < uniqueDeal.length; jj++) {
+                            if (uniqueDeal[jj] != 0) {
+                                if (!orderedProducts[i].VOID) {
+                                    if (uniqueDeal[jj] == orderedProducts[i].I_D_ID) {
+                                        var boolDeal = true;
+                                        for (var arriDeal = 0; arriDeal < arrDealIDs.length; arriDeal++) {
+                                            if (arrDealIDs[arriDeal] == uniqueDeal[jj]) {
+                                                boolDeal = false;
+                                                break;
+                                            }
+                                        }
+                                        if (boolDeal) {
+                                            var row = $('<tr ><td></td><td>' + orderedProducts[i].DEAL_NAME + '</td><td class="text-right">' + orderedProducts[i].DEAL_QTY + '</td><td style="display:none">' + orderedProducts[i].SALE_INVOICE_DETAIL_ID + '</td></tr>');
+                                            $('#detail-section-skus').append(row);
+                                            arrDealIDs.push(uniqueDeal[jj]);
+                                        }
+                                    }
                                 }
-                                $("#SectionName").text(orderedProducts[i].SECTION);
-                                $("#lblOrderNotes2").text($("#txtRemarks").val());
-                                $("#CustoerType").text($("#hfCustomerType").val().toUpperCase());
-                                if ($("#hfEatIn").val() == "1") {
-                                    $("#TableNo").text("");
+                            }
+                        }
+                        if (orderedProducts[i].MODIFIER === false) {
+                            var mod = '';
+                            if (orderedProducts[i].IS_HasMODIFIER) {
+                                var HasMod = 0;
+                                for (var k = 0, lenk = Modifierparent.length; k < lenk; ++k) {
+                                    if (orderedProducts[i].SKU_ID === Modifierparent[k].ParentID && parseInt(orderedProducts[i].ModifierParetn_Row_ID) === parseInt(Modifierparent[k].ModifierParetn_Row_ID)) {
+                                        if (!IsModifierDeleted(orderedProducts, Modifierparent[k].ItemID)) {
+                                            mod = mod + '<br>' + Modifierparent[k].ItemName + ' - ' + Modifierparent[k].Qty;
+                                            HasMod = 1;
+                                        }
+                                    }
+                                }
+                                if (HasMod == 0) {
+                                    sNO = sNO + 1;
+                                    var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                    $('#detail-section-skus').append(row);
                                 }
                                 else {
-                                    $("#TableNo").text("TABLE NO : " + $("#hfTableNo").val());
+                                    sNO = sNO + 1;
+                                    var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + mod + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                    $('#detail-section-skus').append(row);
                                 }
-                                $("#kitchenOrderTaker").text("O-T : " + $('select#ddlOrderBooker option:selected').text());
-                                if ($("#hfCustomerType").val() == "Takeaway") {
-                                    $("#TableNo").text("CUSTOMER :" + $("#txtTakeawayCustomer").val());
-                                }
-                                else if ($("#hfCustomerType").val() == "Delivery") {
-                                    if (document.getElementById("hfPrintCustomerOnDelivery").value == "0") {
-                                        $("#TableNo").text("");
-                                    }
-                                    else {
-                                        $("#TableNo").text("CUSOTMER :" + $("#hfTableNo").val());
-                                    }
-                                    $("#kitchenOrderTaker").text("D-M :" + $('select#ddlOrderBooker option:selected').text());
-                                }
-                                $("#Date").text($("#hfCurrentWorkDate").val());
-                                $("#Time").text(moment().format('hh:mm A'));
-                                $("#PrintMaxOrderNo").text($("#MaxOrderNo").text());
-                                sNoCancel = sNoCancel + 1;
-                                var row = $('<tr ><td>' + sNoCancel + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right">' + orderedProducts[i].QTY + '</td></tr>');
-                                $('#detail-section-skusCancel').append(row);
+                            }
+                            else {
+                                sNO = sNO + 1;
+                                var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                $('#detail-section-skus').append(row);
                             }
                         }
                     }
                 }
             }
-        }
-        if ($("#detail-section-skus tr").length > 0 || $("#detail-section-skusCancel tr").length > 0 || $("#detail-section-skusLess tr").length > 0) {
-            document.getElementById("trLocationName").style.display = "none";
-            if (document.getElementById("hfLocationNameOnKOT").value == "1") {
-                $("#LocationName").text(document.getElementById("hfLocationName").value);
-                document.getElementById("trLocationName").style.display = "block";
+            sortTableKOT();
+            if ($("#detail-section-skus tr").length > 0) {
+                document.getElementById("trLocationName").style.display = "none";
+                if (document.getElementById("hfLocationNameOnKOT").value == "1") {
+                    $("#LocationName").text(document.getElementById("hfLocationName").value);
+                    document.getElementById("trLocationName").style.display = "block";
+                }
+                PrintInvoiceOfSection();
             }
-            PrintInvoiceOfSection();
         }
     }
+        //Running Order
+    else {
+        $("#OrderprintType").text('');
+        $("#divLess").css("display", "none");
+        $("#divCancel").css("display", "none");
+        $("#divAdd").css("display", "none");
+        $("#divDuplicate").css("display", "none");
+        $("#tblCancelItem").css("display", "none");
+        $("#tblLessItem").css("display", "none");
+        $("#tblAddItem").css("display", "none");
+        //Cancel Item
+        for (var j = 0; j < uniqueSections.length; j++) {
+            $('#detail-section-skus').empty(); // clear all skus  from invoice  
+            $('#detail-section-skusCancel').empty();
+            for (var i = 0, len = orderedProducts.length; i < len; i++) {
+                if (orderedProducts[i].SEC_ID == uniqueSections[j]) {
+                    //Cancel Item
+                    if (orderedProducts[i].VOID) {
+                        $("#OrderprintType").text('Running Order...');
+                        $("#divCancel").html('<br><hr>CANCELED ITEM<br><hr>');
+                        $("#tblCancelItem").css("display", "block");
+                        $("#divCancel").css("display", "block");
+                        var qty = orderedProducts[i].QTY;
+                        $("#SectionName").text(orderedProducts[i].SECTION);
+                        $("#lblOrderNotes2").text(products[0].REMARKS);
+                        $("#CustoerType").text($("#hfCustomerType").val().toUpperCase());
+                        if ($("#hfEatIn").val() == "1") {
+                            $("#TableNo").text("");
+                        }
+                        else {
+                            $("#TableNo").text("TABLE NO : " + orderedProducts[i].TableDefination_No);
+                        }
+                        $("#kitchenOrderTaker").text("O-T : " + $('select#ddlOrderBooker option:selected').text());
+                        if ($("#hfCustomerType").val() == "Takeaway") {
+                            $("#TableNo").text("CUSTOMER :" + $("#txtTakeawayCustomer").val());
+                        }
+                        else if ($("#hfCustomerType").val() == "Delivery") {
+                            if (document.getElementById("hfPrintCustomerOnDelivery").value == "0") {
+                                $("#TableNo").text("");
+                            }
+                            else {
+                                $("#TableNo").text("CUSOTMER :" + orderedProducts[i].TableDefination_No + " " + document.getElementById('hfCustomerNo').value);
+                            }
+                            $("#kitchenOrderTaker").text("D-M :" + $('select#ddlOrderBooker option:selected').text());
+                        }
+                        $("#Date").text($("#hfCurrentWorkDate").val());
+                        $("#Time").text(moment().format('hh:mm A'));
+                        if ($("#txtManualOrderNo").val() != "") {
+                            $("#PrintMaxOrderNo").text($("#MaxOrderNo").text() + "-" + $("#txtManualOrderNo").val());
+                        }
+                        else {
+                            $("#PrintMaxOrderNo").text($("#MaxOrderNo").text());
+                        }
+                        var mod = '';
+                        sNO = sNO + 1;
+                        var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                        $('#detail-section-skusCancel').append(row);
+                    }
+                }
+            }
+            sortTableKOT();
+            if ($("#detail-section-skus tr").length > 0 || $("#detail-section-skusCancel tr").length > 0) {
+                document.getElementById("trLocationName").style.display = "none";
+                if (document.getElementById("hfLocationNameOnKOT").value == "1") {
+                    $("#LocationName").text(document.getElementById("hfLocationName").value);
+                    document.getElementById("trLocationName").style.display = "block";
+                }
+                PrintInvoiceOfSection();
+            }
+        }
+        $("#OrderprintType").text('');
+        $("#divLess").css("display", "none");
+        $("#divCancel").css("display", "none");
+        $("#divAdd").css("display", "none");
+        $("#divDuplicate").css("display", "none");
+        $("#tblCancelItem").css("display", "none");
+        $("#tblLessItem").css("display", "none");
+        $("#tblAddItem").css("display", "none");
+        //Add Item
+        for (var j = 0; j < uniqueSections.length; j++) {
+            var arrDealIDs = [];
+            $('#detail-section-skus').empty(); // clear all skus  from invoice  
+            $('#detail-section-skusCancel').empty();
+            for (var i = 0, len = orderedProducts.length; i < len; i++) {
+                if (orderedProducts[i].SEC_ID == uniqueSections[j]) {
+                    //Add New Item
+                    if (orderedProducts[i].QTY - orderedProducts[i].PRINT_QTY > 0 && orderedProducts[i].QtyAddLess == 0 && !orderedProducts[i].VOID) {
+                        $("#OrderprintType").text('Running Order...');
+                        $("#divAdd").html('<br><hr>ADD ITEM<br><hr>');
+                        $("#tblAddItem").css("display", "block");
+                        $("#divAdd").css("display", "block");
+                        var qty = orderedProducts[i].QTY;
+                        $("#SectionName").text(orderedProducts[i].SECTION);
+                        $("#lblOrderNotes2").text(products[0].REMARKS);
+                        $("#CustoerType").text($("#hfCustomerType").val().toUpperCase());
+                        if ($("#hfEatIn").val() == "1") {
+                            $("#TableNo").text("");
+                        }
+                        else {
+                            $("#TableNo").text("TABLE NO : " + orderedProducts[i].TableDefination_No);
+                        }
+                        $("#kitchenOrderTaker").text("O-T : " + $('select#ddlOrderBooker option:selected').text());
+                        if ($("#hfCustomerType").val() == "Takeaway") {
+                            $("#TableNo").text("CUSTOMER :" + $("#txtTakeawayCustomer").val());
+                        }
+                        else if ($("#hfCustomerType").val() == "Delivery") {
+                            if (document.getElementById("hfPrintCustomerOnDelivery").value == "0") {
+                                $("#TableNo").text("");
+                            }
+                            else {
+                                $("#TableNo").text("CUSOTMER :" + orderedProducts[i].TableDefination_No + " " + document.getElementById('hfCustomerNo').value);
+                            }
+                            $("#kitchenOrderTaker").text("D-M :" + $('select#ddlOrderBooker option:selected').text());
+                        }
+                        $("#Date").text($("#hfCurrentWorkDate").val());
+                        $("#Time").text(moment().format('hh:mm A'));
+                        if ($("#txtManualOrderNo").val() != "") {
+                            $("#PrintMaxOrderNo").text($("#MaxOrderNo").text() + "-" + $("#txtManualOrderNo").val());
+                        }
+                        else {
+                            $("#PrintMaxOrderNo").text($("#MaxOrderNo").text());
+                        }
+                        if (orderedProducts[i].I_D_ID == 0) {
+                            if (orderedProducts[i].MODIFIER === false) {
+                                var mod = '';
+                                if (orderedProducts[i].IS_HasMODIFIER) {
+                                    var HasMod = 0;
+                                    for (var k = 0, lenk = Modifierparent.length; k < lenk; ++k) {
+                                        if (orderedProducts[i].SKU_ID === Modifierparent[k].ParentID && parseInt(orderedProducts[i].ModifierParetn_Row_ID) === parseInt(Modifierparent[k].ModifierParetn_Row_ID)) {
+                                            if (!IsModifierDeleted(orderedProducts, Modifierparent[k].ItemID)) {
+                                                mod = mod + '<br>' + Modifierparent[k].ItemName + ' - ' + Modifierparent[k].Qty;
+                                                HasMod = 1;
+                                            }
+                                        }
+                                    }
+                                    if (HasMod == 0) {
+                                        sNO = sNO + 1;
+                                        var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                        $('#detail-section-skus').append(row);
+                                    }
+                                    else {
+                                        sNO = sNO + 1;
+                                        var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + mod + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                        $('#detail-section-skus').append(row);
+                                    }
+                                }
+                                else {
+                                    sNO = sNO + 1;
+                                    var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                    $('#detail-section-skus').append(row);
+                                }
+                            }
+                        }
+                        else {
+                            var uniqueDeal = $.unique(orderedProducts.map(function (d) { return d.I_D_ID; }));
+                            uniqueDeal = uniqueDeal.sort();
+                            uniqueDeal = unique(uniqueDeal);
+
+                            for (var jj = 0; jj < uniqueDeal.length; jj++) {
+                                if (uniqueDeal[jj] != 0) {
+                                    if (!orderedProducts[i].VOID) {
+                                        if (uniqueDeal[jj] == orderedProducts[i].I_D_ID) {
+                                            var boolDeal = true;
+                                            for (var arriDeal = 0; arriDeal < arrDealIDs.length; arriDeal++) {
+                                                if (arrDealIDs[arriDeal] == uniqueDeal[jj]) {
+                                                    boolDeal = false;
+                                                    break;
+                                                }
+                                            }
+                                            if (boolDeal) {
+                                                var row = $('<tr ><td></td><td>' + orderedProducts[i].DEAL_NAME + '</td><td class="text-right">' + orderedProducts[i].DEAL_QTY + '</td><td style="display:none">' + orderedProducts[i].SALE_INVOICE_DETAIL_ID + '</td></tr>');
+                                                $('#detail-section-skus').append(row);
+                                                arrDealIDs.push(uniqueDeal[jj]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (orderedProducts[i].MODIFIER === false) {
+                                var mod = '';
+                                if (orderedProducts[i].IS_HasMODIFIER) {
+                                    var HasMod = 0;
+                                    for (var k = 0, lenk = Modifierparent.length; k < lenk; ++k) {
+                                        if (orderedProducts[i].SKU_ID === Modifierparent[k].ParentID && parseInt(orderedProducts[i].ModifierParetn_Row_ID) === parseInt(Modifierparent[k].ModifierParetn_Row_ID)) {
+                                            if (!IsModifierDeleted(orderedProducts, Modifierparent[k].ItemID)) {
+                                                mod = mod + '<br>' + Modifierparent[k].ItemName + ' - ' + Modifierparent[k].Qty;
+                                                HasMod = 1;
+                                            }
+                                        }
+                                    }
+                                    if (HasMod == 0) {
+                                        sNO = sNO + 1;
+                                        var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                        $('#detail-section-skus').append(row);
+                                    }
+                                    else {
+                                        sNO = sNO + 1;
+                                        var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + mod + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                        $('#detail-section-skus').append(row);
+                                    }
+                                }
+                                else {
+                                    sNO = sNO + 1;
+                                    var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                    $('#detail-section-skus').append(row);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            sortTableKOT();
+            if ($("#detail-section-skus tr").length > 0 || $("#detail-section-skusCancel tr").length > 0) {
+                document.getElementById("trLocationName").style.display = "none";
+                if (document.getElementById("hfLocationNameOnKOT").value == "1") {
+                    $("#LocationName").text(document.getElementById("hfLocationName").value);
+                    document.getElementById("trLocationName").style.display = "block";
+                }
+                PrintInvoiceOfSection();
+            }
+        }
+        $("#OrderprintType").text('');
+        $("#divLess").css("display", "none");
+        $("#divCancel").css("display", "none");
+        $("#divAdd").css("display", "none");
+        $("#divDuplicate").css("display", "none");
+        $("#tblCancelItem").css("display", "none");
+        $("#tblLessItem").css("display", "none");
+        $("#tblAddItem").css("display", "none");
+        //Increase Qty
+        for (var j = 0; j < uniqueSections.length; j++) {
+            $('#detail-section-skus').empty(); // clear all skus  from invoice  
+            $('#detail-section-skusCancel').empty();
+            for (var i = 0, len = orderedProducts.length; i < len; i++) {
+                if (orderedProducts[i].SEC_ID == uniqueSections[j]) {
+                    //Increase Item Qty
+                    if (orderedProducts[i].QtyAddLess > 0 && orderedProducts[i].LessAddType == 2 && !orderedProducts[i].VOID) {
+                        $("#OrderprintType").text('Running Order...');
+                        $("#divAdd").html('<br><hr>ADD ITEM QTY<br><hr>');
+                        $("#tblAddItem").css("display", "block");
+                        $("#divAdd").css("display", "block");
+                        var qty = orderedProducts[i].QtyAddLess;
+                        $("#SectionName").text(orderedProducts[i].SECTION);
+                        $("#lblOrderNotes2").text(products[0].REMARKS);
+                        $("#CustoerType").text($("#hfCustomerType").val().toUpperCase());
+                        if ($("#hfEatIn").val() == "1") {
+                            $("#TableNo").text("");
+                        }
+                        else {
+                            $("#TableNo").text("TABLE NO : " + orderedProducts[i].TableDefination_No);
+                        }
+                        $("#kitchenOrderTaker").text("O-T : " + $('select#ddlOrderBooker option:selected').text());
+                        if ($("#hfCustomerType").val() == "Takeaway") {
+                            $("#TableNo").text("CUSTOMER :" + $("#txtTakeawayCustomer").val());
+                        }
+                        else if ($("#hfCustomerType").val() == "Delivery") {
+                            if (document.getElementById("hfPrintCustomerOnDelivery").value == "0") {
+                                $("#TableNo").text("");
+                            }
+                            else {
+                                $("#TableNo").text("CUSOTMER :" + orderedProducts[i].TableDefination_No + " " + document.getElementById('hfCustomerNo').value);
+                            }
+                            $("#kitchenOrderTaker").text("D-M :" + $('select#ddlOrderBooker option:selected').text());
+                        }
+                        $("#Date").text($("#hfCurrentWorkDate").val());
+                        $("#Time").text(moment().format('hh:mm A'));
+                        if ($("#txtManualOrderNo").val() != "") {
+                            $("#PrintMaxOrderNo").text($("#MaxOrderNo").text() + "-" + $("#txtManualOrderNo").val());
+                        }
+                        else {
+                            $("#PrintMaxOrderNo").text($("#MaxOrderNo").text());
+                        }
+                        if (orderedProducts[i].MODIFIER === false) {
+                            var mod = '';
+                            if (orderedProducts[i].IS_HasMODIFIER) {
+                                var HasMod = 0;
+                                for (var k = 0, lenk = Modifierparent.length; k < lenk; ++k) {
+                                    if (orderedProducts[i].SKU_ID === Modifierparent[k].ParentID && parseInt(orderedProducts[i].ModifierParetn_Row_ID) === parseInt(Modifierparent[k].ModifierParetn_Row_ID)) {
+                                        if (!IsModifierDeleted(orderedProducts, Modifierparent[k].ItemID)) {
+                                            mod = mod + '<br>' + Modifierparent[k].ItemName + ' - ' + Modifierparent[k].Qty;
+                                            HasMod = 1;
+                                        }
+                                    }
+                                }
+                                if (HasMod == 0) {
+                                    sNO = sNO + 1;
+                                    var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                    $('#detail-section-skus').append(row);
+                                }
+                                else {
+                                    sNO = sNO + 1;
+                                    var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + mod + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                    $('#detail-section-skus').append(row);
+                                }
+                            }
+                            else {
+                                sNO = sNO + 1;
+                                var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                                $('#detail-section-skus').append(row);
+                            }
+                        }
+                    }
+                }
+            }
+            sortTableKOT();
+            if ($("#detail-section-skus tr").length > 0 || $("#detail-section-skusCancel tr").length > 0) {
+                document.getElementById("trLocationName").style.display = "none";
+                if (document.getElementById("hfLocationNameOnKOT").value == "1") {
+                    $("#LocationName").text(document.getElementById("hfLocationName").value);
+                    document.getElementById("trLocationName").style.display = "block";
+                }
+                PrintInvoiceOfSection();
+            }
+        }
+        $("#OrderprintType").text('');
+        $("#divLess").css("display", "none");
+        $("#divCancel").css("display", "none");
+        $("#divAdd").css("display", "none");
+        $("#divDuplicate").css("display", "none");
+        $("#tblCancelItem").css("display", "none");
+        $("#tblLessItem").css("display", "none");
+        $("#tblAddItem").css("display", "none");
+        //Decrease Qty
+        for (var j = 0; j < uniqueSections.length; j++) {
+            $('#detail-section-skus').empty(); // clear all skus  from invoice  
+            $('#detail-section-skusCancel').empty();
+            for (var i = 0, len = orderedProducts.length; i < len; i++) {
+                if (orderedProducts[i].SEC_ID == uniqueSections[j]) {
+                    //Decrease Item Qty
+                    if (orderedProducts[i].QtyAddLess > 0 && orderedProducts[i].LessAddType == 1 && !orderedProducts[i].VOID) {
+                        $("#OrderprintType").text('Running Order...');
+                        $("#divCancel").html('<br><hr>LESS ITEM QTY<br><hr>');
+                        $("#tblCancelItem").css("display", "block");
+                        $("#divCancel").css("display", "block");
+                        var qty = orderedProducts[i].QtyAddLess;
+                        $("#SectionName").text(orderedProducts[i].SECTION);
+                        $("#lblOrderNotes2").text(products[0].REMARKS);
+                        $("#CustoerType").text($("#hfCustomerType").val().toUpperCase());
+                        if ($("#hfEatIn").val() == "1") {
+                            $("#TableNo").text("");
+                        }
+                        else {
+                            $("#TableNo").text("TABLE NO : " + orderedProducts[i].TableDefination_No);
+                        }
+                        $("#kitchenOrderTaker").text("O-T : " + $('select#ddlOrderBooker option:selected').text());
+                        if ($("#hfCustomerType").val() == "Takeaway") {
+                            $("#TableNo").text("CUSTOMER :" + $("#txtTakeawayCustomer").val());
+                        }
+                        else if ($("#hfCustomerType").val() == "Delivery") {
+                            if (document.getElementById("hfPrintCustomerOnDelivery").value == "0") {
+                                $("#TableNo").text("");
+                            }
+                            else {
+                                $("#TableNo").text("CUSOTMER :" + orderedProducts[i].TableDefination_No + " " + document.getElementById('hfCustomerNo').value);
+                            }
+                            $("#kitchenOrderTaker").text("D-M :" + $('select#ddlOrderBooker option:selected').text());
+                        }
+                        $("#Date").text($("#hfCurrentWorkDate").val());
+                        $("#Time").text(moment().format('hh:mm A'));
+                        if ($("#txtManualOrderNo").val() != "") {
+                            $("#PrintMaxOrderNo").text($("#MaxOrderNo").text() + "-" + $("#txtManualOrderNo").val());
+                        }
+                        else {
+                            $("#PrintMaxOrderNo").text($("#MaxOrderNo").text());
+                        }
+                        var mod = '';
+                        sNO = sNO + 1;
+                        var row = $('<tr ><td style="vertical-align: top;">' + sNO + '</td><td>' + orderedProducts[i].DESC + '</td><td class="text-right" style="vertical-align: top;">' + parseFloat(qty) + '</td></tr>');
+                        $('#detail-section-skusCancel').append(row);
+                    }
+                }
+            }
+            sortTableKOT();
+            if ($("#detail-section-skus tr").length > 0 || $("#detail-section-skusCancel tr").length > 0) {
+                document.getElementById("trLocationName").style.display = "none";
+                if (document.getElementById("hfLocationNameOnKOT").value == "1") {
+                    $("#LocationName").text(document.getElementById("hfLocationName").value);
+                    document.getElementById("trLocationName").style.display = "block";
+                }
+                PrintInvoiceOfSection();
+            }
+        }
+    }
+    UnlockRecord();
+    var tableData = storeTblValuesPrint(orderedProducts);
+    tableData = JSON.stringify(tableData);
+    UpdatePrintRecord(tableData);
+    $("#txtManualOrderNo").val('');
     IsNewDeliveryOrder = 0;
 }
 function PrintFullKOT() {
@@ -3204,7 +3600,7 @@ function OrderSaved(dtStock) {
         }
 
         if (IsKOTPrint == 1) {
-            UniqueSection();
+            GetPendingBill3(dtStock[0].Stock);
             if (document.getElementById("hfIsFullKOT").value == "1") {
                 PrintFullKOT();
             }
@@ -5949,5 +6345,45 @@ function stopWeightRead() {
         clearInterval(weightTimer);
         weightTimer = null;
     }
+}
+
+function sortTableKOT() {
+    var sortOrder = 0;
+    var arrData = $('#detail-section-skus').find('tr').get();
+    arrData.sort(function (a, b) {
+        var val1 = $(a).children('td').eq(3).text().toUpperCase();
+        var val2 = $(b).children('td').eq(3).text().toUpperCase();
+        if ($.isNumeric(val1) && $.isNumeric(val2))
+            return sortOrder == 1 ? val2 - val1 : val1 - val2;
+        else
+            return (val2 < val1) ? -sortOrder : (val2 > val1) ? sortOrder : 0;
+    });
+    $.each(arrData, function (index, row) {
+        $('#detail-section-skus').append(row);
+    });
+}
+function storeTblValuesPrint(products) {
+    var tableData = new Array();
+    for (var i = 0, len = products.length; i < len; i++) {
+        tableData[i] = {
+            "SKU_ID": products[i].SKU_ID,
+            "SALE_INVOICE_ID": products[i].SALE_INVOICE_ID
+        }
+    }
+    return tableData;
+}
+function UpdatePrintRecord(Items) {
+    $.ajax
+                ({
+                    type: "POST", //HTTP method
+                    url: "frmOrderPOS.aspx/UpdatePrintRecords", //page/method name
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({ orderedProducts: Items }),
+                    success: PrintDone,
+                });
+}
+function PrintDone() {
+
 }
 //----------------------------------------------------------
