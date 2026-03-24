@@ -971,7 +971,7 @@ namespace CORNBusinessLayer.Classes
             IDbTransaction mTransaction = null;
             try
             {
-                LogParams(pSaleInvoiceId, pPaymentModeId, pCustomerTypeId, pTableId, pAmountdue, pDiscount, pGst, pPaidin, pBalance, pIsHold, pUserId, pDocumentDate, pDistributorId, pDiscType, dtInvoiceDetail, pOrderBookerId, pCovertTable, pTakeAwayCustomer, p_VOID_BY, pMANUAL_ORDER_NO, pREMARKS, pserviceCharges, pcustomerID, pInvoicePrinted, pGSTPER, pGSTPERCreditCard, pBillFormat, pAdvanceAmount, pCustomerGST, pCustomerDiscount, pCustomerDiscountType, pCustomerServiceCharges, pCustomerServiceType, pRecipeType, pDelChannel, pDELIVERY_CHANNEL_CASH_IMPACT, pCreditCard_Impact, KDSImplemented, pIsItemChanged, pTakeawayType, pFORM_ID, dt, OldInvoiceJson);
+                //LogParams(pSaleInvoiceId, pPaymentModeId, pCustomerTypeId, pTableId, pAmountdue, pDiscount, pGst, pPaidin, pBalance, pIsHold, pUserId, pDocumentDate, pDistributorId, pDiscType, dtInvoiceDetail, pOrderBookerId, pCovertTable, pTakeAwayCustomer, p_VOID_BY, pMANUAL_ORDER_NO, pREMARKS, pserviceCharges, pcustomerID, pInvoicePrinted, pGSTPER, pGSTPERCreditCard, pBillFormat, pAdvanceAmount, pCustomerGST, pCustomerDiscount, pCustomerDiscountType, pCustomerServiceCharges, pCustomerServiceType, pRecipeType, pDelChannel, pDELIVERY_CHANNEL_CASH_IMPACT, pCreditCard_Impact, KDSImplemented, pIsItemChanged, pTakeawayType, pFORM_ID, dt, OldInvoiceJson);
                 DataTable dtItemLessCancel = dtInvoiceDetail.Clone();
                 List<int> Deal = new List<int>();
                 System.Text.StringBuilder sbSaleInvoiceDetailIds = new System.Text.StringBuilder();
