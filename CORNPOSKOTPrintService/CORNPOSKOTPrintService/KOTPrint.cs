@@ -97,7 +97,7 @@ namespace CORNPOSKOTPrintService
         protected override void OnStart(string[] args)
         {
             WriteLog("Service Started.", "OnStart(string[] args)");
-            WriteLog("Version: 09-Feb-2026 06:50 PM", "OnStart");
+            WriteLog("Version: 25-Mar-2026 11:40 AM", "OnStart");
             WriteLog("PerformTimerOperationCrystalReport", "OnStart");
 
             try
