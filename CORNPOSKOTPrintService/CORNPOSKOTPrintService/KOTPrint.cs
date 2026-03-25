@@ -526,6 +526,10 @@ namespace CORNPOSKOTPrintService
                                     string modifiers = Convert.ToString(dr["Modifiers"] ?? string.Empty).Replace("<br>", Environment.NewLine).Trim();
                                     string qty = Convert.ToString(dr["QTY"] ?? string.Empty).Trim();
                                     string displayName = skuName;
+                                    if (!string.IsNullOrEmpty(dr["OrderNotes"].ToString()))
+                                    {
+                                        displayName += Environment.NewLine + " " + dr["OrderNotes"].ToString();
+                                    }
                                     if (!string.IsNullOrEmpty(modifiers))
                                     {
                                         displayName += Environment.NewLine + "  " + modifiers;
@@ -566,6 +570,10 @@ namespace CORNPOSKOTPrintService
                                     string modifiers = Convert.ToString(dr["Modifiers"] ?? string.Empty).Replace("<br>", Environment.NewLine).Trim();
                                     string qty = Convert.ToString(dr["QTY"] ?? string.Empty).Trim();
                                     string displayName = skuName;
+                                    if (!string.IsNullOrEmpty(dr["OrderNotes"].ToString()))
+                                    {
+                                        displayName += Environment.NewLine + " " + dr["OrderNotes"].ToString();
+                                    }
                                     if (!string.IsNullOrEmpty(modifiers))
                                     {
                                         displayName += Environment.NewLine + "  " + modifiers;
@@ -587,7 +595,7 @@ namespace CORNPOSKOTPrintService
                                 }
                             }
                         }
-                    }                    
+                    }
                 }
                 else
                 {
@@ -597,6 +605,10 @@ namespace CORNPOSKOTPrintService
                         string modifiers = Convert.ToString(dr["Modifiers"] ?? string.Empty).Replace("<br>", Environment.NewLine).Trim();
                         string qty = Convert.ToString(dr["QTY"] ?? string.Empty).Trim();
                         string displayName = skuName;
+                        if (!string.IsNullOrEmpty(dr["OrderNotes"].ToString()))
+                        {
+                            displayName += Environment.NewLine + " " + dr["OrderNotes"].ToString();
+                        }
                         if (!string.IsNullOrEmpty(modifiers))
                         {
                             displayName += Environment.NewLine + "  " + modifiers;
@@ -636,7 +648,7 @@ namespace CORNPOSKOTPrintService
 
         #endregion
 
-            #region Decryp
+        #region Decryp
         public static string Decrypt(string EncryptedText, string Key)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(Key);
