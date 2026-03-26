@@ -97,7 +97,7 @@ namespace CORNPOSKOTPrintService
         protected override void OnStart(string[] args)
         {
             WriteLog("Service Started.", "OnStart(string[] args)");
-            WriteLog("Version: 25-Mar-2026 11:40 AM", "OnStart");
+            WriteLog("Version: 26-Mar-2026 04:30 PM", "OnStart");
             WriteLog("PerformTimerOperationCrystalReport", "OnStart");
 
             try
@@ -526,9 +526,9 @@ namespace CORNPOSKOTPrintService
                                     string modifiers = Convert.ToString(dr["Modifiers"] ?? string.Empty).Replace("<br>", Environment.NewLine).Trim();
                                     string qty = Convert.ToString(dr["QTY"] ?? string.Empty).Trim();
                                     string displayName = skuName;
-                                    if (!string.IsNullOrEmpty(dr["OrderNotes"].ToString()))
+                                    if (!string.IsNullOrEmpty(dr["ORDER_NOTES"].ToString()))
                                     {
-                                        displayName += Environment.NewLine + " " + dr["OrderNotes"].ToString();
+                                        displayName += Environment.NewLine + " " + dr["ORDER_NOTES"].ToString();
                                     }
                                     if (!string.IsNullOrEmpty(modifiers))
                                     {
@@ -570,9 +570,9 @@ namespace CORNPOSKOTPrintService
                                     string modifiers = Convert.ToString(dr["Modifiers"] ?? string.Empty).Replace("<br>", Environment.NewLine).Trim();
                                     string qty = Convert.ToString(dr["QTY"] ?? string.Empty).Trim();
                                     string displayName = skuName;
-                                    if (!string.IsNullOrEmpty(dr["OrderNotes"].ToString()))
+                                    if (!string.IsNullOrEmpty(dr["ORDER_NOTES"].ToString()))
                                     {
-                                        displayName += Environment.NewLine + " " + dr["OrderNotes"].ToString();
+                                        displayName += Environment.NewLine + " " + dr["ORDER_NOTES"].ToString();
                                     }
                                     if (!string.IsNullOrEmpty(modifiers))
                                     {
@@ -605,9 +605,9 @@ namespace CORNPOSKOTPrintService
                         string modifiers = Convert.ToString(dr["Modifiers"] ?? string.Empty).Replace("<br>", Environment.NewLine).Trim();
                         string qty = Convert.ToString(dr["QTY"] ?? string.Empty).Trim();
                         string displayName = skuName;
-                        if (!string.IsNullOrEmpty(dr["OrderNotes"].ToString()))
+                        if (!string.IsNullOrEmpty(dr["ORDER_NOTES"].ToString()))
                         {
-                            displayName += Environment.NewLine + " " + dr["OrderNotes"].ToString();
+                            displayName += Environment.NewLine + " " + dr["ORDER_NOTES"].ToString();
                         }
                         if (!string.IsNullOrEmpty(modifiers))
                         {
