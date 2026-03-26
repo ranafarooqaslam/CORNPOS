@@ -1006,9 +1006,10 @@ function LoadPendingBill(products) {
         $("#hfDeliveryChannel").val(products[0].DELIVERY_CHANNEL);
         $("#MaxOrderNo").text(products[0].ORDER_NO);
         $('#txtDiscountReason2').val(products[0].DiscountRemarks);
-        $('#txtDiscountReason').val(products[0].DiscountRemarks);
+        $('#txtDiscountReason').val(products[0].DiscountRemarks);        
         if (document.getElementById("hfDiscountAuthentication").value == '1') {
             $('#txtDiscountAuthRemarks').val(products[0].DiscountRemarks);
+            $("#hfDiscountRemarks").val(products[0].DiscountRemarks);
             $('#txtDiscountReason2').val("");
             $('#txtDiscountReason').val("");
         }
@@ -8472,8 +8473,9 @@ function SaveInvoice(recordtype) {
         {
             TakeawayType = $("#hfTakeawayType").val();
         }
-        $("#hfDiscountRemarks").val(document.getElementById('txtDiscountReason').value);
-
+        if ($("#hfDiscountRemarks").val() == '') {
+            $("#hfDiscountRemarks").val(document.getElementById('txtDiscountReason').value);
+        }
         var salesTax = 0;
         if (parseFloat($('#hfCustomerGST').val()) > 0) {
             $("#txtCustomerGSTValue").val($("#hfCustomerGST").val());
@@ -9410,7 +9412,9 @@ function CalculateBalance2() {
 }
 
 function UpdateOrder() {
-    $("#hfDiscountRemarks").val(document.getElementById('txtDiscountReason2').value);
+    if ($("#hfDiscountRemarks").val() == '') {
+        $("#hfDiscountRemarks").val(document.getElementById('txtDiscountReason2').value);
+    }
     var customerid = 0;
     var bankdiscountid = 0;
     try {
