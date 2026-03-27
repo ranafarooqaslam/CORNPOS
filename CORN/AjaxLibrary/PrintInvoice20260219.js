@@ -473,7 +473,7 @@ function SaleInvoicePrint2(tblProducts) {
         }
     }
     else {
-        $("#SaleInvoiceText3").text("Provisional Bill");
+        $("#SaleInvoiceText3").text("PRE RECEIPT");
     }
     $("#TotalValue5").text($("#subTotal").text());
     $("#TotalValue23").text(parseFloat(totalamountWithGST).toFixed(0));
@@ -1163,7 +1163,7 @@ function SaleInvoicePrint3(tblProducts) {
     }
     sortTable4();
 
-    $("#SaleInvoiceText4").text("Provisional Bill");
+    $("#SaleInvoiceText4").text("PRE RECEIPT");
     $("#TotalValue6").text(tblProducts[0].AMOUNTDUE);
     $("#TotalValue24").text(parseFloat(totalamountWithGST).toFixed(0));
 
@@ -1729,7 +1729,7 @@ function SaleInvoicePrint4(tblProducts) {
         }
     }
     else {
-        $("#SaleInvoiceText5").text("Provisional Bill");
+        $("#SaleInvoiceText5").text("PRE RECEIPT");
     }
 
     if ($("#hfBillFormat").val() === "3" || $("#hfBillFormat").val() === "4") {
@@ -2929,7 +2929,7 @@ function SaleInvoicePrint(tblProducts) {
     //    }
     //}
     //else {
-        $("#SaleInvoiceText").text("Provisional Bill");
+        $("#SaleInvoiceText").text("PRE RECEIPT");
     //}
 
     if ($("#hfBillFormat").val() === "3" || $("#hfBillFormat").val() === "4")
@@ -6686,8 +6686,8 @@ function PrintSaleInvoiceCashCreditCardBoth(tblProducts) {
     //    }
     //}
     //else {
-        $("#SaleInvoiceText2").text("Provisional Bill");
-        $("#SaleInvoiceText3").text("Provisional Bill");
+        $("#SaleInvoiceText2").text("PRE RECEIPT");
+        $("#SaleInvoiceText3").text("PRE RECEIPT");
     //}
 
     var amountDue = 0;
