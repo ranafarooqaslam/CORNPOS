@@ -1471,7 +1471,7 @@
         <script type="text/javascript" src="../AjaxLibrary/order-pos20260326.js"></script>
         <script src="../AjaxLibrary/select2/dist/js/select2.min.js" type='text/javascript'></script>
         <script type="text/javascript" src="../AjaxLibrary/CustomKeyBoard20231220.js"></script>
-        <script type="text/javascript" src="../AjaxLibrary/PrintInvoice20260219.js"></script>
+        <script type="text/javascript" src="../AjaxLibrary/PrintInvoice20260327.js"></script>
         <script>
             function pageLoad() {
                 $("#ddlCustomer").select2();
