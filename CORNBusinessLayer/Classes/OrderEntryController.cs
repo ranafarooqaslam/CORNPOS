@@ -985,301 +985,366 @@ namespace CORNBusinessLayer.Classes
 
                 if (dtInvoiceDetail.Rows.Count > 0)
                 {
-                    int intLessCancelReasonID = 0;
-                    int ItemType = 1;
-                    long SALEINVOICEDETAILD = 0;
+                    bool itemChanged = false;
                     foreach (DataRow dr in dtInvoiceDetail.Rows)
                     {
+                        long SaleInvoiceDetailID2 = 0;
+                        string ORDER_NOTES = string.Empty;
+                        bool IS_FREE = false;
                         try
                         {
-                            SALEINVOICEDETAILD = Convert.ToInt64(dr["SALE_INVOICE_DETAIL_ID"]);
+                            SaleInvoiceDetailID2 = Convert.ToInt64(dr["SALE_INVOICE_DETAIL_ID"]);
+                        }
+                        catch (Exception ex)
+                        {
+                            SaleInvoiceDetailID2 = 0;
+                            itemChanged = true;
+                            break;
+                        }
+                        try
+                        {
+                            ORDER_NOTES = dr["ItemComments"].ToString();
                         }
                         catch (Exception)
                         {
-                            SALEINVOICEDETAILD = 0;
+                            ORDER_NOTES = "";
                         }
-                        try
-                        {
-                            intLessCancelReasonID = Convert.ToInt32(dr["LessCancelReasonID"]);
-                        }
-                        catch (Exception)
-                        {
-                            intLessCancelReasonID = 0;
-                        }
-
-                        try
-                        {
-                            ItemType = Convert.ToInt32(dr["ItemType"]);
-                        }
-                        catch (Exception)
-                        {
-                            ItemType = 1;
-                        }
-
-                        sbSaleInvoiceDetailIds.Append(SALEINVOICEDETAILD);
-                        sbSaleInvoiceDetailIds.Append(",");
-                        uspInsertSaleInvoiceItemLog mItemLesCancel = new uspInsertSaleInvoiceItemLog
-                        {
-                            Connection = mConnection,
-                            Transaction = mTransaction,
-                            SALE_INVOICE_ID = pSaleInvoiceId,
-                            SALE_INVOICE_DETAIL_ID = SALEINVOICEDETAILD,
-                            SKU_ID = Convert.ToInt32(dr["SKU_ID"]),
-                            IS_VOID = Convert.ToBoolean(dr["VOID"]),
-                            QTY = Convert.ToDecimal(dr["QTY"]),
-                            VOID_BY = p_VOID_BY,
-                            LessCancelReasonID = intLessCancelReasonID,
-                            ItemType = ItemType,
-                            DealQty = Convert.ToDecimal(dr["DEAL_QTY"])
-                        };
-                        DataTable dtItemLog = mItemLesCancel.ExecuteTable();
-                        if (ItemType == 2)//Insert Consumption
-                        {
-                            dtItemLessCancel.ImportRow(dr);
-                            foreach (DataRow drLessCancel in dtItemLessCancel.Rows)
-                            {
-                                if (drLessCancel["SKU_ID"].ToString() == dr["SKU_ID"].ToString())
-                                {
-                                    drLessCancel["QTY"] = dtItemLog.Rows[0]["RETURN_QTY"];
-                                }
-                            }
-                        }
-                    }
-
-                    if (dtItemLessCancel.Rows.Count > 0)
-                    {
-                        InsertLessCancelItemConsumption(pSaleInvoiceId, pDocumentDate, pDistributorId, pCustomerTypeId, pUserId, pRecipeType, dtItemLessCancel, IsFinanceIntegrate, dtCOAConfig, mConnection, mTransaction);
-                    }
-                    //----------------Insert into sale order detail-------------\\
-                    spInsertSALE_INVOICE_DETAILKOT2 mSaleInvoiceDetail = new spInsertSALE_INVOICE_DETAILKOT2
-                    {
-                        Connection = mConnection,
-                        Transaction = mTransaction
-                    };
-                    foreach (DataRow dr in dtInvoiceDetail.Rows)
-                    {
-                        mSaleInvoiceDetail.SALE_INVOICE_ID = pSaleInvoiceId;
-                        mSaleInvoiceDetail.IS_VOID = bool.Parse(dr["VOID"].ToString());
-                        mSaleInvoiceDetail.PRICE = decimal.Parse(dr["T_PRICE"].ToString());
-                        mSaleInvoiceDetail.PRODUCT_CATEGORY_ID = int.Parse(dr["CAT_ID"].ToString());
-                        mSaleInvoiceDetail.QTY = decimal.Parse(dr["QTY"].ToString());
-                        mSaleInvoiceDetail.REMARKS = "H";
-                        mSaleInvoiceDetail.C1 = decimal.Parse(dr["C1"].ToString());
-                        mSaleInvoiceDetail.C2 = decimal.Parse(dr["C2"].ToString());
-                        mSaleInvoiceDetail.ITEM_DEAL_ID = int.Parse(dr["I_D_ID"].ToString());
-                        mSaleInvoiceDetail.DEAL_PRICE = decimal.Parse(dr["A_PRICE"].ToString());
-                        mSaleInvoiceDetail.SKU_ID = int.Parse(dr["SKU_ID"].ToString());
-                        mSaleInvoiceDetail.DealDetailQTY = decimal.Parse(dr["QTY"].ToString());
-                        mSaleInvoiceDetail.DealQTY = decimal.Parse(dr["DEAL_QTY"].ToString());
-                        mSaleInvoiceDetail.intDealID = int.Parse(dr["intDealID"].ToString());
-                        mSaleInvoiceDetail.lngDealDetailID = long.Parse(dr["lngDealDetailID"].ToString());
-                        mSaleInvoiceDetail.DISTRIBUTOR_ID = pDistributorId;
-                        mSaleInvoiceDetail.VOID_BY = p_VOID_BY;
-                        mSaleInvoiceDetail.ItemWiseGST = decimal.Parse(dr["ItemWiseGST"].ToString());
-                        mSaleInvoiceDetail.GSTPER = decimal.Parse(dr["GSTPER"].ToString());
-                        try
-                        {
-                            mSaleInvoiceDetail.DISCOUNT = decimal.Parse(dr["DISCOUNT"].ToString());
-                        }
-                        catch (Exception)
-                        {
-                            mSaleInvoiceDetail.DISCOUNT = 0;
-                        }
-
                         if (dr["IS_FREE"].ToString() != "")
                         {
                             if (dr["IS_FREE"].ToString() == "0")
                             {
-                                mSaleInvoiceDetail.IS_FREE = false;
+                                IS_FREE = false;
                             }
                             else
                             {
-                                mSaleInvoiceDetail.IS_FREE = true;
+                                IS_FREE = true;
                             }
                         }
-                        else
-                        {
-                            mSaleInvoiceDetail.IS_FREE = false;
-                        }
-                        try
-                        {
-                            mSaleInvoiceDetail.ORIGINAL_QTY = Convert.ToDecimal(dr["ORIGINAL_QTY"]);
-                        }
-                        catch (Exception)
-                        {
-                            mSaleInvoiceDetail.ORIGINAL_QTY = 0;
-                        }
-                        if (!mSaleInvoiceDetail.IS_VOID)
-                        {
-                            AllItemsCanceled = false;
-                        }
-                        if (mSaleInvoiceDetail.IS_VOID)
-                        {
-                            mSaleInvoiceDetail.PRINT_QTY = 0;
-                        }
-                        else
-                        {
-                            try
-                            {
-                                mSaleInvoiceDetail.PRINT_QTY = Convert.ToDecimal(dr["PRINT_QTY"]);
-                            }
-                            catch (Exception)
-                            {
-                                mSaleInvoiceDetail.PRINT_QTY = 0;
-                            }
-                        }
-                        try
-                        {
-                            mSaleInvoiceDetail.MODIFIER_PARENT_ID = Convert.ToInt32(dr["MODIFIER_PARENT_ID"]);
-                        }
-                        catch (Exception)
-                        {
-                            mSaleInvoiceDetail.MODIFIER_PARENT_ID = 0;
-                        }
-                        try
-                        {
-                            mSaleInvoiceDetail.ModifierParetn_Row_ID = Convert.ToInt32(dr["ModifierParetn_Row_ID"]);
-                        }
-                        catch (Exception)
-                        {
-                            mSaleInvoiceDetail.ModifierParetn_Row_ID = 0;
-                        }
-                        try
-                        {
-                            mSaleInvoiceDetail.ORDER_NOTES = dr["ItemComments"].ToString();
-                        }
-                        catch (Exception)
-                        {
-                            mSaleInvoiceDetail.ORDER_NOTES = "";
-                        }
-                        try
-                        {
-                            mSaleInvoiceDetail.ComplimentaryReason = Convert.ToInt32(dr["ComplimentaryReason"]);
-                        }
-                        catch (Exception)
-                        {
-                            mSaleInvoiceDetail.ComplimentaryReason = 0;
-                        }
-                        try
-                        {
-                            mSaleInvoiceDetail.TIME_STAMP2 = Convert.ToDateTime(dr["TIME_STAMP"]).ToLocalTime();
-                        }
-                        catch (Exception)
-                        {
-                            mSaleInvoiceDetail.TIME_STAMP2 = System.DateTime.Now;
-                        }
-                        try
-                        {
-                            mSaleInvoiceDetail.DISCOUNTDeal = Convert.ToDecimal(dr["DISCOUNTDeal"]);
-                        }
-                        catch (Exception)
-                        {
-                            mSaleInvoiceDetail.DISCOUNTDeal = 0;
-                        }
-                        bool newitem = true;
-                        //decimal KOTQty = 0;
-                        //decimal KOTDealQty = 0;
-                        //byte KOTType = 1;//1=NewKOT, 2=NewItem,3=Increase Qty,4=Decrease Qty,5=Calncel Item
+
                         foreach (DataRow row1 in dt.Rows)
                         {
                             var skuId = row1.Field<int>("SKU_ID");
                             var qty1 = row1.Field<decimal>("QTY");
-                            //var dealqty1 = row1.Field<decimal>("DealQTY");
+                            var complementary = row1.Field<bool>("IS_FREE");
+                            var itemcommnents = row1.Field<string>("ORDER_NOTES");
+                            var itemcancel = row1.Field<bool>("IS_VOID");
                             var SaleInvoiceDetailID = row1.Field<long>("SALE_INVOICE_DETAIL_ID");
                             var lastupdate = row1.Field<DateTime>("LASTUPDATE_DATE");
-                            long SaleInvoiceDetailID2 = 0;
+                            if (skuId == Convert.ToInt32(dr["SKU_ID"]) && SaleInvoiceDetailID == SaleInvoiceDetailID2)
+                            {
+                                if (qty1 != Convert.ToDecimal(dr["QTY"]) 
+                                    || complementary != IS_FREE
+                                    || itemcommnents != ORDER_NOTES
+                                    || itemcancel != Convert.ToBoolean(dr["VOID"]))
+                                {
+                                    itemChanged = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if(itemChanged)
+                        {
+                            break;
+                        }
+                    }
+
+                    int intLessCancelReasonID = 0;
+                    int ItemType = 1;
+                    long SALEINVOICEDETAILD = 0;
+                    if (itemChanged)
+                    {
+                        foreach (DataRow dr in dtInvoiceDetail.Rows)
+                        {
                             try
                             {
-                                SaleInvoiceDetailID2 = Convert.ToInt64(dr["SALE_INVOICE_DETAIL_ID"]);
+                                SALEINVOICEDETAILD = Convert.ToInt64(dr["SALE_INVOICE_DETAIL_ID"]);
                             }
-                            catch (Exception ex)
+                            catch (Exception)
                             {
-                                SaleInvoiceDetailID2 = 0;
+                                SALEINVOICEDETAILD = 0;
                             }
-                            if (skuId == mSaleInvoiceDetail.SKU_ID && SaleInvoiceDetailID == SaleInvoiceDetailID2)
-                            {         
-                                if (qty1 != mSaleInvoiceDetail.QTY)
+                            try
+                            {
+                                intLessCancelReasonID = Convert.ToInt32(dr["LessCancelReasonID"]);
+                            }
+                            catch (Exception)
+                            {
+                                intLessCancelReasonID = 0;
+                            }
+
+                            try
+                            {
+                                ItemType = Convert.ToInt32(dr["ItemType"]);
+                            }
+                            catch (Exception)
+                            {
+                                ItemType = 1;
+                            }
+
+                            sbSaleInvoiceDetailIds.Append(SALEINVOICEDETAILD);
+                            sbSaleInvoiceDetailIds.Append(",");
+                            uspInsertSaleInvoiceItemLog mItemLesCancel = new uspInsertSaleInvoiceItemLog
+                            {
+                                Connection = mConnection,
+                                Transaction = mTransaction,
+                                SALE_INVOICE_ID = pSaleInvoiceId,
+                                SALE_INVOICE_DETAIL_ID = SALEINVOICEDETAILD,
+                                SKU_ID = Convert.ToInt32(dr["SKU_ID"]),
+                                IS_VOID = Convert.ToBoolean(dr["VOID"]),
+                                QTY = Convert.ToDecimal(dr["QTY"]),
+                                VOID_BY = p_VOID_BY,
+                                LessCancelReasonID = intLessCancelReasonID,
+                                ItemType = ItemType,
+                                DealQty = Convert.ToDecimal(dr["DEAL_QTY"])
+                            };
+                            DataTable dtItemLog = mItemLesCancel.ExecuteTable();
+                            if (ItemType == 2)//Insert Consumption
+                            {
+                                dtItemLessCancel.ImportRow(dr);
+                                foreach (DataRow drLessCancel in dtItemLessCancel.Rows)
                                 {
-                                    mSaleInvoiceDetail.LASTUPDATE_DATE = DateTime.Now;
+                                    if (drLessCancel["SKU_ID"].ToString() == dr["SKU_ID"].ToString())
+                                    {
+                                        drLessCancel["QTY"] = dtItemLog.Rows[0]["RETURN_QTY"];
+                                    }
+                                }
+                            }
+                        }
+
+                        if (dtItemLessCancel.Rows.Count > 0)
+                        {
+                            InsertLessCancelItemConsumption(pSaleInvoiceId, pDocumentDate, pDistributorId, pCustomerTypeId, pUserId, pRecipeType, dtItemLessCancel, IsFinanceIntegrate, dtCOAConfig, mConnection, mTransaction);
+                        }
+                        //----------------Insert into sale order detail-------------\\
+                        spInsertSALE_INVOICE_DETAILKOT2 mSaleInvoiceDetail = new spInsertSALE_INVOICE_DETAILKOT2
+                        {
+                            Connection = mConnection,
+                            Transaction = mTransaction
+                        };
+                        foreach (DataRow dr in dtInvoiceDetail.Rows)
+                        {
+                            mSaleInvoiceDetail.SALE_INVOICE_ID = pSaleInvoiceId;
+                            mSaleInvoiceDetail.IS_VOID = bool.Parse(dr["VOID"].ToString());
+                            mSaleInvoiceDetail.PRICE = decimal.Parse(dr["T_PRICE"].ToString());
+                            mSaleInvoiceDetail.PRODUCT_CATEGORY_ID = int.Parse(dr["CAT_ID"].ToString());
+                            mSaleInvoiceDetail.QTY = decimal.Parse(dr["QTY"].ToString());
+                            mSaleInvoiceDetail.REMARKS = "H";
+                            mSaleInvoiceDetail.C1 = decimal.Parse(dr["C1"].ToString());
+                            mSaleInvoiceDetail.C2 = decimal.Parse(dr["C2"].ToString());
+                            mSaleInvoiceDetail.ITEM_DEAL_ID = int.Parse(dr["I_D_ID"].ToString());
+                            mSaleInvoiceDetail.DEAL_PRICE = decimal.Parse(dr["A_PRICE"].ToString());
+                            mSaleInvoiceDetail.SKU_ID = int.Parse(dr["SKU_ID"].ToString());
+                            mSaleInvoiceDetail.DealDetailQTY = decimal.Parse(dr["QTY"].ToString());
+                            mSaleInvoiceDetail.DealQTY = decimal.Parse(dr["DEAL_QTY"].ToString());
+                            mSaleInvoiceDetail.intDealID = int.Parse(dr["intDealID"].ToString());
+                            mSaleInvoiceDetail.lngDealDetailID = long.Parse(dr["lngDealDetailID"].ToString());
+                            mSaleInvoiceDetail.DISTRIBUTOR_ID = pDistributorId;
+                            mSaleInvoiceDetail.VOID_BY = p_VOID_BY;
+                            mSaleInvoiceDetail.ItemWiseGST = decimal.Parse(dr["ItemWiseGST"].ToString());
+                            mSaleInvoiceDetail.GSTPER = decimal.Parse(dr["GSTPER"].ToString());
+                            try
+                            {
+                                mSaleInvoiceDetail.DISCOUNT = decimal.Parse(dr["DISCOUNT"].ToString());
+                            }
+                            catch (Exception)
+                            {
+                                mSaleInvoiceDetail.DISCOUNT = 0;
+                            }
+
+                            if (dr["IS_FREE"].ToString() != "")
+                            {
+                                if (dr["IS_FREE"].ToString() == "0")
+                                {
+                                    mSaleInvoiceDetail.IS_FREE = false;
                                 }
                                 else
                                 {
-                                    mSaleInvoiceDetail.LASTUPDATE_DATE = lastupdate;
-                                }
-                                newitem = false;
-                                break;
-                            }
-                        }
-                        if (newitem)
-                        {
-                            mSaleInvoiceDetail.LASTUPDATE_DATE = DateTime.Now;
-                        }
-                        try
-                        {
-                            mSaleInvoiceDetail.SALE_INVOICE_DETAIL_ID2 = Convert.ToInt64(dr["SALE_INVOICE_DETAIL_ID"]);
-                        }
-                        catch (Exception ex)
-                        {
-                            mSaleInvoiceDetail.SALE_INVOICE_DETAIL_ID2 = 0;
-                        }
-                        mSaleInvoiceDetail.OldInvoiceJson = OldInvoiceJson;
-                        mSaleInvoiceDetail.DealName = dr["DEAL_NAME"].ToString();
-                        mSaleInvoiceDetail.ExecuteQuery();
-                        if (mSaleInvoiceDetail.IS_VOID == false)
-                        {
-                            if (mSaleInvoiceDetail.IS_FREE == false)
-                            {
-                                itemDiscount += mSaleInvoiceDetail.DISCOUNT;
-                            }
-                        }
-
-                        #region KDS HISTORY
-                        if (KDSImplemented)
-                        {
-                            if (mSaleInvoiceDetail.IS_VOID == false)
-                            {
-                                //if there is change in qty then it should insert new. PR_COUNT => previous qty AND QTY => New Qty
-                                if (decimal.Parse(dr["PR_COUNT"].ToString()) != decimal.Parse(dr["QTY"].ToString()))
-                                {
-                                    spInsertSALE_INVOICE_DETAILKOT2 detail = new spInsertSALE_INVOICE_DETAILKOT2();
-
-                                    detail = mSaleInvoiceDetail;
-                                    var detailId = mSaleInvoiceDetail.SALE_INVOICE_DETAIL_ID;
-                                    detail.SALE_INVOICE_DETAIL_ID = detailId;
-                                    spInsertSALE_INVOICE_DETAILKOT2 detailLast = new spInsertSALE_INVOICE_DETAILKOT2();
-                                    detailLast.Connection = mConnection;
-                                    detailLast.Transaction = mTransaction;
-                                    detail.QTY = decimal.Parse(dr["QTY"].ToString()) - decimal.Parse(dr["PR_COUNT"].ToString());
-                                    detailLast = detail;
-                                    detailLast.ExecuteQueryForKDSHistory();
+                                    mSaleInvoiceDetail.IS_FREE = true;
                                 }
                             }
                             else
                             {
-                                spInsertSALE_INVOICE_DETAIL3 detail = new spInsertSALE_INVOICE_DETAIL3();
-                                detail.Connection = mConnection;
-                                detail.Transaction = mTransaction;
-                                detail.SALE_INVOICE_ID = mSaleInvoiceDetail.SALE_INVOICE_ID;
-                                detail.SKU_ID = mSaleInvoiceDetail.SKU_ID;
-                                detail.VOID_BY = p_VOID_BY;
-                                //detail.IsReady = true; done in sp side
-                                detail.ExecuteQueryForKDSAsVOID();
+                                mSaleInvoiceDetail.IS_FREE = false;
                             }
-                        }
-                        //Order Notes in KDS History
-                        if (KDSImplemented)
-                        {
-                            spInsertSALE_INVOICE_DETAIL3 detail1 = new spInsertSALE_INVOICE_DETAIL3();
-                            detail1.Connection = mConnection;
-                            detail1.Transaction = mTransaction;
-                            detail1.SALE_INVOICE_ID = mSaleInvoiceDetail.SALE_INVOICE_ID;
-                            detail1.SKU_ID = mSaleInvoiceDetail.SKU_ID;
-                            detail1.ORDER_NOTES = mSaleInvoiceDetail.ORDER_NOTES;
-                            detail1.ExecuteQueryForKDSUpdate();
-                        }
-                        #endregion
-                    }
+                            try
+                            {
+                                mSaleInvoiceDetail.ORIGINAL_QTY = Convert.ToDecimal(dr["ORIGINAL_QTY"]);
+                            }
+                            catch (Exception)
+                            {
+                                mSaleInvoiceDetail.ORIGINAL_QTY = 0;
+                            }
+                            if (!mSaleInvoiceDetail.IS_VOID)
+                            {
+                                AllItemsCanceled = false;
+                            }
+                            if (mSaleInvoiceDetail.IS_VOID)
+                            {
+                                mSaleInvoiceDetail.PRINT_QTY = 0;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    mSaleInvoiceDetail.PRINT_QTY = Convert.ToDecimal(dr["PRINT_QTY"]);
+                                }
+                                catch (Exception)
+                                {
+                                    mSaleInvoiceDetail.PRINT_QTY = 0;
+                                }
+                            }
+                            try
+                            {
+                                mSaleInvoiceDetail.MODIFIER_PARENT_ID = Convert.ToInt32(dr["MODIFIER_PARENT_ID"]);
+                            }
+                            catch (Exception)
+                            {
+                                mSaleInvoiceDetail.MODIFIER_PARENT_ID = 0;
+                            }
+                            try
+                            {
+                                mSaleInvoiceDetail.ModifierParetn_Row_ID = Convert.ToInt32(dr["ModifierParetn_Row_ID"]);
+                            }
+                            catch (Exception)
+                            {
+                                mSaleInvoiceDetail.ModifierParetn_Row_ID = 0;
+                            }
+                            try
+                            {
+                                mSaleInvoiceDetail.ORDER_NOTES = dr["ItemComments"].ToString();
+                            }
+                            catch (Exception)
+                            {
+                                mSaleInvoiceDetail.ORDER_NOTES = "";
+                            }
+                            try
+                            {
+                                mSaleInvoiceDetail.ComplimentaryReason = Convert.ToInt32(dr["ComplimentaryReason"]);
+                            }
+                            catch (Exception)
+                            {
+                                mSaleInvoiceDetail.ComplimentaryReason = 0;
+                            }
+                            try
+                            {
+                                mSaleInvoiceDetail.TIME_STAMP2 = Convert.ToDateTime(dr["TIME_STAMP"]).ToLocalTime();
+                            }
+                            catch (Exception)
+                            {
+                                mSaleInvoiceDetail.TIME_STAMP2 = System.DateTime.Now;
+                            }
+                            try
+                            {
+                                mSaleInvoiceDetail.DISCOUNTDeal = Convert.ToDecimal(dr["DISCOUNTDeal"]);
+                            }
+                            catch (Exception)
+                            {
+                                mSaleInvoiceDetail.DISCOUNTDeal = 0;
+                            }
+                            bool newitem = true;
+                            //decimal KOTQty = 0;
+                            //decimal KOTDealQty = 0;
+                            //byte KOTType = 1;//1=NewKOT, 2=NewItem,3=Increase Qty,4=Decrease Qty,5=Calncel Item
+                            foreach (DataRow row1 in dt.Rows)
+                            {
+                                var skuId = row1.Field<int>("SKU_ID");
+                                var qty1 = row1.Field<decimal>("QTY");
+                                //var dealqty1 = row1.Field<decimal>("DealQTY");
+                                var SaleInvoiceDetailID = row1.Field<long>("SALE_INVOICE_DETAIL_ID");
+                                var lastupdate = row1.Field<DateTime>("LASTUPDATE_DATE");
+                                long SaleInvoiceDetailID2 = 0;
+                                try
+                                {
+                                    SaleInvoiceDetailID2 = Convert.ToInt64(dr["SALE_INVOICE_DETAIL_ID"]);
+                                }
+                                catch (Exception ex)
+                                {
+                                    SaleInvoiceDetailID2 = 0;
+                                }
+                                if (skuId == mSaleInvoiceDetail.SKU_ID && SaleInvoiceDetailID == SaleInvoiceDetailID2)
+                                {
+                                    if (qty1 != mSaleInvoiceDetail.QTY)
+                                    {
+                                        mSaleInvoiceDetail.LASTUPDATE_DATE = DateTime.Now;
+                                    }
+                                    else
+                                    {
+                                        mSaleInvoiceDetail.LASTUPDATE_DATE = lastupdate;
+                                    }
+                                    newitem = false;
+                                    break;
+                                }
+                            }
+                            if (newitem)
+                            {
+                                mSaleInvoiceDetail.LASTUPDATE_DATE = DateTime.Now;
+                            }
+                            try
+                            {
+                                mSaleInvoiceDetail.SALE_INVOICE_DETAIL_ID2 = Convert.ToInt64(dr["SALE_INVOICE_DETAIL_ID"]);
+                            }
+                            catch (Exception ex)
+                            {
+                                mSaleInvoiceDetail.SALE_INVOICE_DETAIL_ID2 = 0;
+                            }
+                            mSaleInvoiceDetail.OldInvoiceJson = OldInvoiceJson;
+                            mSaleInvoiceDetail.DealName = dr["DEAL_NAME"].ToString();
+                            mSaleInvoiceDetail.ExecuteQuery();
+                            if (mSaleInvoiceDetail.IS_VOID == false)
+                            {
+                                if (mSaleInvoiceDetail.IS_FREE == false)
+                                {
+                                    itemDiscount += mSaleInvoiceDetail.DISCOUNT;
+                                }
+                            }
 
+                            #region KDS HISTORY
+                            if (KDSImplemented)
+                            {
+                                if (mSaleInvoiceDetail.IS_VOID == false)
+                                {
+                                    //if there is change in qty then it should insert new. PR_COUNT => previous qty AND QTY => New Qty
+                                    if (decimal.Parse(dr["PR_COUNT"].ToString()) != decimal.Parse(dr["QTY"].ToString()))
+                                    {
+                                        spInsertSALE_INVOICE_DETAILKOT2 detail = new spInsertSALE_INVOICE_DETAILKOT2();
+
+                                        detail = mSaleInvoiceDetail;
+                                        var detailId = mSaleInvoiceDetail.SALE_INVOICE_DETAIL_ID;
+                                        detail.SALE_INVOICE_DETAIL_ID = detailId;
+                                        spInsertSALE_INVOICE_DETAILKOT2 detailLast = new spInsertSALE_INVOICE_DETAILKOT2();
+                                        detailLast.Connection = mConnection;
+                                        detailLast.Transaction = mTransaction;
+                                        detail.QTY = decimal.Parse(dr["QTY"].ToString()) - decimal.Parse(dr["PR_COUNT"].ToString());
+                                        detailLast = detail;
+                                        detailLast.ExecuteQueryForKDSHistory();
+                                    }
+                                }
+                                else
+                                {
+                                    spInsertSALE_INVOICE_DETAIL3 detail = new spInsertSALE_INVOICE_DETAIL3();
+                                    detail.Connection = mConnection;
+                                    detail.Transaction = mTransaction;
+                                    detail.SALE_INVOICE_ID = mSaleInvoiceDetail.SALE_INVOICE_ID;
+                                    detail.SKU_ID = mSaleInvoiceDetail.SKU_ID;
+                                    detail.VOID_BY = p_VOID_BY;
+                                    //detail.IsReady = true; done in sp side
+                                    detail.ExecuteQueryForKDSAsVOID();
+                                }
+                            }
+                            //Order Notes in KDS History
+                            if (KDSImplemented)
+                            {
+                                spInsertSALE_INVOICE_DETAIL3 detail1 = new spInsertSALE_INVOICE_DETAIL3();
+                                detail1.Connection = mConnection;
+                                detail1.Transaction = mTransaction;
+                                detail1.SALE_INVOICE_ID = mSaleInvoiceDetail.SALE_INVOICE_ID;
+                                detail1.SKU_ID = mSaleInvoiceDetail.SKU_ID;
+                                detail1.ORDER_NOTES = mSaleInvoiceDetail.ORDER_NOTES;
+                                detail1.ExecuteQueryForKDSUpdate();
+                            }
+                            #endregion
+                        }
+                    }
                     decimal GSTReverse = 0;
                     decimal amountDue = GetAmountDue(pSaleInvoiceId, mConnection, mTransaction);
                     if (pBillFormat == "3")
@@ -1355,7 +1420,7 @@ namespace CORNBusinessLayer.Classes
                     mISom.ExecuteQuery();
 
 
-                    if (AllItemsCanceled)
+                    if (AllItemsCanceled && itemChanged)
                     {
                         spUpdateSALE_INVOICE_MASTER mISom2 = new spUpdateSALE_INVOICE_MASTER();
                         mISom2.Connection = mConnection;
@@ -1365,11 +1430,11 @@ namespace CORNBusinessLayer.Classes
                         mISom2.ExecuteQuery();
                     }
 
-                    DeleteSaleInvoiceDetail mDel = new DeleteSaleInvoiceDetail();
-                    mDel.Connection = mConnection;
-                    mDel.Transaction = mTransaction;
-                    mDel.SaleInvoiceIds = sbSaleInvoiceDetailIds.ToString();
-                    mDel.ExecuteQuery();
+                    //DeleteSaleInvoiceDetail mDel = new DeleteSaleInvoiceDetail();
+                    //mDel.Connection = mConnection;
+                    //mDel.Transaction = mTransaction;
+                    //mDel.SaleInvoiceIds = sbSaleInvoiceDetailIds.ToString();
+                    //mDel.ExecuteQuery();
 
                     mTransaction.Commit();                    
                     return true;
