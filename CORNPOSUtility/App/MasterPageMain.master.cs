@@ -197,6 +197,59 @@ public partial class MasterPageMain : System.Web.UI.MasterPage
 
                     ltrlMenu.Text = sbMenu.ToString();
                 }
+                else if (Session["UserID"].ToString() == "2")
+                {
+                    //Bread Crum
+                    //Location Setup
+                    string Url = Request.Url.AbsoluteUri;
+                    if (Url.ToLower().Contains("default.aspx"))
+                    {
+                        ltrlBreadCrum.Text = "Location Setup";
+                    }
+                    //User Setp
+                    else if (Url.ToLower().Contains("user.aspx"))
+                    {
+                        ltrlBreadCrum.Text = "User Setup";
+                    }
+                    
+                    //Menu
+                    System.Text.StringBuilder sbMenu = new System.Text.StringBuilder();
+                    sbMenu.Append("<nav>");
+
+                    //Location Setup
+                    sbMenu.Append("<ul class='nav topnav'>");
+                    if (Url.ToLower().Contains("default.aspx"))
+                    {
+                        sbMenu.Append("<li class='dropdown active' id='menuLicense'>");
+                    }
+                    else
+                    {
+                        sbMenu.Append("<li id='menuLicense'>");
+                    }
+                    sbMenu.Append("<a href = 'Default.aspx' > Location Setup</a>");
+                    sbMenu.Append("</li>");
+
+                    //User Setup
+                    if (Url.ToLower().Contains("user.aspx"))
+                    {
+                        sbMenu.Append("<li class='dropdown active' id = 'menuInsight' >");
+                    }
+                    else
+                    {
+                        sbMenu.Append("<li id = 'menuInsight' >");
+                    }
+                    sbMenu.Append("<a href='user.aspx'>User Setup</ a >");
+                    sbMenu.Append("</ li>");
+                                        
+                    sbMenu.Append("<li>");
+                    sbMenu.Append("<a href = 'Logout.aspx' > Logout </ a >");
+                    sbMenu.Append("</ li>");
+                    sbMenu.Append("</ ul>");
+
+                    sbMenu.Append("</ nav>");
+
+                    ltrlMenu.Text = sbMenu.ToString();
+                }
             }
         }
     }

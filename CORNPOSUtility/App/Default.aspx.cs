@@ -21,11 +21,8 @@ public partial class Default : System.Web.UI.Page
             LoadMenu();
             if (Session["UserID"] != null)
             {
-                if (Session["UserID"].ToString() == "1")
-                {
-                    rowLogin.Visible = false;
-                    rowLicense.Visible = true;
-                }
+                rowLogin.Visible = false;
+                rowLicense.Visible = true;
             }
         }
     }
@@ -768,6 +765,11 @@ public partial class Default : System.Web.UI.Page
         if(txtUser.Text == "mypos" && txtPass.Text == "pos++")
         {            
             Session.Add("UserID", 1);
+            Response.Redirect(Request.RawUrl);
+        }
+        else if (txtUser.Text == "support" && txtPass.Text == "jayho")
+        {
+            Session.Add("UserID", 2);
             Response.Redirect(Request.RawUrl);
         }
     }

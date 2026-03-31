@@ -79,23 +79,23 @@ function LoadPendingBill(products) {
         qrCode = eval(result.d);
         if (qrCode.length > 0) {
             if (document.getElementById("hfTaxAuthority").value == "2") {
-                document.getElementById('imgQrCodePRA').src = 'data:image/png;base64,' + qrCode[0].QRCodePRA;
+                document.getElementById('imgQrCodePRA').src = 'data:image/png;base64,' + qrCode[0].QRCode;
                 document.getElementById("trQRImagePRA").style.display = "table-row";
                 document.getElementById("imgpra").style.display = "block";
                 document.getElementById("trFBRInvoicePRA").style.display = "table-row";
-                $("#FBRInvoiceNoPRA").text($("#hfTaxInvoiceLable").val() + ': ' + qrCode[0].InvoiceNumberPRA);
+                $("#FBRInvoiceNoPRA").text($("#hfTaxInvoiceLable").val() + ': ' + qrCode[0].InvoiceNumberFBR);
 
-                document.getElementById('imgQrCodePRA3').src = 'data:image/png;base64,' + qrCode[0].QRCodePRA;
+                document.getElementById('imgQrCodePRA3').src = 'data:image/png;base64,' + qrCode[0].QRCode;
                 document.getElementById("trQRImagePRA3").style.display = "table-row";
                 document.getElementById("imgpra3").style.display = "block";
                 document.getElementById("trFBRInvoicePRA3").style.display = "table-row";
-                $("#FBRInvoiceNoPRA3").text($("#hfTaxInvoiceLable").val() + ': ' + qrCode[0].InvoiceNumberPRA);
+                $("#FBRInvoiceNoPRA3").text($("#hfTaxInvoiceLable").val() + ': ' + qrCode[0].InvoiceNumberFBR);
 
-                document.getElementById('imgQrCodePRACafeBedaar').src = 'data:image/png;base64,' + qrCode[0].QRCodePRA;
+                document.getElementById('imgQrCodePRACafeBedaar').src = 'data:image/png;base64,' + qrCode[0].QRCode;
                 document.getElementById("trQRImagePRACafeBedaar").style.display = "table-row";
                 document.getElementById("imgpraCafeBedaar").style.display = "block";
                 document.getElementById("trFBRInvoicePRACafeBedaar").style.display = "table-row";
-                $("#FBRInvoiceNoPRACafeBedaar").text($("#hfTaxInvoiceLable").val() + ': ' + qrCode[0].InvoiceNumberPRA);
+                $("#FBRInvoiceNoPRACafeBedaar").text($("#hfTaxInvoiceLable").val() + ': ' + qrCode[0].InvoiceNumberFBR);
             }
             else if (document.getElementById("hfTaxAuthority").value == "1") {
                 document.getElementById('imgQrCodeFBR').src = 'data:image/png;base64,' + qrCode[0].QRCode;
