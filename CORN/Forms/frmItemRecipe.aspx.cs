@@ -324,16 +324,19 @@ public partial class Forms_frmItemRecipe : System.Web.UI.Page
 
     protected void ddlSKU_SelectedIndexChanged(object sender, EventArgs e)
     {
-        hfRawUnit.Value = "";
-        DataTable dt = new DataTable();
-
-        dt = SKUCtl.SelectSkuInfo(Convert.ToInt32(ddlSKU.SelectedItem.Value), Constants.IntNullValue, Constants.IntNullValue, 8, int.Parse(Session["CompanyId"].ToString()),null);
-        if (dt.Rows.Count > 0)
+        if (ddlSKU.Items.Count > 0)
         {
-            txtUOM.Text = dt.Rows[0]["UOM_DESC"].ToString();
-            hfRawUnitName.Value = dt.Rows[0]["UOM_DESC"].ToString();
-            hfRawUnit.Value = dt.Rows[0]["UOM_ID"].ToString();
+            hfRawUnit.Value = "";
+            DataTable dt = new DataTable();
+
+            dt = SKUCtl.SelectSkuInfo(Convert.ToInt32(ddlSKU.SelectedItem.Value), Constants.IntNullValue, Constants.IntNullValue, 8, int.Parse(Session["CompanyId"].ToString()), null);
+            if (dt.Rows.Count > 0)
+            {
+                txtUOM.Text = dt.Rows[0]["UOM_DESC"].ToString();
+                hfRawUnitName.Value = dt.Rows[0]["UOM_DESC"].ToString();
+                hfRawUnit.Value = dt.Rows[0]["UOM_ID"].ToString();
+            }
+            txtQuantity.Focus();
         }
-        txtQuantity.Focus();
     }
 }
