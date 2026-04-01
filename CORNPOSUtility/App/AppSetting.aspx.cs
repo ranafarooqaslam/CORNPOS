@@ -576,6 +576,18 @@ public partial class AppSetting : System.Web.UI.Page
                         ddlAvailableValues.Items.Add(lstVoucherEntryMinimumDate);
                         ddlAvailableValues.SelectedValue = dr["strColumnValue"].ToString();
                         break;
+                    case "ProfitLossConsumptionFormula":
+                        ListItem lstProfitLossConsumptionFormula = new ListItem();
+                        lstProfitLossConsumptionFormula.Text = "Default";
+                        lstProfitLossConsumptionFormula.Value = "1";
+                        ddlAvailableValues.Items.Add(lstProfitLossConsumptionFormula);
+
+                        lstProfitLossConsumptionFormula = new ListItem();
+                        lstProfitLossConsumptionFormula.Text = "Exlude Transfer In";
+                        lstProfitLossConsumptionFormula.Value = "2";
+                        ddlAvailableValues.Items.Add(lstProfitLossConsumptionFormula);
+                        ddlAvailableValues.SelectedValue = dr["strColumnValue"].ToString();
+                        break;
                     default:
                         ListItem lstDefault = new ListItem();
                         lstDefault.Text = "Default: No";
