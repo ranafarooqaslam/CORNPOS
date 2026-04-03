@@ -34,7 +34,7 @@
                             <asp:RadioButtonList ID="rblType" runat="server" RepeatDirection="Horizontal" Width="100%"
                                 AutoPostBack="true" OnSelectedIndexChanged="rblType_SelectedIndexChanged">
                                 <asp:ListItem Value="2" Text="Purchase" Selected="true"></asp:ListItem>
-                                <asp:ListItem Value="5" Text="Transfer Out" Enabled="false"></asp:ListItem>
+                                <asp:ListItem Value="5" Text="Transfer Out"></asp:ListItem>
                                 <asp:ListItem Value="3" Text="Purchase Return" Enabled="false"></asp:ListItem>
                                 <asp:ListItem Value="6" Text="Damage" Enabled="false"></asp:ListItem>
                                 <asp:ListItem Value="20" Text="Production In" Enabled="false"></asp:ListItem>
@@ -43,7 +43,7 @@
                             <asp:RadioButtonList ID="rblActionType" runat="server" RepeatDirection="Horizontal" Width="30%"
                                 AutoPostBack="true" OnSelectedIndexChanged="rblActionType_SelectedIndexChanged">
                                 <asp:ListItem Value="1" Text="Delete" Selected="true"></asp:ListItem>
-                                <asp:ListItem Value="2" Text="Edit"></asp:ListItem>
+                                <%--<asp:ListItem Value="2" Text="Edit"></asp:ListItem>--%>
                             </asp:RadioButtonList>
                             <strong>Select Database</strong>
                             <br />
