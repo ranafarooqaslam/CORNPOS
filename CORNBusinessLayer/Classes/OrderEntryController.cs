@@ -1009,16 +1009,10 @@ namespace CORNBusinessLayer.Classes
                         {
                             ORDER_NOTES = "";
                         }
-                        if (dr["IS_FREE"].ToString() != "")
+                        if (dr["IS_FREE"] != DBNull.Value && dr["IS_FREE"].ToString() != "")
                         {
-                            if (dr["IS_FREE"].ToString() == "0")
-                            {
-                                IS_FREE = false;
-                            }
-                            else
-                            {
-                                IS_FREE = true;
-                            }
+                            string value = dr["IS_FREE"].ToString().Trim().ToLower();
+                            IS_FREE = value == "1" || value == "true";
                         }
 
                         foreach (DataRow row1 in dt.Rows)
