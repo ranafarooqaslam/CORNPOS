@@ -48,8 +48,8 @@ public partial class AddDB : System.Web.UI.Page
             return;
         }
 
-        string connection = GetConnectionString("Data Source=" + server + ";Initial Catalog=" + newDb + ";Persist Security Info=True;User ID=" + uid + ";Password=" + pwd + ";");
-        string connectionInsight = GetConnectionStringInsight("server=" + server + ";database=" + newDb + ";uid=" + uid + ";password=" + pwd + ";");
+        string connection = GetConnectionString("Data Source=" + server + ";Initial Catalog=" + newDb + ";Persist Security Info=True;User ID=" + uid + ";Password=" + pwd + ";Encrypt=False;");
+        string connectionInsight = GetConnectionStringInsight("server=" + server + ";database=" + newDb + ";uid=" + uid + ";password=" + pwd + ";Encrypt=False;");
 
         try
         {
