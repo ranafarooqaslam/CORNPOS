@@ -588,6 +588,18 @@ public partial class AppSetting : System.Web.UI.Page
                         ddlAvailableValues.Items.Add(lstProfitLossConsumptionFormula);
                         ddlAvailableValues.SelectedValue = dr["strColumnValue"].ToString();
                         break;
+                    case "PurchaseGSTType":
+                        ListItem lstPurchaseGSTType = new ListItem();
+                        lstPurchaseGSTType.Text = "Default(Item Wise)";
+                        lstPurchaseGSTType.Value = "1";
+                        ddlAvailableValues.Items.Add(lstPurchaseGSTType);
+
+                        lstPurchaseGSTType = new ListItem();
+                        lstPurchaseGSTType.Text = "Whole Invoice";
+                        lstPurchaseGSTType.Value = "2";
+                        ddlAvailableValues.Items.Add(lstPurchaseGSTType);
+                        ddlAvailableValues.SelectedValue = dr["strColumnValue"].ToString();
+                        break;
                     default:
                         ListItem lstDefault = new ListItem();
                         lstDefault.Text = "Default: No";
