@@ -18185,6 +18185,8 @@ namespace CORNBusinessLayer.Reports {
             
             private global::System.Data.DataColumn columnMANUAL_ORDER_NO;
             
+            private global::System.Data.DataColumn columnCUSTOMER_NAME;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public RptDeliveryChannelInvoiceWiseSaleDataTable() {
@@ -18308,6 +18310,14 @@ namespace CORNBusinessLayer.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn CUSTOMER_NAMEColumn {
+                get {
+                    return this.columnCUSTOMER_NAME;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -18343,7 +18353,7 @@ namespace CORNBusinessLayer.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public RptDeliveryChannelInvoiceWiseSaleRow AddRptDeliveryChannelInvoiceWiseSaleRow(string DeliveryChannel, string Invoice_Date, decimal DiscountAmount, decimal GSTAmount, decimal GrossAmount, decimal NetAmount, decimal SERVICE_CHARGES, string Payment_Mode, long InvoiceNo, string MANUAL_ORDER_NO) {
+            public RptDeliveryChannelInvoiceWiseSaleRow AddRptDeliveryChannelInvoiceWiseSaleRow(string DeliveryChannel, string Invoice_Date, decimal DiscountAmount, decimal GSTAmount, decimal GrossAmount, decimal NetAmount, decimal SERVICE_CHARGES, string Payment_Mode, long InvoiceNo, string MANUAL_ORDER_NO, string CUSTOMER_NAME) {
                 RptDeliveryChannelInvoiceWiseSaleRow rowRptDeliveryChannelInvoiceWiseSaleRow = ((RptDeliveryChannelInvoiceWiseSaleRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         DeliveryChannel,
@@ -18356,17 +18366,11 @@ namespace CORNBusinessLayer.Reports {
                         SERVICE_CHARGES,
                         Payment_Mode,
                         InvoiceNo,
-                        MANUAL_ORDER_NO};
+                        MANUAL_ORDER_NO,
+                        CUSTOMER_NAME};
                 rowRptDeliveryChannelInvoiceWiseSaleRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowRptDeliveryChannelInvoiceWiseSaleRow);
                 return rowRptDeliveryChannelInvoiceWiseSaleRow;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public RptDeliveryChannelInvoiceWiseSaleRow FindBySALE_INVOICE_ID(long SALE_INVOICE_ID) {
-                return ((RptDeliveryChannelInvoiceWiseSaleRow)(this.Rows.Find(new object[] {
-                            SALE_INVOICE_ID})));
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -18397,6 +18401,7 @@ namespace CORNBusinessLayer.Reports {
                 this.columnPayment_Mode = base.Columns["Payment_Mode"];
                 this.columnInvoiceNo = base.Columns["InvoiceNo"];
                 this.columnMANUAL_ORDER_NO = base.Columns["MANUAL_ORDER_NO"];
+                this.columnCUSTOMER_NAME = base.Columns["CUSTOMER_NAME"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -18424,8 +18429,10 @@ namespace CORNBusinessLayer.Reports {
                 base.Columns.Add(this.columnInvoiceNo);
                 this.columnMANUAL_ORDER_NO = new global::System.Data.DataColumn("MANUAL_ORDER_NO", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnMANUAL_ORDER_NO);
+                this.columnCUSTOMER_NAME = new global::System.Data.DataColumn("CUSTOMER_NAME", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnCUSTOMER_NAME);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
-                                this.columnSALE_INVOICE_ID}, true));
+                                this.columnSALE_INVOICE_ID}, false));
                 this.columnDeliveryChannel.AllowDBNull = false;
                 this.columnDeliveryChannel.MaxLength = 100;
                 this.columnSALE_INVOICE_ID.AutoIncrement = true;
@@ -18439,6 +18446,7 @@ namespace CORNBusinessLayer.Reports {
                 this.columnNetAmount.ReadOnly = true;
                 this.columnSERVICE_CHARGES.ReadOnly = true;
                 this.columnMANUAL_ORDER_NO.MaxLength = 20;
+                this.columnCUSTOMER_NAME.MaxLength = 100;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -33568,6 +33576,23 @@ namespace CORNBusinessLayer.Reports {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string CUSTOMER_NAME {
+                get {
+                    try {
+                        return ((string)(this[this.tableRptDeliveryChannelInvoiceWiseSale.CUSTOMER_NAMEColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'CUSTOMER_NAME\' in table \'RptDeliveryChannelInvoiceWiseSale\'" +
+                                " is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableRptDeliveryChannelInvoiceWiseSale.CUSTOMER_NAMEColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsInvoice_DateNull() {
                 return this.IsNull(this.tableRptDeliveryChannelInvoiceWiseSale.Invoice_DateColumn);
             }
@@ -33672,6 +33697,18 @@ namespace CORNBusinessLayer.Reports {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetMANUAL_ORDER_NONull() {
                 this[this.tableRptDeliveryChannelInvoiceWiseSale.MANUAL_ORDER_NOColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsCUSTOMER_NAMENull() {
+                return this.IsNull(this.tableRptDeliveryChannelInvoiceWiseSale.CUSTOMER_NAMEColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetCUSTOMER_NAMENull() {
+                this[this.tableRptDeliveryChannelInvoiceWiseSale.CUSTOMER_NAMEColumn] = global::System.Convert.DBNull;
             }
         }
         
