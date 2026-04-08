@@ -31,6 +31,7 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
         if (!Page.IsPostBack)
         {
             this.GetAppSettingDetail();
+            GSTSetting();
             DrpDocumentType.Focus();
             LoadPrincipal();
             LoadDistributor();
@@ -82,6 +83,24 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
 
         Session.Add("PurchaseSKUS", _purchaseSkus);
 
+    }
+
+    private void GSTSetting()
+    {
+        txtGstAmount.Enabled = false;
+        rdoGSTType.Enabled = true;
+        txtItemGST.Enabled = true;
+        DataTable dt = (DataTable)Session["dtAppSettingDetail"];
+        if (dt.Rows.Count > 0)
+        {
+            if(dt.Rows[0]["PurchaseGSTType"].ToString() == "2")
+            {
+                rdoGSTType.SelectedValue = "1";
+                txtGstAmount.Enabled = true;
+                rdoGSTType.Enabled = false;
+                txtItemGST.Enabled = false;                
+            }
+        }
     }
 
     #region Load
@@ -251,21 +270,24 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
             txtTotalQuantity.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.00}", totalValue);
 
             decimal grossAmount = 0;
+            decimal totalgst = 0;
             foreach (GridViewRow item in GrdPurchase.Rows)
             {
                 var qty = Convert.ToDecimal(_dc.chkNull_0(item.Cells[4].Text));
                 var price = Convert.ToDecimal(_dc.chkNull_0(item.Cells[6].Text));
                 grossAmount = grossAmount + (qty * price);
+                totalgst += Convert.ToDecimal(_dc.chkNull_0(item.Cells[8].Text));
             }
 
             txtTotalAmount.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.00}", grossAmount);
+            txtGstAmount.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.00}", totalgst);
             if (DrpDocumentType.SelectedIndex == 0)
             {
-                txtNetAmount.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.00}", totalAmount + Convert.ToDecimal(_dc.chkNull_0(txtGstAmount.Text)) + Convert.ToDecimal(_dc.chkNull_0(txtAdvanceTax.Text)) - Convert.ToDecimal(_dc.chkNull_0(txtDiscount.Text)) + Convert.ToDecimal(_dc.chkNull_0(txtFreight.Text)));
+                txtNetAmount.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.00}", grossAmount + Convert.ToDecimal(_dc.chkNull_0(txtGstAmount.Text)) + Convert.ToDecimal(_dc.chkNull_0(txtAdvanceTax.Text)) - Convert.ToDecimal(_dc.chkNull_0(txtDiscount.Text)) + Convert.ToDecimal(_dc.chkNull_0(txtFreight.Text)));
             }
             else
             {
-                txtNetAmount.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.00}", totalAmount + Convert.ToDecimal(_dc.chkNull_0(txtGstAmount.Text)) + Convert.ToDecimal(_dc.chkNull_0(txtAdvanceTax.Text)) - Convert.ToDecimal(_dc.chkNull_0(txtDiscount.Text)));
+                txtNetAmount.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.00}", grossAmount + Convert.ToDecimal(_dc.chkNull_0(txtGstAmount.Text)) + Convert.ToDecimal(_dc.chkNull_0(txtAdvanceTax.Text)) - Convert.ToDecimal(_dc.chkNull_0(txtDiscount.Text)));
             }
         }
     }
@@ -1287,6 +1309,16 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
         bool IsFinanceSetting = GetFinanceConfig();
         if (DrpDocumentType.SelectedIndex == 0) //Purchase
         {
+            if(txtGstAmount.Enabled)//If GST Invoice Wise
+            {
+                if(txtGstAmount.Text.Trim().Length > 0)
+                {
+                    foreach(DataRow dr in dtPurchaseDetail.Rows)
+                    {
+                        dr["TAX"] = Convert.ToDecimal(_dc.chkNull_0(txtGstAmount.Text))/ grossAmount * Convert.ToDecimal(dr["AMOUNT"]);
+                    }
+                }
+            }
             if (drpDocumentNo.Value.ToString() == Constants.LongNullValue.ToString())
             {
                 PurchaseID = _mPurchaseCtrl.InsertPurchase(int.Parse(drpDistributorID.SelectedItem.Value.ToString()),
@@ -1296,7 +1328,7 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
                     false, dtPurchaseDetail, 0, txtBuiltyNo.Text,
                     int.Parse(Session["UserId"].ToString()),
                     int.Parse(drpPrincipal.SelectedItem.Value.ToString()), 
-                    decimal.Parse(_dc.chkNull_0(txtGstAmount.Text)) + itemGST, decimal.Parse(_dc.chkNull_0(txtAdvanceTax.Text)),
+                    decimal.Parse(_dc.chkNull_0(txtGstAmount.Text)), decimal.Parse(_dc.chkNull_0(txtAdvanceTax.Text)),
                     decimal.Parse(_dc.chkNull_0(txtDiscount.Text)) + itemDiscount,
                     decimal.Parse(_dc.chkNull_0(txtFreight.Text)), mNetAmount, 
                     drpPrincipal.SelectedItem.Text, Convert.ToInt32(ddlPaymentMode.SelectedItem.Value),

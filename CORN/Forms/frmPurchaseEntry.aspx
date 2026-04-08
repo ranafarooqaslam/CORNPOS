@@ -68,16 +68,15 @@
 
             document.getElementById("<%= txtAmount.ClientID %>").value = finalAmount.toFixed(2);
         }
-        function CalculateNetAmount1() {
+        function CalculateNetAmount1() {            
             var str = 0;
             var grid = document.getElementById('<%=GrdPurchase.ClientID %>');
             for (var row = 1; row < grid.rows.length; row++) {
                 str = str + Number(grid.rows[row].cells[9].innerText);
             }
 
-            var GrossAmount = str; //$("[id$='txtTotalAmount']").val();
-            var Discount = $("[id$='txtDiscount']").val();
-            var Gst = $("[id$='txtGstAmount']").val();
+            var GrossAmount = str;
+            var Discount = $("[id$='txtDiscount']").val();            
             var freight = $("[id$='txtFreight']").val();
             var advancetax = $("[id$='txtAdvanceTax']").val();
 
@@ -87,9 +86,6 @@
             if (Discount == "") {
                 Discount = 0;
             }
-            if (Gst == "") {
-                Gst = 0;
-            }
             if (freight == "") {
                 freight = 0;
             }
@@ -97,7 +93,7 @@
             {
                 advancetax = 0;
             }
-            $("[id$='txtNetAmount']").val((parseFloat(GrossAmount) + parseFloat(Gst) - parseFloat(Discount) + parseFloat(freight) + parseFloat(advancetax)).toFixed(2));
+            $("[id$='txtNetAmount']").val((parseFloat(GrossAmount) - parseFloat(Discount) + parseFloat(freight) + parseFloat(advancetax)).toFixed(2));
         }
     </script>
     <div class="main-contents">
