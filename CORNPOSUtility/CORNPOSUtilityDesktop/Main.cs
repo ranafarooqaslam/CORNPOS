@@ -19,7 +19,7 @@ namespace CORNPOSUtilityDesktop
             {
                 con.Open();
                 //using (SqlCommand cmd = new SqlCommand("SELECT name from sys.databases WHERE compatibility_level <> 140 AND NAME NOT LIKE 'FASHION%' AND name <> 'CORNAPI' AND name NOT LIKE 'DEMO%' ORDER BY name", con))
-                using (SqlCommand cmd = new SqlCommand("SELECT name from sys.databases WHERE compatibility_level <> 140 AND NAME NOT LIKE 'FASHION%' AND name <> 'CORNAPI' ORDER BY name", con))
+                using (SqlCommand cmd = new SqlCommand("SELECT name from sys.databases WHERE database_id > 4 AND compatibility_level <> 140 AND NAME NOT LIKE 'FASHION%' AND name <> 'CORNAPI' ORDER BY name", con))
                 //using (SqlCommand cmd = new SqlCommand("SELECT name from sys.databases WHERE name = 'DemoCafe'", con))
                 {
                     using (IDataReader dr = cmd.ExecuteReader())
