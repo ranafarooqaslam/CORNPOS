@@ -97,7 +97,7 @@ namespace CORNPOSKOTPrintService
         protected override void OnStart(string[] args)
         {
             WriteLog("Service Started.", "OnStart(string[] args)");
-            WriteLog("Version: 26-Mar-2026 04:30 PM", "OnStart");
+            WriteLog("Version: 09-Apr-2026 03:30 PM", "OnStart");
             WriteLog("PerformTimerOperationCrystalReport", "OnStart");
 
             try
@@ -378,7 +378,7 @@ namespace CORNPOSKOTPrintService
                 float centerX2 = (InvoiceWidth - textWidth2) / 2;
                 g.DrawString(InvSubTitle4, InvoiceFont, BlueBrush, centerX2, CurrentY);
             }
-            if (customerType.ToLower() == "Delivery".ToLower())
+            if (customerType.ToLower().Contains("delivery"))
             {
                 CurrentY = CurrentY + 20;
                 g.DrawString("D-M: " + bookerName, InvoiceFont, BlueBrush, 10, CurrentY);
