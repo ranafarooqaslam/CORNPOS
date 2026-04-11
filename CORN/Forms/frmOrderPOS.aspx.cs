@@ -1315,7 +1315,7 @@ namespace Forms
                 int distributerId = int.Parse(HttpContext.Current.Session["DISTRIBUTOR_ID"].ToString());
 
                 var dtValue = (DataTable)JsonConvert.DeserializeObject(orderedProducts, (typeof(DataTable)));
-
+                string GSTCalculation = HttpContext.Current.Session["GSTCalculation"].ToString();
                 if (dtValue != null && dtValue.Rows.Count > 0 &&
                     long.Parse(dtValue.Rows[0]["INVOICE_ID"].ToString()) > 0)
                 {
@@ -1341,7 +1341,7 @@ namespace Forms
                                     Discount = decimal.Parse(dc.chkNull_0(discount));
                                 }
                             }
-
+                            Discount = Discount + dtValue.Rows.Cast<DataRow>().Sum(dr => decimal.Parse(dr["DISCOUNT"].ToString()));
                             if (int.Parse(payType) == 0)
                             {
                                 PaymentMode = 1;
@@ -1378,7 +1378,7 @@ namespace Forms
                                     if (rows.Length > 0)
                                     {
                                         dtFBR.ImportRow(rows[0]);
-                                        strQRCode = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, dtValue, dtFBR);
+                                        strQRCode = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, GSTCalculation, dtValue, dtFBR);
                                         strInvoiceNumberFBR = HttpContext.Current.Session["InvoiceNumberFBR"].ToString();
                                     }
                                     DataRow[] rowsPRA = dtTaxAuthority.Select("FBRURL = '" + UrlPRA.Replace("'", "''") + "'");
@@ -1387,14 +1387,14 @@ namespace Forms
                                     if (rowsPRA.Length > 0)
                                     {
                                         dtPRA.ImportRow(rowsPRA[0]);
-                                        strQRCodePRA = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, dtValue, dtPRA);
+                                        strQRCodePRA = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, GSTCalculation, dtValue, dtPRA);
                                         strInvoiceNumberPRA = HttpContext.Current.Session["InvoiceNumberFBR"].ToString();
                                     }                                    
                                 }
                             }
                             else//Punjab Revenu Authority and Federal Board of Revenue
                             {
-                                strQRCode = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, dtValue, dtTaxAuthority);
+                                strQRCode = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, GSTCalculation, dtValue, dtTaxAuthority);
                                 strInvoiceNumberFBR = HttpContext.Current.Session["InvoiceNumberFBR"].ToString();
                             }
                         }
@@ -1453,8 +1453,7 @@ namespace Forms
                                 }
                             }
                         }
-
-                        string GSTCalculation = HttpContext.Current.Session["GSTCalculation"].ToString();
+                        
                         if (GSTCalculation == "1")
                         {
                             gst = decimal.Parse(amountDue) * taxRate / 100;
@@ -1613,7 +1612,7 @@ namespace Forms
                 int distributerId = int.Parse(HttpContext.Current.Session["DISTRIBUTOR_ID"].ToString());
 
                 var dtValue = (DataTable)JsonConvert.DeserializeObject(orderedProducts, (typeof(DataTable)));
-
+                string GSTCalculation = HttpContext.Current.Session["GSTCalculation"].ToString();
                 if (dtValue != null && dtValue.Rows.Count > 0 &&
                     long.Parse(dtValue.Rows[0]["INVOICE_ID"].ToString()) > 0)
                 {
@@ -1640,7 +1639,7 @@ namespace Forms
                                     Discount = decimal.Parse(dc.chkNull_0(discount));
                                 }
                             }
-
+                            Discount = Discount + dtValue.Rows.Cast<DataRow>().Sum(dr => decimal.Parse(dr["DISCOUNT"].ToString()));
                             if (int.Parse(payType) == 0)
                             {
                                 PaymentMode = 1;
@@ -1676,7 +1675,7 @@ namespace Forms
                                     if (rows.Length > 0)
                                     {
                                         dtFBR.ImportRow(rows[0]);
-                                        strQRCode = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, dtValue, dtFBR);
+                                        strQRCode = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, GSTCalculation, dtValue, dtFBR);
                                         strInvoiceNumberFBR = HttpContext.Current.Session["InvoiceNumberFBR"].ToString();
                                     }
                                     DataRow[] rowsPRA = dtTaxAuthority.Select("FBRURL = '" + UrlPRA.Replace("'", "''") + "'");
@@ -1685,14 +1684,14 @@ namespace Forms
                                     if (rowsPRA.Length > 0)
                                     {
                                         dtPRA.ImportRow(rowsPRA[0]);
-                                        strQRCodePRA = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, dtValue, dtPRA);
+                                        strQRCodePRA = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, GSTCalculation, dtValue, dtPRA);
                                         strInvoiceNumberPRA = HttpContext.Current.Session["InvoiceNumberFBR"].ToString();
                                     }                                    
                                 }
                             }
                             else
                             {
-                                strQRCode = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, dtValue, dtTaxAuthority);
+                                strQRCode = PostDataToFBR(dtValue.Rows[0]["INVOICE_ID"].ToString(), "", "", "", "", PaymentMode, TaxRate, 0, Discount, 1, GSTCalculation, dtValue, dtTaxAuthority);
                                 strInvoiceNumberFBR = HttpContext.Current.Session["InvoiceNumberFBR"].ToString();
                             }
                         }
@@ -1752,8 +1751,6 @@ namespace Forms
                                 }
                             }
                         }
-
-                        string GSTCalculation = HttpContext.Current.Session["GSTCalculation"].ToString();
                         if (GSTCalculation == "1")
                         {
                             gst = decimal.Parse(amountDue) * taxRate / 100;
@@ -2372,12 +2369,20 @@ namespace Forms
         #region FBR PRA Integration
         [WebMethod]
         [ScriptMethod]
-        public static string PostDataToFBR(string InvoiceNo, string ClientNTN, string ClientCNIC, string ClientName, string ClientPhone, int PaymentMode, double TaxRate, decimal FurtherTax, decimal Discount, int InvoiceType, DataTable dtDetail,DataTable dtTaxAuthority)
+        public static string PostDataToFBR(string InvoiceNo, string ClientNTN, string ClientCNIC, string ClientName, string ClientPhone, int PaymentMode, double TaxRate, decimal FurtherTax, decimal Discount, int InvoiceType,string GSTCalculation, DataTable dtDetail,DataTable dtTaxAuthority)
         {
             try
             {
                 if (dtTaxAuthority.Rows.Count > 0)
                 {
+                    decimal GrossTotal = 0;
+                    if (GSTCalculation == "2")
+                    {
+                        foreach (DataRow dr in dtDetail.Rows)
+                        {
+                            GrossTotal += Convert.ToDecimal(dr["AMOUNT"]);
+                        }
+                    }
                     InvoiceFBR objInvoice = new InvoiceFBR();
                     List<InvoiceFBRDetail> lstItems = new List<InvoiceFBRDetail>();                    
                     int TotalQty = 0;
@@ -2396,7 +2401,17 @@ namespace Forms
                                 ObjInvoiceDetail.ItemCode = dr["SKU_ID"].ToString();
                                 ObjInvoiceDetail.ItemName = dr["DEAL_NAME"].ToString();
                                 ObjInvoiceDetail.Quantity = Convert.ToInt32(dr["DEAL_QTY"]);
-                                ObjInvoiceDetail.SaleValue = Convert.ToDouble(dr["A_PRICE"]);
+                                if (GSTCalculation == "2")
+                                {
+                                    decimal lineTotal = Convert.ToDecimal(dr["A_PRICE"]);
+                                    decimal itemDiscount = (GrossTotal > 0) ? (lineTotal / GrossTotal) * Discount : 0;
+                                    decimal adjustedLine = lineTotal - itemDiscount;
+                                    ObjInvoiceDetail.SaleValue = Convert.ToDouble(adjustedLine / Convert.ToInt32(dr["QTY"]));
+                                }
+                                else
+                                {
+                                    ObjInvoiceDetail.SaleValue = Convert.ToDouble(dr["A_PRICE"]);
+                                }
                                 if (HttpContext.Current.Session["ItemWiseGST"].ToString() == "1")
                                 {
                                     ObjInvoiceDetail.TaxCharged = Convert.ToDouble(dr["ItemWiseGST"]);
@@ -2404,10 +2419,10 @@ namespace Forms
                                 }
                                 else
                                 {
-                                    ObjInvoiceDetail.TaxCharged = Convert.ToDouble(dr["A_PRICE"]) * TaxRate / 100;
+                                    ObjInvoiceDetail.TaxCharged = ObjInvoiceDetail.SaleValue * TaxRate / 100;
                                     ObjInvoiceDetail.TaxRate = TaxRate;
                                 }
-                                ObjInvoiceDetail.TotalAmount = Convert.ToDouble(dr["A_PRICE"]) + ObjInvoiceDetail.TaxCharged;
+                                ObjInvoiceDetail.TotalAmount = ObjInvoiceDetail.SaleValue + ObjInvoiceDetail.TaxCharged;
                                 ObjInvoiceDetail.PCTCode = "10101";
                                 ObjInvoiceDetail.FurtherTax = 0;
                                 ObjInvoiceDetail.InvoiceType = InvoiceType;//1=New,2=Debit,3=Credit
@@ -2421,7 +2436,17 @@ namespace Forms
                             ObjInvoiceDetail.ItemCode = dr["SKU_ID"].ToString();
                             ObjInvoiceDetail.ItemName = dr["SKU_NAME"].ToString();
                             ObjInvoiceDetail.Quantity = Convert.ToInt32(dr["QTY"]);
-                            ObjInvoiceDetail.SaleValue = Convert.ToDouble(dr["AMOUNT"]);
+                            if (GSTCalculation == "2")
+                            {
+                                decimal lineTotal = Convert.ToDecimal(dr["AMOUNT"]);
+                                decimal itemDiscount = (GrossTotal > 0) ? (lineTotal / GrossTotal) * Discount : 0;
+                                decimal adjustedLine = lineTotal - itemDiscount;
+                                ObjInvoiceDetail.SaleValue = Convert.ToDouble(adjustedLine / Convert.ToInt32(dr["QTY"]));
+                            }
+                            else
+                            {
+                                ObjInvoiceDetail.SaleValue = Convert.ToDouble(dr["AMOUNT"]);
+                            }
                             if (HttpContext.Current.Session["ItemWiseGST"].ToString() == "1")
                             {
                                 ObjInvoiceDetail.TaxCharged = Convert.ToDouble(dr["ItemWiseGST"]);
@@ -2429,10 +2454,10 @@ namespace Forms
                             }
                             else
                             {
-                                ObjInvoiceDetail.TaxCharged = Convert.ToDouble(dr["AMOUNT"]) * TaxRate / 100;
+                                ObjInvoiceDetail.TaxCharged = ObjInvoiceDetail.SaleValue * TaxRate / 100;
                                 ObjInvoiceDetail.TaxRate = TaxRate;
                             }
-                            ObjInvoiceDetail.TotalAmount = Convert.ToDouble(dr["AMOUNT"]) + ObjInvoiceDetail.TaxCharged;
+                            ObjInvoiceDetail.TotalAmount = ObjInvoiceDetail.SaleValue + ObjInvoiceDetail.TaxCharged;
                             ObjInvoiceDetail.PCTCode = "10101";
                             ObjInvoiceDetail.FurtherTax = 0;
                             ObjInvoiceDetail.InvoiceType = InvoiceType;//1=New,2=Debit,3=Credit
