@@ -5106,40 +5106,6 @@ namespace CORNBusinessLayer.Classes
                 return null;
             }
         }
-        public long UpdateSALE_INVOICE_DETAIL(spInsertSALE_INVOICE_DETAIL mISom)
-        {
-            IDbConnection mConnection = null;
-            IDbTransaction mTransaction = null;
-            try
-            {
-                mConnection = ProviderFactory.GetConnection(Configuration.ConnectionString, EnumProviders.SQLClient);
-                mConnection.Open();
-                mTransaction = ProviderFactory.GetTransaction(mConnection);
-
-                spInsertSALE_INVOICE_DETAIL mISomNew = new spInsertSALE_INVOICE_DETAIL();
-                mISomNew = mISom;
-                mISomNew.Connection = mConnection;
-                mISomNew.Transaction = mTransaction;
-                mISomNew.ExecuteQueryForInvoiceUpdate();
-                mTransaction.Commit();
-
-                return mISomNew.SALE_INVOICE_DETAIL_ID;
-            }
-            catch (Exception exp)
-            {
-
-                ExceptionPublisher.PublishException(exp);
-                mTransaction.Rollback();
-                return Constants.LongNullValue;
-            }
-            finally
-            {
-                if (mConnection != null && mConnection.State == ConnectionState.Open)
-                {
-                    mConnection.Close();
-                }
-            }
-        }
         public long UpdateSALE_INVOICE_MASTER(spUpdateSALE_INVOICE_MASTER mISom)
         {
             IDbConnection mConnection = null;
