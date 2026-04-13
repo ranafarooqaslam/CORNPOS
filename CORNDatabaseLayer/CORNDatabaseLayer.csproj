@@ -156,7 +156,6 @@
     <Compile Include="InputClasses\uspInsertKOTDetail.cs" />
     <Compile Include="InputClasses\uspInsertCustomerPoints.cs" />
     <Compile Include="InputClasses\uspDeletePurchase.cs" />
-    <Compile Include="InputClasses\DeleteSaleInvoiceDetail.cs" />
     <Compile Include="InputClasses\uspSelectDISTRIBUTOR_USERInfo.cs" />
     <Compile Include="InputClasses\uspGetLastPurchasePrice.cs" />
     <Compile Include="InputClasses\uspInsertCustomerInvoiceCalculation.cs" />

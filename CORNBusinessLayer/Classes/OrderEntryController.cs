@@ -151,7 +151,7 @@ namespace CORNBusinessLayer.Classes
 
         }
 
-        public DataSet SelectPendingBillsDataset(long pSaleInvoiceId, DateTime pDocumentDate, int pDistributorId, int pUSER_ID, int pCustomerType,bool pIsKOTService, int pTypeId)
+        public DataSet SelectPendingBillsDataset(long pSaleInvoiceId, DateTime pDocumentDate, int pDistributorId, int pUSER_ID, int pCustomerType, bool pIsKOTService, int pTypeId)
         {
             IDbConnection mConnection = null;
             try
@@ -634,7 +634,7 @@ namespace CORNBusinessLayer.Classes
 
         #region Insert, Update, Deleted
 
-        public static long Add_Invoice(int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pPaidin, decimal pBalance, decimal pGST, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, DataTable dtInvoiceDetail, int pOrderbookerId, string pCovertable, long pCustomerId, string pMaxOrderNo, string pTakeAwayCustomer, string pMANUAL_ORDER_NO, string pREMARKS, int pDeliveryType, int pDelChannel, int pSERVICE_CHARGES_TYPE, byte pFORM_ID, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, bool KDSImplemented, short pTakeawayType,decimal pPOSFee)
+        public static long Add_Invoice(int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pPaidin, decimal pBalance, decimal pGST, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, DataTable dtInvoiceDetail, int pOrderbookerId, string pCovertable, long pCustomerId, string pMaxOrderNo, string pTakeAwayCustomer, string pMANUAL_ORDER_NO, string pREMARKS, int pDeliveryType, int pDelChannel, int pSERVICE_CHARGES_TYPE, byte pFORM_ID, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, bool KDSImplemented, short pTakeawayType, decimal pPOSFee)
         {
             IDbConnection mConnection = null;
             IDbTransaction mTransaction = null;
@@ -894,7 +894,7 @@ namespace CORNBusinessLayer.Classes
                                 mSaleInvoiceDetail.DISCOUNTDeal = 0;
                             }
                             mSaleInvoiceDetail.DealName = dr["DEAL_NAME"].ToString();
-                            mSaleInvoiceDetail.ExecuteQuery();                            
+                            mSaleInvoiceDetail.ExecuteQuery();
                             if (KDSImplemented)
                             {
                                 spInsertSALE_INVOICE_DETAIL3 detailLast = new spInsertSALE_INVOICE_DETAIL3();
@@ -965,7 +965,7 @@ namespace CORNBusinessLayer.Classes
             }
         }
 
-        public static bool HoldOrder(long pSaleInvoiceId, int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pBalance, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, int pDiscType, DataTable dtInvoiceDetail, int pOrderBookerId, string pCovertTable, string pTakeAwayCustomer, int p_VOID_BY, string pMANUAL_ORDER_NO, string pREMARKS, int pserviceCharges, int pcustomerID, bool pInvoicePrinted, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, string pRecipeType, int pDelChannel, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, bool KDSImplemented, bool pIsItemChanged, short pTakeawayType,DataTable dt,string OldInvoiceJson, byte pFORM_ID, bool IsFinanceIntegrate, DataTable dtCOAConfig)
+        public static bool HoldOrder(long pSaleInvoiceId, int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pBalance, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, int pDiscType, DataTable dtInvoiceDetail, int pOrderBookerId, string pCovertTable, string pTakeAwayCustomer, int p_VOID_BY, string pMANUAL_ORDER_NO, string pREMARKS, int pserviceCharges, int pcustomerID, bool pInvoicePrinted, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, string pRecipeType, int pDelChannel, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, bool KDSImplemented, bool pIsItemChanged, short pTakeawayType, DataTable dt, string OldInvoiceJson, byte pFORM_ID, bool IsFinanceIntegrate, DataTable dtCOAConfig)
         {
             IDbConnection mConnection = null;
             IDbTransaction mTransaction = null;
@@ -985,9 +985,10 @@ namespace CORNBusinessLayer.Classes
 
                 if (dtInvoiceDetail.Rows.Count > 0)
                 {
-                    bool itemChanged = false;
+                    DataTable dtInvoiceDetailNew = dtInvoiceDetail.Clone();
                     foreach (DataRow dr in dtInvoiceDetail.Rows)
                     {
+                        bool itemChanged = false;
                         long SaleInvoiceDetailID2 = 0;
                         string ORDER_NOTES = string.Empty;
                         bool IS_FREE = false;
@@ -999,7 +1000,6 @@ namespace CORNBusinessLayer.Classes
                         {
                             SaleInvoiceDetailID2 = 0;
                             itemChanged = true;
-                            break;
                         }
                         try
                         {
@@ -1026,28 +1026,27 @@ namespace CORNBusinessLayer.Classes
                             var lastupdate = row1.Field<DateTime>("LASTUPDATE_DATE");
                             if (skuId == Convert.ToInt32(dr["SKU_ID"]) && SaleInvoiceDetailID == SaleInvoiceDetailID2)
                             {
-                                if (qty1 != Convert.ToDecimal(dr["QTY"]) 
+                                if (qty1 != Convert.ToDecimal(dr["QTY"])
                                     || complementary != IS_FREE
                                     || itemcommnents != ORDER_NOTES
                                     || itemcancel != Convert.ToBoolean(dr["VOID"]))
                                 {
                                     itemChanged = true;
-                                    break;
                                 }
                             }
                         }
-                        if(itemChanged)
+                        if (itemChanged)
                         {
-                            break;
+                            dtInvoiceDetailNew.ImportRow(dr);
                         }
                     }
 
                     int intLessCancelReasonID = 0;
                     int ItemType = 1;
                     long SALEINVOICEDETAILD = 0;
-                    if (itemChanged)
+                    if (dtInvoiceDetailNew.Rows.Count > 0)
                     {
-                        foreach (DataRow dr in dtInvoiceDetail.Rows)
+                        foreach (DataRow dr in dtInvoiceDetailNew.Rows)
                         {
                             try
                             {
@@ -1109,13 +1108,14 @@ namespace CORNBusinessLayer.Classes
                         {
                             InsertLessCancelItemConsumption(pSaleInvoiceId, pDocumentDate, pDistributorId, pCustomerTypeId, pUserId, pRecipeType, dtItemLessCancel, IsFinanceIntegrate, dtCOAConfig, mConnection, mTransaction);
                         }
+
                         //----------------Insert into sale order detail-------------\\
                         spInsertSALE_INVOICE_DETAILKOT2 mSaleInvoiceDetail = new spInsertSALE_INVOICE_DETAILKOT2
                         {
                             Connection = mConnection,
                             Transaction = mTransaction
                         };
-                        foreach (DataRow dr in dtInvoiceDetail.Rows)
+                        foreach (DataRow dr in dtInvoiceDetailNew.Rows)
                         {
                             mSaleInvoiceDetail.SALE_INVOICE_ID = pSaleInvoiceId;
                             mSaleInvoiceDetail.IS_VOID = bool.Parse(dr["VOID"].ToString());
@@ -1236,8 +1236,6 @@ namespace CORNBusinessLayer.Classes
                                 mSaleInvoiceDetail.DISCOUNTDeal = 0;
                             }
                             bool newitem = true;
-                            //decimal KOTQty = 0;
-                            //decimal KOTDealQty = 0;
                             //byte KOTType = 1;//1=NewKOT, 2=NewItem,3=Increase Qty,4=Decrease Qty,5=Calncel Item
                             foreach (DataRow row1 in dt.Rows)
                             {
@@ -1414,7 +1412,7 @@ namespace CORNBusinessLayer.Classes
                     mISom.ExecuteQuery();
 
 
-                    if (AllItemsCanceled && itemChanged)
+                    if (AllItemsCanceled && dtInvoiceDetailNew.Rows.Count == dtInvoiceDetail.Rows.Count)
                     {
                         spUpdateSALE_INVOICE_MASTER mISom2 = new spUpdateSALE_INVOICE_MASTER();
                         mISom2.Connection = mConnection;
@@ -1424,20 +1422,14 @@ namespace CORNBusinessLayer.Classes
                         mISom2.ExecuteQuery();
                     }
 
-                    //DeleteSaleInvoiceDetail mDel = new DeleteSaleInvoiceDetail();
-                    //mDel.Connection = mConnection;
-                    //mDel.Transaction = mTransaction;
-                    //mDel.SaleInvoiceIds = sbSaleInvoiceDetailIds.ToString();
-                    //mDel.ExecuteQuery();
-
-                    mTransaction.Commit();                    
+                    mTransaction.Commit();
                     return true;
-                }                
+                }
             }
             catch (Exception exp)
             {
                 ExceptionPublisher.PublishException(exp);
-                mTransaction.Rollback();                
+                mTransaction.Rollback();
                 throw;
             }
             finally
@@ -1566,7 +1558,7 @@ namespace CORNBusinessLayer.Classes
             return dt;
         }
 
-        public static DataTable Update_Invoice(long pSaleInvoiceId, int pDistributorId, int pCustomerTypeId, int pPaymentModeId, decimal pAmountDue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pGstPerAge, int pUserId, DateTime pDocumentDate, int pDiscType, DataTable dtInvoiceDetail, decimal pServiceCharges, string pTakeAwayCustomer, short empDiscType, int EMC_UserID, int Manager_UserID, string PASSWORD, long pCustomerID, string pCardNo, decimal pPurchasing, string pMANUAL_ORDER_NO, string pREMARKS, int pChargesType, int pDeliveryChannelID, string pInvoiceNumberFBR, long p_BANK_ID, bool pIS_GST_VOID, decimal pGSTPER, decimal pGSTPERCash, decimal pGSTPERCreditCard, decimal pCreaditAmount, int pRecordType, string pRecipeType, string pBillFormat, decimal pAdvanceAmount, decimal pBankPortion, string pItemWiseGST, string GSTCalculation, string pDiscountRemarks, decimal pPointsEarned, decimal pPointsDeducted, string pCreditCardNo, decimal pLOYALTY_POINTS, short pTakeawayType,string pInvoiceNumberPRA, bool IsFinanceIntegrate, DataTable dtCOAConfig)
+        public static DataTable Update_Invoice(long pSaleInvoiceId, int pDistributorId, int pCustomerTypeId, int pPaymentModeId, decimal pAmountDue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pGstPerAge, int pUserId, DateTime pDocumentDate, int pDiscType, DataTable dtInvoiceDetail, decimal pServiceCharges, string pTakeAwayCustomer, short empDiscType, int EMC_UserID, int Manager_UserID, string PASSWORD, long pCustomerID, string pCardNo, decimal pPurchasing, string pMANUAL_ORDER_NO, string pREMARKS, int pChargesType, int pDeliveryChannelID, string pInvoiceNumberFBR, long p_BANK_ID, bool pIS_GST_VOID, decimal pGSTPER, decimal pGSTPERCash, decimal pGSTPERCreditCard, decimal pCreaditAmount, int pRecordType, string pRecipeType, string pBillFormat, decimal pAdvanceAmount, decimal pBankPortion, string pItemWiseGST, string GSTCalculation, string pDiscountRemarks, decimal pPointsEarned, decimal pPointsDeducted, string pCreditCardNo, decimal pLOYALTY_POINTS, short pTakeawayType, string pInvoiceNumberPRA, bool IsFinanceIntegrate, DataTable dtCOAConfig)
         {
             IDbConnection mConnection = null;
             IDbTransaction mTransaction = null;
@@ -4540,7 +4532,7 @@ namespace CORNBusinessLayer.Classes
 
         #endregion
 
-        public long InsertSaleInvoice(decimal pAmountDue,int pDistributorID,DateTime pWorkingDate, long pCustomerID,decimal pPaidIn,int pPaymentMode,int pUserID,string pRemarks,decimal pItemDiscount,decimal pExtraDiscount, DataTable dtInvoiceDetail, bool IsFinanceIntegrate, DataTable dtCOAConfig)
+        public long InsertSaleInvoice(decimal pAmountDue, int pDistributorID, DateTime pWorkingDate, long pCustomerID, decimal pPaidIn, int pPaymentMode, int pUserID, string pRemarks, decimal pItemDiscount, decimal pExtraDiscount, DataTable dtInvoiceDetail, bool IsFinanceIntegrate, DataTable dtCOAConfig)
         {
             IDbConnection mConnection = null;
             IDbTransaction mTransaction = null;
@@ -4686,7 +4678,7 @@ namespace CORNBusinessLayer.Classes
                             {
                                 //Dr  Credit Sale Receivable
                                 //Cr  Credit Sales
-                                
+
                                 drConfig = dtCOAConfig.Select("CODE = '" + (int)Enums.COAMapping.CreditSaleReceivable + "'");
                                 if (drConfig.Length > 0)
                                 {
@@ -5018,7 +5010,7 @@ namespace CORNBusinessLayer.Classes
                             {
                                 //Dr  Credit Sale Receivable
                                 //Cr  Credit Sales
-                                
+
                                 drConfig = dtCOAConfig.Select("CODE = '" + (int)Enums.COAMapping.CreditSaleReceivable + "'");
                                 if (drConfig.Length > 0)
                                 {
@@ -5896,7 +5888,7 @@ namespace CORNBusinessLayer.Classes
 
         }
 
-        private static void LogParams(long pSaleInvoiceId, int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pBalance, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, int pDiscType, DataTable dtInvoiceDetail, int pOrderBookerId, string pCovertTable, string pTakeAwayCustomer, int p_VOID_BY, string pMANUAL_ORDER_NO, string pREMARKS, int pserviceCharges, int pcustomerID, bool pInvoicePrinted, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, string pRecipeType, int pDelChannel, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, bool KDSImplemented, bool pIsItemChanged, short pTakeawayType, byte pFORM_ID, DataTable dt,string OldInvoiceJson)
+        private static void LogParams(long pSaleInvoiceId, int pPaymentModeId, int pCustomerTypeId, int pTableId, decimal pAmountdue, decimal pDiscount, decimal pGst, decimal pPaidin, decimal pBalance, bool pIsHold, int pUserId, DateTime pDocumentDate, int pDistributorId, int pDiscType, DataTable dtInvoiceDetail, int pOrderBookerId, string pCovertTable, string pTakeAwayCustomer, int p_VOID_BY, string pMANUAL_ORDER_NO, string pREMARKS, int pserviceCharges, int pcustomerID, bool pInvoicePrinted, decimal pGSTPER, decimal pGSTPERCreditCard, string pBillFormat, decimal pAdvanceAmount, decimal pCustomerGST, decimal pCustomerDiscount, byte pCustomerDiscountType, decimal pCustomerServiceCharges, byte pCustomerServiceType, string pRecipeType, int pDelChannel, bool pDELIVERY_CHANNEL_CASH_IMPACT, bool pCreditCard_Impact, bool KDSImplemented, bool pIsItemChanged, short pTakeawayType, byte pFORM_ID, DataTable dt, string OldInvoiceJson)
         {
             WriteLog("mTransaction.Rollback()");
             try
