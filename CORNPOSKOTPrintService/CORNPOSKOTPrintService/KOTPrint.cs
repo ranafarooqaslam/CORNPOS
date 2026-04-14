@@ -97,7 +97,7 @@ namespace CORNPOSKOTPrintService
         protected override void OnStart(string[] args)
         {
             WriteLog("Service Started.", "OnStart(string[] args)");
-            WriteLog("Version: 09-Apr-2026 03:30 PM", "OnStart");
+            WriteLog("Version: 11-Apr-2026 036:00 PM", "OnStart");
             WriteLog("PerformTimerOperationCrystalReport", "OnStart");
 
             try
@@ -320,6 +320,14 @@ namespace CORNPOSKOTPrintService
             }
             catch (Exception ex)
             {
+                if (!UpdatePrintedKOT(Convert.ToInt64(OrderNo), byteKOTType, _section, 1))
+                    WriteLog("KOT Print not updated.", string.Empty);
+                if (_section == "Xpeditor")
+                {
+                    if (!UpdatePrintedKOT(Convert.ToInt64(OrderNo), byteKOTType, string.Empty, 2))
+                        WriteLog("Xpeditor KOT Print not updated.", string.Empty);
+                }
+
                 WriteLog(ex.ToString(), "PrintReport");
             }
         }
