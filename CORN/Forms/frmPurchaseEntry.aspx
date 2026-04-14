@@ -269,6 +269,7 @@
                         <div class="col-md-1 reduceSpace">
                             <asp:HiddenField ID="hfInventoryType" runat="server" Value="0" />
                             <asp:HiddenField ID="hfSKUID" runat="server" Value="0" />
+                            <asp:HiddenField ID="hfItemGST" runat="server" Value="0" />
                             <asp:Button AccessKey="A" ID="btnAdd" OnClick="btnAdd_Click" CausesValidation="true" OnClientClick="CalculateITEMAmount();" runat="server" Text="Add" CssClass="btn btn-success" />
                         </div>
                     </div>

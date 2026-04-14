@@ -25,6 +25,7 @@ namespace CORNDatabaseLayer.Classes
         private string m_BATCH_NO;
         private int m_UOM_ID;
         private decimal m_STOCK_UNIT_QTY;
+        private decimal m_TAX;
         #endregion
 
         #region Public Properties
@@ -188,6 +189,12 @@ namespace CORNDatabaseLayer.Classes
             {
                 return m_STOCK_UNIT_QTY;
             }
+        }
+
+        public decimal TAX
+        {
+            set { m_TAX = value; }
+            get { return m_TAX; }
         }
 
 
@@ -435,6 +442,19 @@ namespace CORNDatabaseLayer.Classes
             else
             {
                 parameter.Value = m_STOCK_UNIT_QTY;
+            }
+            pparams.Add(parameter);
+
+            parameter = ProviderFactory.GetParameter(EnumProviders.SQLClient);
+            parameter.ParameterName = "@TAX";
+            parameter.DbType = ProviderFactory.GetDBType(EnumProviders.SQLClient, EnumDBTypes.Decimal);
+            if (m_TAX == Constants.DecimalNullValue)
+            {
+                parameter.Value = DBNull.Value;
+            }
+            else
+            {
+                parameter.Value = m_TAX;
             }
             pparams.Add(parameter);
         }

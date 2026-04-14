@@ -651,6 +651,7 @@ namespace CORNBusinessLayer.Classes
                     mPurchaseDetail.TYPE_ID = mPurchaseMaster.TYPE_ID;
                     mPurchaseDetail.TIME_STAMP = p_DOCUMENT_DATE;
                     mPurchaseDetail.UOM_ID = int.Parse(dr["UOM_ID"].ToString());
+                    mPurchaseDetail.TAX = decimal.Parse(dr["TAX"].ToString());
                     mPurchaseDetail.STOCK_UNIT_QTY = decimal.Parse(dr["S_QUANTITY"].ToString());
 
                     mPurchaseDetail.ExecuteQuery();
@@ -3169,6 +3170,7 @@ namespace CORNBusinessLayer.Classes
                     mPurchaseDetail.TYPE_ID = mPurchaseMaster.TYPE_ID;
                     mPurchaseDetail.TIME_STAMP = p_DOCUMENT_DATE;
                     mPurchaseDetail.UOM_ID = int.Parse(dr["UOM_ID"].ToString());
+                    mPurchaseDetail.TAX = decimal.Parse(dr["TAX"].ToString());
                     mPurchaseDetail.STOCK_UNIT_QTY = decimal.Parse(dr["S_QUANTITY"].ToString());
 
                     mPurchaseDetail.ExecuteQuery();

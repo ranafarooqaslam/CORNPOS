@@ -587,6 +587,7 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
             if (dsClosing.Tables[1].Rows.Count > 0)
             {
                 lblLastPrice.Text = "Last Price: " + String.Format("{0:0.00}", dsClosing.Tables[1].Rows[0]["PRICE"]);
+                hfItemGST.Value = dsClosing.Tables[1].Rows[0]["Tax"].ToString();
             }
         }
     }
@@ -674,6 +675,7 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
                     if (dsClosing.Tables[1].Rows.Count > 0)
                     {
                         lblLastPrice.Text = "Last Price: " + String.Format("{0:0.00}", dsClosing.Tables[1].Rows[0]["PRICE"]);
+                        hfItemGST.Value = dsClosing.Tables[1].Rows[0]["Tax"].ToString();
                     }
                 }
             }
@@ -981,11 +983,13 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
                                 {
                                     dr["PRICE"] = Convert.ToDecimal(lblLastPrice.Text.Replace("Last Price: ", "").Trim());
                                     dr["AMOUNT"] = decimal.Parse(lblLastPrice.Text.Replace("Last Price: ", "").Trim()) * Qty;
+                                    dr["TAX"] = Convert.ToDecimal(hfItemGST.Value) * Qty;
                                 }
                                 else
                                 {
                                     dr["PRICE"] = 0;
                                     dr["AMOUNT"] = 0;
+                                    dr["TAX"] = 0;
                                 }
                             }
                             dr["Remarks"] = txtItemRemarks.Text;
@@ -1057,6 +1061,7 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
                                         if (foundRows2.Length > 0)
                                         {
                                             dr["AMOUNT"] = decimal.Parse(foundRows2[0]["DISTRIBUTOR_PRICE"].ToString()) * decimal.Parse(dr["Quantity"].ToString());
+                                            dr["TAX"] = Convert.ToDecimal(hfItemGST.Value) * decimal.Parse(dr["Quantity"].ToString());
                                         }
                                     }
                                     break;
@@ -1125,7 +1130,20 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
                                 dr["PRICE"] = decimal.Parse(_dc.chkNull_0(txtPrice.Text));
                                 dr["AMOUNT"] = decimal.Parse(_dc.chkNull_0(txtPrice.Text)) * Qty;
                             }
-                                    
+
+                            if (rdoGSTType.SelectedValue == "1")
+                            {
+                                var gross = decimal.Parse(dr["PRICE"].ToString()) * decimal.Parse(dr["Quantity"].ToString());
+                                var discount = decimal.Parse(dr["DISCOUNT"].ToString());
+                                var netAmount = gross - discount;
+                                var gst = netAmount * (decimal.Parse(_dc.chkNull_0(txtItemGST.Text)) / 100);
+
+                                dr["TAX"] = gst;
+                            }
+                            else
+                            {
+                                dr["TAX"] = decimal.Parse(_dc.chkNull_0(txtItemGST.Text));
+                            }
                         }
                         else
                         {
@@ -1133,27 +1151,14 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
                             {
                                 dr["PRICE"] = foundRows2[0]["DISTRIBUTOR_PRICE"];
                                 dr["AMOUNT"] = decimal.Parse(foundRows2[0]["DISTRIBUTOR_PRICE"].ToString()) * Qty;
+                                dr["TAX"] = Convert.ToDecimal(hfItemGST.Value) * Qty;
                             }
                             else
                             {
                                 dr["PRICE"] = 0;
                                 dr["AMOUNT"] = 0;
+                                dr["TAX"] = 0;
                             }
-                        }
-
-                        if (rdoGSTType.SelectedValue == "1")
-                        {
-                            var gross = decimal.Parse(dr["PRICE"].ToString()) * decimal.Parse(dr["Quantity"].ToString());
-                            var discount = decimal.Parse(dr["DISCOUNT"].ToString());
-
-                            var netAmount = gross - discount;
-                            var gst = netAmount * (decimal.Parse(_dc.chkNull_0(txtItemGST.Text)) / 100);
-
-                            dr["TAX"] = gst;
-                        }
-                        else
-                        {
-                            dr["TAX"] = decimal.Parse(_dc.chkNull_0(txtItemGST.Text));
                         }
                         dr["Remarks"] = txtItemRemarks.Text;
                         dr["Expiry_Date"] = txtExpiryDate.Text;
