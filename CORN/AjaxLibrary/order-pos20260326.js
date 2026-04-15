@@ -663,6 +663,7 @@ function LoadOpenItem() {
         );
 }
 function GetOpenItems(products) {
+    OpenItemValues = [];
     products = JSON.stringify(products);
     var result = jQuery.parseJSON(products.replace(/&quot;/g, '"'));
     products = eval(result.d);
@@ -672,8 +673,12 @@ function GetOpenItems(products) {
     lstProducts = eval(lstProducts);
     for (var i = 0, len = lstProducts.length; i < len; ++i)
     {
-        OpenItemValues.push(lstProducts[i].SKU_NAME);
+        if (lstProducts[i].SECTION_ID == parseInt($("#ddlSectionOpenItem").val())) {
+            OpenItemValues.push(lstProducts[i].SKU_NAME);
+        }
     }
+
+    $("#txtOpentItemName").autocomplete("option", "source", OpenItemValues);
 }
 function loadAllProducts() {
     $.ajax
@@ -1819,6 +1824,11 @@ $(document).ready(function () {
                     }
                 }
             });
+        });
+
+        $('#ddlSectionOpenItem').change(function () {
+            $("#txtOpentItemName").val("");
+            LoadOpenItem();
         });
         waitLoading('Loading');
         $(".nav-ic img").click(function () {
