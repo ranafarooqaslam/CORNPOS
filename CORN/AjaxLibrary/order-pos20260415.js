@@ -1909,7 +1909,7 @@ $(document).ready(function () {
                         if ($('#txtLoyaltyCard').val() != "") {
                             $('#txtLoyaltyCard').trigger('blur');
                         }
-
+                        
                         if ($('#hfPaymentType').val() == "1") {
                             document.getElementById('ddlBank').style.display = "table-row";
                             document.getElementById('txtCardNo').style.display = "table-row";
@@ -7840,6 +7840,13 @@ function OnError(xhr, errorType, exception) {
 function PayType(myPayType) {    
     var DiscountDetail = GetDiscountTemplateDetail($('select#ddlDiscountType option:selected').val().toString());
     if (DiscountDetail[0].DiscountTypeID == 4 && $('select#ddlBankDiscount option:selected').val().length > 0 && $('#hfPaymentType').val() == "1") {
+        document.getElementById("cash").style["background-color"] = "#919399";
+        document.getElementById("credit").style["background-color"] = "#919399";
+        document.getElementById("btnCredit").style["background-color"] = "#919399";
+        document.getElementById("btnEasypaisa").style["background-color"] = "#919399";
+        document.getElementById("btnJazzcash").style["background-color"] = "#919399";
+        document.getElementById("btnOnlineTransfer").style["background-color"] = "#919399";
+        document.getElementById("credit").style["background-color"] = "#7dab49";
         return;
     }
     document.getElementById('ddlBank').style.display = "none";
