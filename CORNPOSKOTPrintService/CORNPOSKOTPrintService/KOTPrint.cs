@@ -441,7 +441,7 @@ namespace CORNPOSKOTPrintService
 
             if (RunningOrderText.Length > 0)
             {
-                CurrentY = CurrentY + 20;
+                CurrentY = CurrentY + 40;
 
                 // Measure text size
                 SizeF textSize = g.MeasureString(RunningOrderText, InvoiceFont);
