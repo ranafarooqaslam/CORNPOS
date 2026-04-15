@@ -994,11 +994,14 @@ namespace CORNBusinessLayer.Classes
                         bool IS_FREE = false;
                         try
                         {
-                            SaleInvoiceDetailID2 = Convert.ToInt64(dr["SALE_INVOICE_DETAIL_ID"]);
+                            SaleInvoiceDetailID2 = Convert.ToInt64(dr["SALE_INVOICE_DETAIL_ID"]);                            
                         }
                         catch (Exception ex)
                         {
-                            SaleInvoiceDetailID2 = 0;
+                            SaleInvoiceDetailID2 = 0;                            
+                        }
+                        if (SaleInvoiceDetailID2 == 0)
+                        {
                             itemChanged = true;
                         }
                         try
