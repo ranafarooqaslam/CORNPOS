@@ -2993,7 +2993,8 @@ function SaleInvoicePrint(tblProducts) {
         else {
             if (parseFloat(tblProducts[0].ITEM_DISCOUNT) > 0) {
                 var dis = (parseFloat(tblProducts[0].TotalDiscount) / parseFloat(amountDue) * 100).toFixed(0);
-                $("#Discount-text").text("Disc @" + dis + "% :");
+                //$("#Discount-text").text("Disc @" + dis + "% :");
+                $("#Discount-text").text('Discount :');
             }
             else {
                 $("#Discount-text").text('Discount :');
@@ -6019,7 +6020,8 @@ function PaymentInvoicePrint(tblProducts) {
         else {
             if (parseFloat(tblProducts[0].ITEM_DISCOUNT) > 0) {
                 var dis = (parseFloat(tblProducts[0].TotalDiscount) / parseFloat(amountDue) * 100).toFixed(0);
-                $("#Discount-text").text("Disc @" + dis + "% :");
+                //$("#Discount-text").text("Disc @" + dis + "% :");
+                $("#Discount-text").text('Discount :');
             }
             else {
                 $("#Discount-text").text('Discount :');

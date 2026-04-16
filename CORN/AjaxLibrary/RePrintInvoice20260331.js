@@ -930,7 +930,8 @@ function ReprintInvoice() {
         else {
             if (parseFloat($('#hfITEM_DISCOUNT').val()) > 0) {
                 var dis = (parseFloat($('#hfITEM_DISCOUNT').val()) / parseFloat(amountDue) * 100).toFixed(0);
-                $("#Discount-text").text("Disc @" + dis + "% :");
+                //$("#Discount-text").text("Disc @" + dis + "% :");
+                $("#Discount-text").text('Discount :');
             }
             else {
                 $("#Discount-text").text('Discount :');
