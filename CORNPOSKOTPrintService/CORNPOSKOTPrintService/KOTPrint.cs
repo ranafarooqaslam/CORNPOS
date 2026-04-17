@@ -441,7 +441,7 @@ namespace CORNPOSKOTPrintService
 
             if (RunningOrderText.Length > 0)
             {
-                CurrentY = CurrentY + 40;
+                CurrentY = CurrentY + 20;
 
                 // Measure text size
                 SizeF textSize = g.MeasureString(RunningOrderText, InvoiceFont);
@@ -460,8 +460,15 @@ namespace CORNPOSKOTPrintService
                 g.DrawString(RunningOrderText, InvoiceFont, BlueBrush, rectX + padding, CurrentY);
             }
 
+            if (RunningOrderText.Length > 0)
+            {
+                CurrentY = CurrentY - 20;
+            }
             Utiltiy.DrawCircle(g, new Pen(Brushes.Black, 2), 250, CurrentY - 10, 27);
-
+            if (RunningOrderText.Length > 0)
+            {
+                CurrentY = CurrentY + 20;
+            }
             CurrentY = CurrentY + 25;
             g.DrawLine(new Pen(Brushes.Black, 2), 10, CurrentY, 300, CurrentY);//            
             CurrentY = CurrentY + 5;

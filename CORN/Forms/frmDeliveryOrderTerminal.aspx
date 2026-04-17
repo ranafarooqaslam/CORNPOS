@@ -941,7 +941,7 @@
         <script type="text/javascript" src="../AjaxLibrary/jQuery.print.js"></script>        
         <script type="text/javascript" src="../AjaxLibrary/zebra_dialog.js"></script>
         <script type="text/javascript" src="../AjaxLibrary/DeliveryOrderTerminal20240816.js"></script>
-        <script type="text/javascript" src="../AjaxLibrary/PrintInvoice20260327.js"></script>
+        <script type="text/javascript" src="../AjaxLibrary/PrintInvoice20260415.js"></script>
     </form>
 </body>
 </html>
