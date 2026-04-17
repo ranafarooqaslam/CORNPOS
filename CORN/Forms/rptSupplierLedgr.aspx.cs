@@ -150,7 +150,7 @@ public partial class Forms_rptSupplierLedgr : System.Web.UI.Page
                 }
             }
         }        
-        DataSet ds = RptCustCtl.GetVendorLedger(sbVendorID.ToString(), sbDistributorID.ToString(), DateTime.Parse(txtStartDate.Text + " 00:00:00"), DateTime.Parse(txtEndDate.Text + " 23:59:59"),DrpPrincipal.SelectedItem.Text, TypeID);
+        DataSet ds = RptCustCtl.GetVendorLedger(sbVendorID.ToString(), sbDistributorID.ToString(), DateTime.Parse(txtStartDate.Text + " 00:00:00"), DateTime.Parse(txtEndDate.Text + " 23:59:59"),DrpPrincipal.SelectedItem.Text, 2);
         DataTable dt = DPrint.SelectReportTitle(int.Parse(drpDistributor.SelectedItem.Value.ToString()));
         CrpSupplierLedger CrpReport = new CrpSupplierLedger();
         ReportDocument subReport = CrpReport.OpenSubreport("SubReport");

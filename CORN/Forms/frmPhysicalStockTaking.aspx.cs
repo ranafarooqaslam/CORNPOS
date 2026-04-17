@@ -1018,12 +1018,15 @@ public partial class Forms_frmPhysicalStockTaking : System.Web.UI.Page
         dtItems.Columns.Add("SKU_ID", typeof(int));
         dtItems.Columns.Add("SKU_NAME", typeof(string));
         dtItems.Columns.Add("UOM", typeof(string));
+        dtItems.Columns.Add("SKU_HIE_NAME", typeof(string));
+
         foreach (DataRow drItem in dtskuPrice.Rows)
         {
             DataRow dr = dtItems.NewRow();
             dr["SKU_ID"] = drItem["SKU_ID"];
             dr["SKU_NAME"] = drItem["SKU_NAME"];
             dr["UOM"] = drItem["UOM_DESC"];
+            dr["SKU_HIE_NAME"] = drItem["SKU_HIE_NAME"];
             dtItems.Rows.Add(dr);
         }
 
@@ -1032,14 +1035,23 @@ public partial class Forms_frmPhysicalStockTaking : System.Web.UI.Page
         ws.Cells[1, 2].Value = "Item Name";
         ws.Cells[1, 3].Value = "UOM";
         ws.Cells[1, 4].Value = "Quantity";
+        ws.Cells[1, 5].Value = "Category";
         foreach (DataRow DataTableRow in dtItems.Rows)
         {
             int colIndex = 1;
             rowIndex++;
             foreach (DataColumn DataTableColumn in dtItems.Columns)
             {
-                var cell = ws.Cells[rowIndex, colIndex];
-                cell.Value = DataTableRow[DataTableColumn.ColumnName];
+                if (colIndex == 4)
+                {
+                    var cell = ws.Cells[rowIndex, 5];
+                    cell.Value = DataTableRow[DataTableColumn.ColumnName];
+                }
+                else
+                {
+                    var cell = ws.Cells[rowIndex, colIndex];
+                    cell.Value = DataTableRow[DataTableColumn.ColumnName];
+                }
                 colIndex++;
             }
         }
