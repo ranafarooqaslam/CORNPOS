@@ -1917,6 +1917,7 @@ function plusQty(obj) {
         var price = $(rowIndex).find('td:eq(6)').text();
         var discount = 0;
         discount = CalculatePromotion(parseInt(Sku_Id), qty, parseFloat($(rowIndex).find('td:eq(6)').text()));
+        $(rowIndex).find('td:eq(47)').text(discount);
         var amount = parseFloat(qty * price - parseFloat(discount)).toFixed(2);
         $(rowIndex).find('td:eq(7)').text(amount);
         $(rowIndex).find('td:eq(46)').text(amount * parseFloat($(rowIndex).find('td:eq(45)').text()) / 100);
@@ -3935,7 +3936,7 @@ function CalculateBalance() {
     }
 
     if (discountType == 0) {
-        discount = parseFloat(grandTotal) * parseFloat(discount / 100) + parseFloat(itemdiscount);
+        discount = parseFloat(grandTotal) * parseFloat(discount / 100);
         if (document.getElementById("hfGSTCalculation").value == "1") {
             gst = parseFloat(gst / 100) * parseFloat(grandTotal);
         }
@@ -3948,7 +3949,7 @@ function CalculateBalance() {
         else {
             gst = parseFloat(gst / 100) * (parseFloat(grandTotal) - parseFloat(discount));
         }
-        balance = Math.round((grandTotal - discount + parseFloat(servicecharges) + parseFloat(gst)), 0);
+        balance = Math.round((grandTotal - (discount + parseFloat(itemdiscount)) + parseFloat(servicecharges) + parseFloat(gst)), 0);
         amountDue = Math.round(balance, 0);
         balance = cashRcd - balance;
     }
@@ -3965,7 +3966,7 @@ function CalculateBalance() {
         else {
             gst = parseFloat(gst / 100) * (parseFloat(grandTotal) - (parseFloat(discount) + parseFloat(itemdiscount)));
         }
-        balance = parseFloat(grandTotal) + parseFloat(gst) + parseFloat(servicecharges) - parseFloat(discount) + parseFloat(itemdiscount);
+        balance = parseFloat(grandTotal) + parseFloat(gst) + parseFloat(servicecharges) - parseFloat(discount) - parseFloat(itemdiscount);
         amountDue = Math.round(balance, 0);
         balance = Math.round((cashRcd - balance), 0);
     }
@@ -3983,7 +3984,7 @@ function CalculateBalance() {
             gst = parseFloat(gst / 100) * (parseFloat(grandTotal - (discount + parseFloat(itemdiscount))));
         }
         balance = parseFloat(grandTotal) + parseFloat(servicecharges) + parseFloat(gst);
-        amountDue = parseFloat(balance) - parseFloat(discount) + parseFloat(itemdiscount);
+        amountDue = parseFloat(balance) - parseFloat(discount) - parseFloat(itemdiscount);
         balance = Math.round((cashRcd - amountDue), 0);
     }
     if ($('#hfItemWiseGST').val() == "1") {
@@ -4696,7 +4697,7 @@ function CalculateBalance2() {
         gst = 0;
     }
     if (discountType == 0) {
-        discount = parseFloat(grandTotal) * parseFloat(discount) / 100 + parseFloat(itemdiscount);
+        discount = parseFloat(grandTotal) * parseFloat(discount) / 100;
         if (document.getElementById("hfGSTCalculation").value == "1") {
             gst = parseFloat(gst / 100) * parseFloat(grandTotal);
         }
@@ -5860,7 +5861,7 @@ function addProductToOrderTable(skuId) {
                                     if ($(this).find("td:eq(22)").text() == "0") {//when item_deal_id=0
                                         $(this).find("td:eq(4) input").val(parseFloat($(this).find("td:eq(4) input").val()) + parseFloat($('#txtQuantity').val()));
                                         $(this).find("td:eq(7)").text(parseFloat($(this).find("td:eq(6)").text()) * parseInt($(this).find("td:eq(4) input").val()) - parseFloat(discount));
-                                        $(this).find("td:eq(47)").text((parseFloat($(this).find("td:eq(4) input").val()) + 1) * discount);
+                                        $(this).find("td:eq(47)").text(discount);
                                     }
                                     else {
                                         if (lstProducts[i].Is_CatChoice == "0") {
@@ -5886,7 +5887,7 @@ function addProductToOrderTable(skuId) {
                                 else {
                                     $(this).find("td:eq(4) input").val(parseFloat($(this).find("td:eq(4) input").val()) + parseFloat($('#txtQuantity').val()));
                                     $(this).find("td:eq(7)").text(parseFloat($(this).find("td:eq(6)").text()) * parseInt($(this).find("td:eq(4) input").val()) - parseFloat(discount));
-                                    $(this).find("td:eq(47)").text((parseFloat($(this).find("td:eq(4) input").val()) + 1) * discount);
+                                    $(this).find("td:eq(47)").text(discount);
                                 }
                                 tableData = storeTblValues();
                                 tableData = JSON.stringify(tableData);
