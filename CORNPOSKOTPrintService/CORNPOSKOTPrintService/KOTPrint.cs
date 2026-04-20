@@ -420,7 +420,7 @@ namespace CORNPOSKOTPrintService
             if(ManualKOTNO.Trim().Length > 0)
             {
                 CurrentY = CurrentY + 20;
-                g.DrawString("Manual KOT No: " + ManualKOTNO, InvOrderTitleFont, BlueBrush, 10, CurrentY);
+                g.DrawString("Manual KOT No: " + ManualKOTNO, InvoiceFont, BlueBrush, 10, CurrentY);
             }
 
             string RunningOrderText = string.Empty;
