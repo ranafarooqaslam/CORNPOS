@@ -79,6 +79,7 @@ namespace CORNPOSKOTPrintService
         static byte byteKOTType = 0;
         static long OrderNo = 0;
         static string covertable = string.Empty;
+        static string ManualKOTNO = string.Empty;
         static bool IsPrintTypeFullKOT = false;
         static DataTable dtValue = new DataTable();
         #endregion
@@ -244,6 +245,7 @@ namespace CORNPOSKOTPrintService
                                 OrderNotes = dtValue.Rows[0]["OrderNotes"].ToString();
                                 OrderNo = Convert.ToInt64(dtValue.Rows[0]["SaleInvoiceID"]);
                                 covertable = dtValue.Rows[0]["CoverTable"].ToString();
+                                ManualKOTNO = dtValue.Rows[0]["ManualKOTNO"].ToString();
                                 byteKOTType = Convert.ToByte(drKOTTyp["KOTType"]);
                                 IsPrintTypeFullKOT = false;
                                 WriteLog(string.Format("Order No-{0}-" + KOTType + "-" + drSection["SECTION"].ToString() + " Started Printing.", dtValue.Rows[0]["SaleInvoiceID"].ToString()), string.Empty);
@@ -265,6 +267,7 @@ namespace CORNPOSKOTPrintService
                                 OrderNotes = dtValue.Rows[0]["OrderNotes"].ToString();
                                 OrderNo = Convert.ToInt64(dtValue.Rows[0]["SaleInvoiceID"]);
                                 covertable = dtValue.Rows[0]["CoverTable"].ToString();
+                                ManualKOTNO = dtValue.Rows[0]["ManualKOTNO"].ToString();
                                 byteKOTType = Convert.ToByte(drKOTTyp["KOTType"]);
                                 IsPrintTypeFullKOT = true;
                                 WriteLog(string.Format("Order No-{0}-" + KOTType + "-Full KOT Started Printing.", dtValue.Rows[0]["SaleInvoiceID"].ToString()), string.Empty);
@@ -413,6 +416,11 @@ namespace CORNPOSKOTPrintService
             {
                 CurrentY = CurrentY + 20;
                 g.DrawString("Covers: " + covertable, InvoiceFont, BlueBrush, 10, CurrentY);
+            }
+            if(ManualKOTNO.Trim().Length > 0)
+            {
+                CurrentY = CurrentY + 20;
+                g.DrawString("Manual KOT No: " + ManualKOTNO, InvOrderTitleFont, BlueBrush, 10, CurrentY);
             }
 
             string RunningOrderText = string.Empty;
