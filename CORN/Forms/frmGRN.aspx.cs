@@ -29,6 +29,7 @@ public partial class Forms_frmGRN : System.Web.UI.Page
         {
             Session.Remove("dtGridData");
             GetAppSettingDetail();
+            GSTSetting();
             LoadPrincipal();
             LoadLocations();
             LoadSkuDetail();
@@ -69,6 +70,19 @@ public partial class Forms_frmGRN : System.Web.UI.Page
                     }
                     dateTextBox.Attributes.Add("readonly", "readonly");
                 }
+            }
+        }
+    }
+
+    private void GSTSetting()
+    {
+        txtGstAmount.Enabled = false;
+        DataTable dt = (DataTable)Session["dtAppSettingDetail"];
+        if (dt.Rows.Count > 0)
+        {
+            if (dt.Rows[0]["PurchaseGSTType"].ToString() == "2")
+            {
+                txtGstAmount.Enabled = true;
             }
         }
     }
@@ -453,8 +467,9 @@ public partial class Forms_frmGRN : System.Web.UI.Page
                                     amount = Convert.ToDecimal(_dc.chkNull_0(T.Text)) * price;
                                     discount = Convert.ToDecimal(_dc.chkNull_0(D.Text));
                                     tax = Convert.ToDecimal(_dc.chkNull_0(Tx.Text));
-
                                     expiryDate = Convert.ToDateTime(txtExpiry.Text);
+                                    var netAmount = amount - discount;
+                                    tax = netAmount * (tax / 100);
                                 }
                                 else if (j == 8)
                                 {

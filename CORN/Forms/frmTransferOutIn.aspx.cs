@@ -7,19 +7,6 @@ using CORNCommon.Classes;
 
 public partial class Forms_frmTransferOutIn : System.Web.UI.Page
 {
-    DataTable _PurchaseSKUS;
-    private void CreateTable()
-    {
-        _PurchaseSKUS = new DataTable();
-        _PurchaseSKUS.Columns.Add("SKU_ID", typeof(int));
-        _PurchaseSKUS.Columns.Add("SKU_Code", typeof(string));
-        _PurchaseSKUS.Columns.Add("SKU_Name", typeof(string));
-        _PurchaseSKUS.Columns.Add("Quantity", typeof(decimal));
-        _PurchaseSKUS.Columns.Add("UOM_ID", typeof(int));
-        _PurchaseSKUS.Columns.Add("S_UOM_ID", typeof(int));
-        _PurchaseSKUS.Columns.Add("S_Quantity", typeof(decimal));
-        this.Session.Add("PurchaseSKUS", _PurchaseSKUS);
-    }
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!Page.IsPostBack)
@@ -210,19 +197,6 @@ public partial class Forms_frmTransferOutIn : System.Web.UI.Page
         else
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "msg", "alert('Dayclose not found for selected location!');", true);
-        }
-    }
-    private void LoadGird()
-    {
-        try
-        {
-            _PurchaseSKUS = (DataTable)this.Session["PurchaseSKUS"];
-            GrdPurchase.DataSource = _PurchaseSKUS;
-            GrdPurchase.DataBind();
-        }
-        catch (Exception EX)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "msg", "alert(' Error:   " + EX.Message.ToString() + " ');", true);
         }
     }
     protected void btnCancel_Click(object sender, EventArgs e)
