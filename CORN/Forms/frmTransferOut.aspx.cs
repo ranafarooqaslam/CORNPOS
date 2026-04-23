@@ -22,6 +22,7 @@ public partial class Forms_frmTransferOut : System.Web.UI.Page
         _PurchaseSKUS.Columns.Add("UOM_ID", typeof(int));
         _PurchaseSKUS.Columns.Add("S_UOM_ID", typeof(int));
         _PurchaseSKUS.Columns.Add("S_Quantity", typeof(decimal));
+        _PurchaseSKUS.Columns.Add("TAX", typeof(decimal));
         this.Session.Add("PurchaseSKUS", _PurchaseSKUS);
     }
     protected void Page_Load(object sender, EventArgs e)
