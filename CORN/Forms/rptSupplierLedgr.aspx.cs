@@ -117,6 +117,7 @@ public partial class Forms_rptSupplierLedgr : System.Web.UI.Page
         }
         if (Session["FranchiseModule"].ToString() == "1")
         {
+            TypeID = 2;
             DataTable dtVendors = (DataTable)Session["dtVendors"];
             if (DrpPrincipal.SelectedItem.Value.ToString() == Constants.IntNullValue.ToString())
             {                
@@ -125,14 +126,6 @@ public partial class Forms_rptSupplierLedgr : System.Web.UI.Page
                     if (dr["VendorID"].ToString() == DrpPrincipal.SelectedItem.Value.ToString())
                     {
                         sbVendorID.Append(dr["SupplierLocationID"].ToString());
-                        if (dr["VendorType"].ToString() == "1")
-                        {
-                            TypeID = 1;
-                        }
-                        else
-                        {
-                            TypeID = 2;
-                        }
                         break;
                     }
                 }
@@ -150,7 +143,7 @@ public partial class Forms_rptSupplierLedgr : System.Web.UI.Page
                 }
             }
         }        
-        DataSet ds = RptCustCtl.GetVendorLedger(sbVendorID.ToString(), sbDistributorID.ToString(), DateTime.Parse(txtStartDate.Text + " 00:00:00"), DateTime.Parse(txtEndDate.Text + " 23:59:59"),DrpPrincipal.SelectedItem.Text, 2);
+        DataSet ds = RptCustCtl.GetVendorLedger(sbVendorID.ToString(), sbDistributorID.ToString(), DateTime.Parse(txtStartDate.Text + " 00:00:00"), DateTime.Parse(txtEndDate.Text + " 23:59:59"),DrpPrincipal.SelectedItem.Text, TypeID);
         DataTable dt = DPrint.SelectReportTitle(int.Parse(drpDistributor.SelectedItem.Value.ToString()));
         CrpSupplierLedger CrpReport = new CrpSupplierLedger();
         ReportDocument subReport = CrpReport.OpenSubreport("SubReport");
