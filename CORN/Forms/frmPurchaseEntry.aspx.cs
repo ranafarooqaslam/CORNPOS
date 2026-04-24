@@ -271,12 +271,12 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
 
             decimal grossAmount = 0;
             decimal totalgst = 0;
-            foreach (GridViewRow item in GrdPurchase.Rows)
+            foreach(DataRow dr in _purchaseSkus.Rows)
             {
-                var qty = Convert.ToDecimal(_dc.chkNull_0(item.Cells[4].Text));
-                var price = Convert.ToDecimal(_dc.chkNull_0(item.Cells[6].Text));
+                var qty = Convert.ToDecimal(_dc.chkNull_0(dr["Quantity"].ToString()));
+                var price = Convert.ToDecimal(_dc.chkNull_0(dr["Price"].ToString()));
                 grossAmount = grossAmount + (qty * price);
-                totalgst += Convert.ToDecimal(_dc.chkNull_0(item.Cells[8].Text));
+                totalgst += Convert.ToDecimal(_dc.chkNull_0(dr["TAX"].ToString()));
             }
 
             txtTotalAmount.Text = String.Format(CultureInfo.InvariantCulture, "{0:0.00}", grossAmount);
@@ -1301,15 +1301,14 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
         decimal grossAmount = 0;
         decimal itemDiscount = 0;
         decimal itemGST = 0;
-        foreach (GridViewRow item in GrdPurchase.Rows)
+        foreach(DataRow dr in dtPurchaseDetail.Rows)
         {
-            var qty = Convert.ToDecimal(_dc.chkNull_0(item.Cells[4].Text));
-            var price = Convert.ToDecimal(_dc.chkNull_0(item.Cells[6].Text));
+            var qty = Convert.ToDecimal(_dc.chkNull_0(dr["Quantity"].ToString()));
+            var price = Convert.ToDecimal(_dc.chkNull_0(dr["Price"].ToString()));
             grossAmount = grossAmount + (qty * price);
-            itemDiscount = itemDiscount + Convert.ToDecimal(_dc.chkNull_0(item.Cells[7].Text));
-            itemGST = itemGST + Convert.ToDecimal(_dc.chkNull_0(item.Cells[8].Text));
+            itemDiscount = itemDiscount + Convert.ToDecimal(_dc.chkNull_0(dr["DISCOUNT"].ToString()));
+            itemGST = itemGST + Convert.ToDecimal(_dc.chkNull_0(dr["TAX"].ToString()));
         }
-
         DataTable dtConfig = GetCOAConfiguration();
         bool IsFinanceSetting = GetFinanceConfig();
         if (DrpDocumentType.SelectedIndex == 0) //Purchase
