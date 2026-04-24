@@ -6128,14 +6128,14 @@ function PaymentInvoicePrint(tblProducts) {
             $("#lblAccountTitle").text("Acc. Title : " + tblProducts[0].CreditCardAccountTile);
         }
         $("#PayIn-text").text('Payment IN :');
-        var cash = tblProducts[0].PAIDIN;
+        var cash = tblProducts[0].PAIDIN - parseFloat($("#hfPOSFee").val());
         var credit = 0;
         if ($("#hfBillFormat").val() === "3" || $("#hfBillFormat").val() === "4") {
-            credit = Math.round((parseFloat(amountDue) - parseFloat(tblProducts[0].TotalDiscount)), 0);
+            credit = Math.round((parseFloat(amountDue) + parseFloat($("#hfPOSFee").val()) - parseFloat(tblProducts[0].TotalDiscount)), 0);
         }
         else
         {
-            credit = Math.round((parseFloat(amountDue) + parseFloat(tblProducts[0].GST) + parseFloat(tblProducts[0].SERVICE_CHARGES) - parseFloat(tblProducts[0].TotalDiscount)), 0);
+            credit = Math.round((parseFloat(amountDue) + parseFloat($("#hfPOSFee").val()) + parseFloat(tblProducts[0].GST) + parseFloat(tblProducts[0].SERVICE_CHARGES) - parseFloat(tblProducts[0].TotalDiscount)), 0);
         }
         var credit = credit - cash;
 

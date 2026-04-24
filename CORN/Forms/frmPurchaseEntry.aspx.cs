@@ -1358,7 +1358,7 @@ public partial class Forms_frmPurchaseEntry : System.Web.UI.Page
                     false, dtPurchaseDetail, 0, txtBuiltyNo.Text,
                     int.Parse(Session["UserId"].ToString()),
                     int.Parse(drpPrincipal.SelectedItem.Value.ToString())
-               , decimal.Parse(_dc.chkNull_0(txtGstAmount.Text)) + itemGST, decimal.Parse(_dc.chkNull_0(txtAdvanceTax.Text)),
+               , decimal.Parse(_dc.chkNull_0(txtGstAmount.Text)), decimal.Parse(_dc.chkNull_0(txtAdvanceTax.Text)),
                     decimal.Parse(_dc.chkNull_0(txtDiscount.Text)) + itemDiscount, 
                     decimal.Parse(_dc.chkNull_0(txtFreight.Text)), mNetAmount,
                     drpPrincipal.SelectedItem.Text, Convert.ToInt32(ddlPaymentMode.SelectedItem.Value),

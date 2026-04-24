@@ -903,7 +903,7 @@ function ReprintInvoice() {
         else {
             document.getElementById("ServiceChargesRow").style.display = "none";
         }
-        $("#GrandTotal-value").text($("#lblPaymentDue").text());
+        $("#GrandTotal-value").text(parseFloat($("#lblPaymentDue").text()) + parseFloat($("#hfPOSFee").val()));
         $("#Discount-value").text(text);
 
         ShowHideInvoiceFootDiscount("false");
@@ -994,12 +994,9 @@ function ReprintInvoice() {
         }
         else {
             $("#PayType").text('MOP: Credit Card');
-
-            $("#PayIn-value").text(credit);
-
+            $("#PayIn-value").text(credit + parseFloat($("#hfPOSFee").val()));
             $("#balance-text").text('Balance :');
             $("#balance-value").text(0)
-
             $("#balance-text2").text(text);
             $("#balance-value2").text(text);
         }
